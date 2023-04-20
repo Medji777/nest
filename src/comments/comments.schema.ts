@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import {HydratedDocument, Model, Types} from 'mongoose';
-import { CommentInputModel } from '@type/comments';
-import { LikeInfoModel } from '@type/likes';
+import { CommentInputModel } from '../types/comments';
+import { LikeInfoModel } from '../types/likes';
 
 export type CommentsDocument = HydratedDocument<Comments>;
 export type CommentsModuleType = Model<CommentsDocument> &

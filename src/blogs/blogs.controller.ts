@@ -12,8 +12,8 @@ import {
 } from '@nestjs/common';
 import { BlogsService } from './blogs.service';
 import { BlogsQueryRepository } from './blogs.query-repository';
-import { BlogsInputModel, QueryBlogs } from '@type/blogs';
-import { PostInputModel } from "@type/posts";
+import { BlogsInputModel, QueryBlogs } from '../types/blogs';
+import { PostInputModel } from "../types/posts";
 import { PostsService } from "../posts/posts.service";
 import { PostsQueryRepository } from "../posts/posts.query-repository";
 
