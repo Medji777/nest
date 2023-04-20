@@ -26,18 +26,6 @@ export enum Resolutions {
   P2160 = 'P2160',
 }
 
-export enum Statuses {
-  OK = 200,
-  CREATED = 201,
-  NO_CONTENT = 204,
-  BAD_REQUEST = 400,
-  UN_AUTHORIZED = 401,
-  FORBIDDEN = 403,
-  NOT_FOUND = 404,
-  TOO_MANY_REQUEST = 429,
-  INTERNAL_SERVER_ERROR = 500,
-}
-
 export enum SortDirections {
   asc = 'asc',
   desc = 'desc',

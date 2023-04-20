@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Blogs, BlogsModelType } from './blogs.schema';
-import { BlogsViewModel, QueryBlogs } from '../types/blogs';
-import {Paginator, SortDirections} from '../types/types';
-import { getSortNumber } from '../utils/sort';
-import { transformPagination } from '../utils/transform';
+import { BlogsViewModel, QueryBlogs } from '@type/blogs';
+import {Paginator, SortDirections} from '@type/types';
+import { getSortNumber } from '@utils/sort';
+import { transformPagination } from '@utils/transform';
 
 @Injectable()
 export class BlogsQueryRepository {

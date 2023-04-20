@@ -6,10 +6,10 @@ import {
   CommentInputModel,
   CommentViewModel,
   PostId,
-} from '../types/comments';
+} from '@type/comments';
 import { CommentsDocument } from './comments.schema';
-import { LikeStatus } from '../types/types';
-import { LikeInfoModel } from '../types/likes';
+import { LikeStatus } from '@type/types';
+import { LikeInfoModel } from '@type/likes';
 
 type CommentPayload = CommentInputModel & CommentatorInfo & PostId;
 

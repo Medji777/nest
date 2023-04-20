@@ -5,10 +5,10 @@ import {
   CommentsDocument,
   CommentsModuleType,
 } from './comments.schema';
-import { CommentViewModel, QueryComments } from '../types/comments';
-import {LikeStatus, Paginator, SortDirections} from '../types/types';
-import { getSortNumber } from '../utils/sort';
-import { transformPagination } from '../utils/transform';
+import { CommentViewModel, QueryComments } from '@type/comments';
+import {LikeStatus, Paginator, SortDirections} from '@type/types';
+import { getSortNumber } from '@utils/sort';
+import { transformPagination } from '@utils/transform';
 
 const projection = { _id: 0, postId: 0, __v: 0 };
 

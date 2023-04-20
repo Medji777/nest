@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { BlogsRepository } from './blogs.repository';
-import { BlogsInputModel, BlogsViewModel } from '../types/blogs';
+import { BlogsInputModel, BlogsViewModel } from '@type/blogs';
 import { BlogDocument } from './blogs.schema';
 
 @Injectable()

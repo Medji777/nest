@@ -1,9 +1,9 @@
 import { Controller, Delete, Get, HttpCode, HttpStatus } from '@nestjs/common';
 import { AppService } from './app.service';
-import { BlogsService } from './blogs/blogs.service';
-import { PostsService } from './posts/posts.service';
-import { CommentsService } from './comments/comments.service';
-import { UsersService } from './users/users.service';
+import { BlogsService } from '../blogs/blogs.service';
+import { PostsService } from '../posts/posts.service';
+import { CommentsService } from '../comments/comments.service';
+import { UsersService } from '../users/users.service';
 
 @Controller()
 export class AppController {

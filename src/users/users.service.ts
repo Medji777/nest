@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import bcrypt from 'bcrypt';
 import { UsersRepository } from './users.repository';
 import { UsersQueryRepository } from './users.query-repository';
-import { UserViewModel, UserInputModel } from '../types/users';
+import { UserViewModel, UserInputModel } from '@type/users';
 import { Users } from './users.schema';
 
 type Cred = {

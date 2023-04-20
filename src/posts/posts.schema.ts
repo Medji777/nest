@@ -1,23 +1,21 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument, Model } from 'mongoose';
-import { PostInputModel } from '../types/posts';
-import { LikeInfoModel } from '../types/likes';
+import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
+import {Document, HydratedDocument, Model, Types} from 'mongoose';
+import { PostInputModel } from '@type/posts';
+import { LikeInfoModel } from '@type/likes';
 
 export type PostsDocument = HydratedDocument<Posts>;
 export type PostsModelType = Model<PostsDocument> & PostsModelStatic;
 
-@Schema({ _id: false })
+@Schema()
 class ExtendedLikesInfo {
-  @Prop({ required: true })
+  @Prop({ default: 0 })
   likesCount: number;
-  @Prop({ required: true })
+  @Prop({ default: 0 })
   dislikesCount: number;
 }
 
-const ExtendedLikesInfoSchema = SchemaFactory.createForClass(ExtendedLikesInfo);
-
 @Schema()
-export class Posts {
+export class Posts extends Document {
   @Prop({ required: true })
   id: string;
   @Prop({ required: true })
@@ -32,8 +30,8 @@ export class Posts {
   blogName: string;
   @Prop()
   createdAt?: string;
-  @Prop({ type: ExtendedLikesInfoSchema })
-  extendedLikesInfo: ExtendedLikesInfo;
+  @Prop({type: Types.ObjectId, ref: ExtendedLikesInfo.name })
+  extendedLikesInfo: ExtendedLikesInfo
 
   update(payload: PostInputModel) {
     this.title = payload.title;

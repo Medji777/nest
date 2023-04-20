@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument, Model } from 'mongoose';
-import { CommentInputModel } from '../types/comments';
-import { LikeInfoModel } from '../types/likes';
+import {HydratedDocument, Model, Types} from 'mongoose';
+import { CommentInputModel } from '@type/comments';
+import { LikeInfoModel } from '@type/likes';
 
 export type CommentsDocument = HydratedDocument<Comments>;
 export type CommentsModuleType = Model<CommentsDocument> &
@@ -16,7 +16,7 @@ export type CommentsStaticMethods = {
   ) => CommentsDocument;
 };
 
-@Schema({ _id: false })
+@Schema()
 class CommentatorInfo {
   @Prop({ required: true })
   userId: string;
@@ -24,9 +24,7 @@ class CommentatorInfo {
   userLogin: string;
 }
 
-const CommentatorInfoSchema = SchemaFactory.createForClass(CommentatorInfo);
-
-@Schema({ _id: false })
+@Schema()
 class LikesInfo {
   @Prop({ required: true })
   likesCount: number;
@@ -34,21 +32,19 @@ class LikesInfo {
   dislikesCount: number;
 }
 
-const LikesInfoSchema = SchemaFactory.createForClass(LikesInfo);
-
 @Schema()
 export class Comments {
   @Prop()
   id: string;
   @Prop({ required: true })
   content: string;
-  @Prop({ type: CommentatorInfoSchema })
+  @Prop({ type: Types.ObjectId, ref: CommentatorInfo.name })
   commentatorInfo: CommentatorInfo;
   @Prop({ required: true })
   createdAt: string;
   @Prop({ required: true })
   postId: string;
-  @Prop({ type: LikesInfoSchema })
+  @Prop({ type: Types.ObjectId, ref: LikesInfo.name })
   likesInfo: LikesInfo;
 
   update(payload: CommentInputModel) {

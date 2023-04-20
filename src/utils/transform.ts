@@ -1,4 +1,4 @@
-import { Paginator } from '../types/types';
+import { Paginator } from '@type/types';
 
 export const transformPagination = <T>(
   items: Array<T>,

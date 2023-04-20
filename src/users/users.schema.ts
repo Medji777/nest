@@ -1,13 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument, Model } from 'mongoose';
-import { PasswordHash } from '../types/users';
+import {HydratedDocument, Model, Types} from 'mongoose';
+import { PasswordHash } from '@type/users';
 
 type PayloadType = EmailConfirmation | PasswordConfirmation;
 
 export type UsersDocument = HydratedDocument<Users>;
 export type UsersModelType = Model<UsersDocument> & UsersModelStatic;
 
-@Schema({ _id: false })
+@Schema()
 class EmailConfirmation {
   @Prop({ default: null })
   confirmationCode?: string | null;
@@ -19,13 +19,8 @@ class EmailConfirmation {
   isConfirmed: boolean;
 }
 
-const EmailConfirmationSchema = SchemaFactory.createForClass(EmailConfirmation);
-
-@Schema({ _id: false })
+@Schema()
 class PasswordConfirmation extends EmailConfirmation {}
-
-const PasswordConfirmationSchema =
-  SchemaFactory.createForClass(PasswordConfirmation);
 
 @Schema()
 export class Users {
@@ -44,10 +39,10 @@ export class Users {
   @Prop({ required: true })
   passwordHash: string;
 
-  @Prop({ type: EmailConfirmationSchema })
+  @Prop({ type: Types.ObjectId, ref: EmailConfirmation.name })
   emailConfirmation: EmailConfirmation;
 
-  @Prop({ type: PasswordConfirmationSchema })
+  @Prop({ type: Types.ObjectId, ref: PasswordConfirmation.name })
   passwordConfirmation: PasswordConfirmation;
 
   updatePassword(payload: PasswordHash) {

@@ -1,11 +1,11 @@
 import { InjectModel } from '@nestjs/mongoose';
+import { NotFoundException } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { Users } from './users.schema';
-import { getSortNumber } from '../utils/sort';
-import { transformPagination } from '../utils/transform';
-import { Paginator, SortDirections } from '../types/types';
-import { QueryUsers, UserViewModel } from '../types/users';
-import { NotFoundException } from '@nestjs/common';
+import { getSortNumber } from '@utils/sort';
+import { transformPagination } from '@utils/transform';
+import { Paginator, SortDirections } from '@type/types';
+import { QueryUsers, UserViewModel } from '@type/users';
 
 const projectionFilter = {
   _id: 0,

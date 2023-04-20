@@ -12,10 +12,10 @@ import {
 } from '@nestjs/common';
 import { BlogsService } from './blogs.service';
 import { BlogsQueryRepository } from './blogs.query-repository';
-import { BlogsInputModel, QueryBlogs } from '../types/blogs';
-import {PostInputModel, PostsViewModel} from "../types/posts";
-import {PostsService} from "../posts/posts.service";
-import {PostsQueryRepository} from "../posts/posts.query-repository";
+import { BlogsInputModel, QueryBlogs } from '@type/blogs';
+import { PostInputModel } from "@type/posts";
+import { PostsService } from "../posts/posts.service";
+import { PostsQueryRepository } from "../posts/posts.query-repository";
 
 @Controller('blogs')
 export class BlogsController {
@@ -65,7 +65,7 @@ export class BlogsController {
   @Post(':blogId/posts')
   async createPostForBlogId(@Param('blogId') id: string, @Body() bodyDTO: PostInputModel) {
     const blog = await this.blogsQueryRepository.findById(id);
-    return this.postsService.create({
+    return await this.postsService.create({
       ...bodyDTO,
       blogId: id,
       blogName: blog.name

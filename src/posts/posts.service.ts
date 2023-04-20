@@ -8,7 +8,7 @@ import {
 } from '../types/posts';
 import { LikeInfoModel } from '../types/likes';
 import { PostsDocument } from './posts.schema';
-import { LikeStatus } from '../types/types';
+import { LikeStatus } from '@type/types';
 
 @Injectable()
 export class PostsService {

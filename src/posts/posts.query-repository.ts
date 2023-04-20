@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Posts, PostsDocument, PostsModelType } from './posts.schema';
-import { PostsViewModel, QueryPosts } from '../types/posts';
-import {LikeStatus, Paginator, SortDirections} from '../types/types';
-import { getSortNumber } from '../utils/sort';
-import { transformPagination } from '../utils/transform';
+import { PostsViewModel, QueryPosts } from '@type/posts';
+import {LikeStatus, Paginator, SortDirections} from '@type/types';
+import { getSortNumber } from '@utils/sort';
+import { transformPagination } from '@utils/transform';
 
 const projectionInit = { _id: 0, __v: 0 };
 
