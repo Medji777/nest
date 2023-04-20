@@ -13,12 +13,17 @@ import {
 import { BlogsService } from './blogs.service';
 import { BlogsQueryRepository } from './blogs.query-repository';
 import { BlogsInputModel, QueryBlogs } from '../types/blogs';
+import {PostInputModel, PostsViewModel} from "../types/posts";
+import {PostsService} from "../posts/posts.service";
+import {PostsQueryRepository} from "../posts/posts.query-repository";
 
 @Controller('blogs')
 export class BlogsController {
   constructor(
     private readonly blogsService: BlogsService,
+    private readonly postsService: PostsService,
     private readonly blogsQueryRepository: BlogsQueryRepository,
+    private readonly postsQueryRepository: PostsQueryRepository
   ) {}
 
   @Get()
@@ -51,9 +56,19 @@ export class BlogsController {
     await this.blogsService.delete(id);
   }
 
-  // @Get(':id')
-  // getPostByBlogIdWithQuery() {}
+  @Get(':blogId/posts')
+  async getPostByBlogIdWithQuery(@Param('blogId') id: string, @Query() query) {
+    await this.blogsQueryRepository.findById(id);
+    return this.postsQueryRepository.getPostsByBlogId(id,query)
+  }
 
-  // @Post('/:blogId/posts')
-  // createPostForBlogId() {}
+  @Post(':blogId/posts')
+  async createPostForBlogId(@Param('blogId') id: string, @Body() bodyDTO: PostInputModel) {
+    const blog = await this.blogsQueryRepository.findById(id);
+    return this.postsService.create({
+      ...bodyDTO,
+      blogId: id,
+      blogName: blog.name
+    })
+  }
 }
