@@ -35,7 +35,7 @@ export class PostsService {
     await this.postsRepository.save(doc);
   }
   async delete(id: string): Promise<void> {
-    const isDeleted = this.postsRepository.deleteById(id);
+    const isDeleted = await this.postsRepository.deleteById(id);
     if (!isDeleted) {
       throw new NotFoundException('post not found');
     }
