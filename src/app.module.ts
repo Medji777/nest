@@ -6,16 +6,16 @@ import { UsersModule } from './users/users.module';
 import { BlogsModule } from './blogs/blogs.module';
 import { PostsModule } from './posts/posts.module';
 import { CommentsModule } from './comments/comments.module';
+import { settings } from './config';
 
 @Module({
   imports: [
+    settings.START_MODULE,
+    MongooseModule.forRoot(settings.mongoURI),
     UsersModule,
     BlogsModule,
     PostsModule,
     CommentsModule,
-    MongooseModule.forRoot(
-      'mongodb+srv://admin:admin@cluster0.ka27jfe.mongodb.net/back-dev?retryWrites=true&w=majority',
-    ),
   ],
   controllers: [AppController],
   providers: [AppService],
