@@ -14,7 +14,7 @@ import { PostsService } from './posts.service';
 import { PostsQueryRepository } from './posts.query-repository';
 import { PostInputModel, QueryPosts } from '../types/posts';
 import { BlogsQueryRepository } from '../blogs/blogs.query-repository';
-import { CommentInputModel, QueryComments } from '../types/comments';
+import {CommentDBModel, CommentInputModel, QueryComments} from '../types/comments';
 import { CommentsService } from '../comments/comments.service';
 import { CommentsQueryRepository } from '../comments/comments.query-repository';
 
@@ -23,7 +23,7 @@ export class PostsController {
   constructor(
     private readonly postsService: PostsService,
     private readonly postsQueryRepository: PostsQueryRepository,
-    // private readonly commentsService: CommentsService,
+    private readonly commentsService: CommentsService,
     private readonly blogsQueryRepository: BlogsQueryRepository,
     private readonly commentsQueryRepository: CommentsQueryRepository,
   ) {}
@@ -77,8 +77,14 @@ export class PostsController {
   async createCommentByPost(
     @Param('id') id: string,
     @Body() bodyDTO: CommentInputModel,
-  ) {
-    return this.postsService.createCommentByPost(id, '', '', bodyDTO);
+  ): Promise<CommentDBModel> {
+    const post = await this.postsQueryRepository.findById(id);
+    return this.commentsService.create({
+      ...bodyDTO,
+      postId: post.id,
+      userId: '',
+      userLogin: '',
+    });
   }
 
   // @Put('/:id/like-status')

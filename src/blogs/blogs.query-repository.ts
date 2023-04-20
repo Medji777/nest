@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Blogs, BlogsModelType } from './blogs.schema';
 import { BlogsViewModel, QueryBlogs } from '../types/blogs';
-import { Paginator } from '../types/types';
+import {Paginator, SortDirections} from '../types/types';
 import { getSortNumber } from '../utils/sort';
 import { transformPagination } from '../utils/transform';
 
@@ -10,7 +10,7 @@ import { transformPagination } from '../utils/transform';
 export class BlogsQueryRepository {
   constructor(@InjectModel(Blogs.name) private BlogsModel: BlogsModelType) {}
   async getAll(query: QueryBlogs): Promise<Paginator<BlogsViewModel>> {
-    const { searchNameTerm, sortBy, sortDirection, pageNumber, pageSize } =
+    const { searchNameTerm = null, sortBy, sortDirection = SortDirections.desc, pageNumber = 1, pageSize = 10 } =
       query;
     const sortNumber = getSortNumber(sortDirection);
     const filter = !searchNameTerm

@@ -9,14 +9,11 @@ import {
 import { LikeInfoModel } from '../types/likes';
 import { PostsDocument } from './posts.schema';
 import { LikeStatus } from '../types/types';
-import { CommentsService } from '../comments/comments.service';
-import { CommentDBModel, CommentInputModel } from '../types/comments';
 
 @Injectable()
 export class PostsService {
   constructor(
     private readonly postsRepository: PostsRepository,
-    private readonly commentsService: CommentsService,
   ) {}
   async create(payload: PostInputModel & BlogName): Promise<PostsViewModel> {
     const createPost = this.postsRepository.create(
@@ -46,23 +43,6 @@ export class PostsService {
   }
   async deleteAll(): Promise<void> {
     await this.postsRepository.deleteAll();
-  }
-  async createCommentByPost(
-    id: string,
-    userId: string,
-    userLogin: string,
-    bodyDTO: CommentInputModel,
-  ): Promise<CommentDBModel> {
-    const doc = await this.postsRepository.findById(id);
-    if (!doc) {
-      throw new NotFoundException('post not found');
-    }
-    return this.commentsService.create({
-      ...bodyDTO,
-      postId: doc.id,
-      userId: '',
-      userLogin: '',
-    });
   }
   private async _updateLikeInPost(
     id: string,

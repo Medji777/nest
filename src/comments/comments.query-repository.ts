@@ -6,7 +6,7 @@ import {
   CommentsModuleType,
 } from './comments.schema';
 import { CommentViewModel, QueryComments } from '../types/comments';
-import { LikeStatus, Paginator } from '../types/types';
+import {LikeStatus, Paginator, SortDirections} from '../types/types';
 import { getSortNumber } from '../utils/sort';
 import { transformPagination } from '../utils/transform';
 
@@ -40,7 +40,7 @@ export class CommentsQueryRepository {
     //userId?: string,
   ): Promise<Paginator<CommentViewModel>> {
     const filter = { postId: id };
-    const { sortBy, sortDirection, pageNumber, pageSize } = query;
+    const { sortBy, sortDirection = SortDirections.desc, pageNumber = 1, pageSize = 10 } = query;
     const sortNumber = getSortNumber(sortDirection);
     const skipNumber = (pageNumber - 1) * pageSize;
     const count = await this.CommentsModel.countDocuments(filter);
