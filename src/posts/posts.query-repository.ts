@@ -14,12 +14,12 @@ export class PostsQueryRepository {
   async getAll(query: QueryPosts): Promise<Paginator<PostsViewModel>> {
     const { sortBy = 'createdAt', sortDirection = SortDirections.desc, pageNumber = 1, pageSize = 10 } = query;
     const sortNumber = getSortNumber(sortDirection);
-    const skipNumber = (pageNumber - 1) * pageSize;
+    const skipNumber = (+pageNumber - 1) * +pageSize;
     const count = await this.PostsModel.countDocuments();
     const doc = await this.PostsModel.find({}, projectionInit)
       .sort({ [sortBy]: sortNumber })
       .skip(skipNumber)
-      .limit(pageSize);
+      .limit(+pageSize);
 
     const mappedPost = doc.map(this._getOutputPost);
     // const mappedPostWithStatusLike = await this._setStatusLikeMapped(
@@ -32,8 +32,8 @@ export class PostsQueryRepository {
 
     return transformPagination<PostsViewModel>(
       mappedPost,
-      pageSize,
-      pageNumber,
+      +pageSize,
+      +pageNumber,
       count,
     );
   }
@@ -58,12 +58,12 @@ export class PostsQueryRepository {
     const filter = { blogId: id };
     const { sortBy = 'createdAt', sortDirection = SortDirections.desc, pageNumber = 1, pageSize = 10 } = query;
     const sortNumber = getSortNumber(sortDirection);
-    const skipNumber = (pageNumber - 1) * pageSize;
+    const skipNumber = (+pageNumber - 1) * +pageSize;
     const count = await this.PostsModel.countDocuments(filter);
     const doc = await this.PostsModel.find(filter, projectionInit)
       .sort({ [sortBy]: sortNumber })
       .skip(skipNumber)
-      .limit(pageSize);
+      .limit(+pageSize);
 
     const mappedPost = doc.map(this._getOutputPost);
     // const mappedPostWithStatusLike = await this._setStatusLikeMapped(mappedPost, userId!)
@@ -71,8 +71,8 @@ export class PostsQueryRepository {
 
     return transformPagination<PostsViewModel>(
       mappedPost,
-      pageSize,
-      pageNumber,
+      +pageSize,
+      +pageNumber,
       count,
     );
   }

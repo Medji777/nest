@@ -39,19 +39,19 @@ export class UsersQueryRepository {
       });
     }
     const filter = !arrayFilters.length ? {} : { $or: arrayFilters };
-    const skipNumber = (pageNumber - 1) * pageSize;
+    const skipNumber = (+pageNumber - 1) * +pageSize;
 
     const count = await this.UserModel.countDocuments(filter);
     const items = await this.UserModel.find(filter, projectionFilter)
       .sort({ [sortBy]: sortNumber })
       .skip(skipNumber)
-      .limit(pageSize)
+      .limit(+pageSize)
       .lean();
 
     return transformPagination<UserViewModel>(
       items,
-      pageSize,
-      pageNumber,
+      +pageSize,
+      +pageNumber,
       count,
     );
   }

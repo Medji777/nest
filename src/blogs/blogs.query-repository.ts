@@ -16,17 +16,17 @@ export class BlogsQueryRepository {
     const filter = !searchNameTerm
       ? {}
       : { name: { $regex: new RegExp(searchNameTerm, 'gi') } };
-    const skipNumber = (pageNumber - 1) * pageSize;
+    const skipNumber = (+pageNumber - 1) * +pageSize;
     const count = await this.BlogsModel.countDocuments(filter);
     const data = await this.BlogsModel.find(filter, { _id: 0, __v: 0 })
       .sort({ [sortBy]: sortNumber })
       .skip(skipNumber)
-      .limit(pageSize)
+      .limit(+pageSize)
       .lean();
     return transformPagination<BlogsViewModel>(
       data,
-      pageSize,
-      pageNumber,
+      +pageSize,
+      +pageNumber,
       count,
     );
   }

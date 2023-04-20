@@ -42,20 +42,20 @@ export class CommentsQueryRepository {
     const filter = { postId: id };
     const { sortBy = 'createdAt', sortDirection = SortDirections.desc, pageNumber = 1, pageSize = 10 } = query;
     const sortNumber = getSortNumber(sortDirection);
-    const skipNumber = (pageNumber - 1) * pageSize;
+    const skipNumber = (+pageNumber - 1) * +pageSize;
     const count = await this.CommentsModel.countDocuments(filter);
     const doc = await this.CommentsModel.find(filter, projection)
       .sort({ [sortBy]: sortNumber })
       .skip(skipNumber)
-      .limit(pageSize);
+      .limit(+pageSize);
 
     const mappedComments = doc.map(this._getOutputComment);
     //const mappedCommentsWithStatusLike = await this._setStatusLikeMapped(mappedComments, userId!)
 
     return transformPagination<CommentViewModel>(
       mappedComments,
-      pageSize,
-      pageNumber,
+      +pageSize,
+      +pageNumber,
       count,
     );
   }
