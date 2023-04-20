@@ -10,7 +10,7 @@ import { transformPagination } from '../utils/transform';
 export class BlogsQueryRepository {
   constructor(@InjectModel(Blogs.name) private BlogsModel: BlogsModelType) {}
   async getAll(query: QueryBlogs): Promise<Paginator<BlogsViewModel>> {
-    const { searchNameTerm = null, sortBy, sortDirection = SortDirections.desc, pageNumber = 1, pageSize = 10 } =
+    const { searchNameTerm = null, sortBy = 'createdAt', sortDirection = SortDirections.desc, pageNumber = 1, pageSize = 10 } =
       query;
     const sortNumber = getSortNumber(sortDirection);
     const filter = !searchNameTerm

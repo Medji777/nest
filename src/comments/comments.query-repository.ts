@@ -40,7 +40,7 @@ export class CommentsQueryRepository {
     //userId?: string,
   ): Promise<Paginator<CommentViewModel>> {
     const filter = { postId: id };
-    const { sortBy, sortDirection = SortDirections.desc, pageNumber = 1, pageSize = 10 } = query;
+    const { sortBy = 'createdAt', sortDirection = SortDirections.desc, pageNumber = 1, pageSize = 10 } = query;
     const sortNumber = getSortNumber(sortDirection);
     const skipNumber = (pageNumber - 1) * pageSize;
     const count = await this.CommentsModel.countDocuments(filter);

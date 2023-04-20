@@ -12,7 +12,7 @@ const projectionInit = { _id: 0, __v: 0 };
 export class PostsQueryRepository {
   constructor(@InjectModel(Posts.name) private PostsModel: PostsModelType) {}
   async getAll(query: QueryPosts): Promise<Paginator<PostsViewModel>> {
-    const { sortBy, sortDirection = SortDirections.desc, pageNumber = 1, pageSize = 10 } = query;
+    const { sortBy = 'createdAt', sortDirection = SortDirections.desc, pageNumber = 1, pageSize = 10 } = query;
     const sortNumber = getSortNumber(sortDirection);
     const skipNumber = (pageNumber - 1) * pageSize;
     const count = await this.PostsModel.countDocuments();
@@ -56,7 +56,7 @@ export class PostsQueryRepository {
     query: QueryPosts,
   ): Promise<Paginator<PostsViewModel>> {
     const filter = { blogId: id };
-    const { sortBy, sortDirection = SortDirections.desc, pageNumber = 1, pageSize = 10 } = query;
+    const { sortBy = 'createdAt', sortDirection = SortDirections.desc, pageNumber = 1, pageSize = 10 } = query;
     const sortNumber = getSortNumber(sortDirection);
     const skipNumber = (pageNumber - 1) * pageSize;
     const count = await this.PostsModel.countDocuments(filter);

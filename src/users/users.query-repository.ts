@@ -22,7 +22,7 @@ export class UsersQueryRepository {
     const {
       searchLoginTerm = null,
       searchEmailTerm = null,
-      sortBy,
+      sortBy = 'createdAt',
       sortDirection = SortDirections.desc,
       pageNumber = 1,
       pageSize = 10,
