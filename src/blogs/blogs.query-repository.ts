@@ -31,7 +31,7 @@ export class BlogsQueryRepository {
     );
   }
   async findById(id: string): Promise<BlogsViewModel> {
-    const blog = this.BlogsModel.findOne({ id }, { _id: 0, __v: 0 }).lean();
+    const blog = await this.BlogsModel.findOne({ id }, { _id: 0, __v: 0 }).lean();
     if (!blog) {
       throw new NotFoundException('blog not found');
     }
