@@ -1,17 +1,18 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Posts, PostsDocument, PostsModelType } from './posts.schema';
-import { PostsViewModel, QueryPosts } from '../types/posts';
+import { PostsViewModel } from '../types/posts';
 import {LikeStatus, Paginator, SortDirections} from '../types/types';
 import { getSortNumber } from '../utils/sort';
 import { transformPagination } from '../utils/transform';
+import { QueryPostsDto } from "./dto";
 
 const projectionInit = { _id: 0, __v: 0 };
 
 @Injectable()
 export class PostsQueryRepository {
   constructor(@InjectModel(Posts.name) private PostsModel: PostsModelType) {}
-  async getAll(query: QueryPosts): Promise<Paginator<PostsViewModel>> {
+  async getAll(query: QueryPostsDto): Promise<Paginator<PostsViewModel>> {
     const { sortBy = 'createdAt', sortDirection = SortDirections.desc, pageNumber = 1, pageSize = 10 } = query;
     const sortNumber = getSortNumber(sortDirection);
     const skipNumber = (+pageNumber - 1) * +pageSize;
@@ -53,7 +54,7 @@ export class PostsQueryRepository {
   }
   async getPostsByBlogId(
     id: string,
-    query: QueryPosts,
+    query: QueryPostsDto,
   ): Promise<Paginator<PostsViewModel>> {
     const filter = { blogId: id };
     const { sortBy = 'createdAt', sortDirection = SortDirections.desc, pageNumber = 1, pageSize = 10 } = query;

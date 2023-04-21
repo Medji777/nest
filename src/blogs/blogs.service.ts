@@ -1,12 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { BlogsRepository } from './blogs.repository';
-import { BlogsInputModel, BlogsViewModel } from '../types/blogs';
+import { BlogsViewModel } from '../types/blogs';
 import { BlogDocument } from './blogs.schema';
+import { BlogsInputModelDTO } from "./dto";
 
 @Injectable()
 export class BlogsService {
   constructor(private readonly blogsRepository: BlogsRepository) {}
-  async create(payload: BlogsInputModel): Promise<BlogsViewModel> {
+  async create(payload: BlogsInputModelDTO): Promise<BlogsViewModel> {
     const createdBlog = this.blogsRepository.create(
       payload.name,
       payload.description,
@@ -16,7 +17,7 @@ export class BlogsService {
     await this.blogsRepository.save(createdBlog);
     return this._createMapBlogs(createdBlog);
   }
-  async update(id: string, payload: BlogsInputModel): Promise<void> {
+  async update(id: string, payload: BlogsInputModelDTO): Promise<void> {
     const blog = await this.blogsRepository.findBlogById(id);
     if (!blog) {
       throw new NotFoundException('blog not found');

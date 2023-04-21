@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import bcrypt from 'bcrypt';
 import { UsersRepository } from './users.repository';
-import { UsersQueryRepository } from './users.query-repository';
-import { UserViewModel, UserInputModel } from '../types/users';
 import { Users } from './users.schema';
+import { UserViewModel } from '../types/users';
+import { UserInputModelDto } from "./dto";
 
 type Cred = {
   check: boolean;
@@ -12,11 +12,8 @@ type Cred = {
 
 @Injectable()
 export class UsersService {
-  constructor(
-    private readonly usersRepository: UsersRepository,
-    private readonly usersQueryRepository: UsersQueryRepository,
-  ) {}
-  async createUser(payload: UserInputModel): Promise<UserViewModel> {
+  constructor(private readonly usersRepository: UsersRepository) {}
+  async createUser(payload: UserInputModelDto): Promise<UserViewModel> {
     const passwordHash = await this._createPasswordHash(payload.password);
     const doc = this.usersRepository.create(
       payload.login,
@@ -41,7 +38,7 @@ export class UsersService {
     await this.usersRepository.deleteAll();
   }
   async checkCredentials(input: string, password: string): Promise<Cred> {
-    const user = await this.usersQueryRepository.getUserByLoginOrEmail(input);
+    const user = await this.usersRepository.getUserByUniqueField(input);
     if (!user) {
       return {
         check: false,

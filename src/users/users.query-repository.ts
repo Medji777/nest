@@ -4,8 +4,9 @@ import { Model } from 'mongoose';
 import { Users } from './users.schema';
 import { getSortNumber } from '../utils/sort';
 import { transformPagination } from '../utils/transform';
-import { Paginator, SortDirections } from '../types/types';
-import { QueryUsers, UserViewModel } from '../types/users';
+import { Paginator } from '../types/types';
+import { UserViewModel } from '../types/users';
+import { QueryUsersDto } from "./dto";
 
 const projectionFilter = {
   _id: 0,
@@ -17,16 +18,9 @@ const projectionFilter = {
 
 export class UsersQueryRepository {
   constructor(@InjectModel(Users.name) private UserModel: Model<Users>) {}
-  async getAll(query: QueryUsers): Promise<Paginator<UserViewModel>> {
+  async getAll(query: QueryUsersDto): Promise<Paginator<UserViewModel>> {
     const arrayFilters = [];
-    const {
-      searchLoginTerm = null,
-      searchEmailTerm = null,
-      sortBy = 'createdAt',
-      sortDirection = SortDirections.desc,
-      pageNumber = 1,
-      pageSize = 10,
-    } = query;
+    const {searchLoginTerm, searchEmailTerm, sortBy, sortDirection, pageNumber, pageSize} = query;
     const sortNumber = getSortNumber(sortDirection);
     if (!!searchLoginTerm) {
       arrayFilters.push({
@@ -39,19 +33,19 @@ export class UsersQueryRepository {
       });
     }
     const filter = !arrayFilters.length ? {} : { $or: arrayFilters };
-    const skipNumber = (+pageNumber - 1) * +pageSize;
+    const skipNumber = (pageNumber - 1) * pageSize;
 
     const count = await this.UserModel.countDocuments(filter);
     const items = await this.UserModel.find(filter, projectionFilter)
       .sort({ [sortBy]: sortNumber })
       .skip(skipNumber)
-      .limit(+pageSize)
+      .limit(pageSize)
       .lean();
 
     return transformPagination<UserViewModel>(
       items,
-      +pageSize,
-      +pageNumber,
+      pageSize,
+      pageNumber,
       count,
     );
   }

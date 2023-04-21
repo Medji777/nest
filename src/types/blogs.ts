@@ -1,4 +1,5 @@
 import { SortDirections } from './types';
+import { PostInputModel } from "./posts";
 
 export type BlogsViewModel = {
   id: string;
@@ -25,6 +26,8 @@ export type BlogsInputModel = {
   description: string;
   websiteUrl: string;
 };
+
+export type BlogPostInputModel = Omit<PostInputModel,'blogId'>
 
 export type QueryBlogs = {
   searchNameTerm: string | null;

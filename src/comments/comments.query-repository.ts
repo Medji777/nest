@@ -5,10 +5,11 @@ import {
   CommentsDocument,
   CommentsModuleType,
 } from './comments.schema';
-import { CommentViewModel, QueryComments } from '../types/comments';
+import { CommentViewModel } from '../types/comments';
 import {LikeStatus, Paginator, SortDirections} from '../types/types';
 import { getSortNumber } from '../utils/sort';
 import { transformPagination } from '../utils/transform';
+import { QueryCommentsDto } from "./dto";
 
 const projection = { _id: 0, postId: 0, __v: 0 };
 
@@ -36,7 +37,7 @@ export class CommentsQueryRepository {
   }
   async getCommentsByPostId(
     id: string,
-    query: QueryComments,
+    query: QueryCommentsDto,
     //userId?: string,
   ): Promise<Paginator<CommentViewModel>> {
     const filter = { postId: id };

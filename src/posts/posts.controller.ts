@@ -12,11 +12,12 @@ import {
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { PostsQueryRepository } from './posts.query-repository';
-import { PostInputModel, QueryPosts } from '../types/posts';
 import { BlogsQueryRepository } from '../blogs/blogs.query-repository';
-import {CommentDBModel, CommentInputModel, QueryComments} from '../types/comments';
+import { CommentDBModel } from '../types/comments';
 import { CommentsService } from '../comments/comments.service';
 import { CommentsQueryRepository } from '../comments/comments.query-repository';
+import { PostInputModelDto, QueryPostsDto } from "./dto";
+import { CommentInputModelDto, QueryCommentsDto } from "../comments/dto";
 
 @Controller('posts')
 export class PostsController {
@@ -30,7 +31,7 @@ export class PostsController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  getPosts(@Query() query: QueryPosts) {
+  getPosts(@Query() query: QueryPostsDto) {
     return this.postsQueryRepository.getAll(query);
   }
 
@@ -42,7 +43,7 @@ export class PostsController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  async createPost(@Body() bodyDTO: PostInputModel) {
+  async createPost(@Body() bodyDTO: PostInputModelDto) {
     const blog = await this.blogsQueryRepository.findById(bodyDTO.blogId);
     return await this.postsService.create({
       ...bodyDTO,
@@ -52,7 +53,10 @@ export class PostsController {
 
   @Put(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async updatePost(@Param('id') id: string, @Body() bodyDTO: PostInputModel) {
+  async updatePost(
+      @Param('id') id: string,
+      @Body() bodyDTO: PostInputModelDto
+  ) {
     await this.postsService.update(id, bodyDTO);
   }
 
@@ -66,7 +70,7 @@ export class PostsController {
   @HttpCode(HttpStatus.OK)
   async getCommentByPost(
     @Param('id') id: string,
-    @Query() query: QueryComments,
+    @Query() query: QueryCommentsDto,
   ) {
     await this.postsQueryRepository.findById(id);
     return this.commentsQueryRepository.getCommentsByPostId(id, query);
@@ -76,7 +80,7 @@ export class PostsController {
   @HttpCode(HttpStatus.CREATED)
   async createCommentByPost(
     @Param('id') id: string,
-    @Body() bodyDTO: CommentInputModel,
+    @Body() bodyDTO: CommentInputModelDto,
   ): Promise<CommentDBModel> {
     const post = await this.postsQueryRepository.findById(id);
     return this.commentsService.create({

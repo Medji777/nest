@@ -11,10 +11,7 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UsersQueryRepository } from './users.query-repository';
-import {
-  QueryUsers as QueryUsersDto,
-  UserInputModel as UserInputDto,
-} from '../types/users';
+import { QueryUsersDto, UserInputModelDto } from "./dto";
 
 @Controller('users')
 export class UsersController {
@@ -30,7 +27,7 @@ export class UsersController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  async create(@Body() bodyDTO: UserInputDto) {
+  async create(@Body() bodyDTO: UserInputModelDto) {
     return this.usersService.createUser(bodyDTO);
   }
 
