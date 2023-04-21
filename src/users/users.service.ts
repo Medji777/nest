@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import { UsersRepository } from './users.repository';
 import { Users } from './users.schema';
 import { UserViewModel } from '../types/users';
-import { UserInputModelDto } from "./dto";
+import { UserInputModelDto } from './dto';
 
 type Cred = {
   check: boolean;

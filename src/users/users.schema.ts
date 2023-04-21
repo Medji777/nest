@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import {HydratedDocument, Model, Types} from 'mongoose';
+import { HydratedDocument, Model, Types } from 'mongoose';
 import { PasswordHash } from '../types/users';
 
 type PayloadType = EmailConfirmation | PasswordConfirmation;

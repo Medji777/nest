@@ -1,5 +1,5 @@
-import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
-import {Document, HydratedDocument, Model, Types} from 'mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document, HydratedDocument, Model, Types } from 'mongoose';
 import { PostInputModel } from '../types/posts';
 import { LikeInfoModel } from '../types/likes';
 
@@ -30,8 +30,8 @@ export class Posts extends Document {
   blogName: string;
   @Prop()
   createdAt?: string;
-  @Prop({type: Types.ObjectId, ref: ExtendedLikesInfo.name })
-  extendedLikesInfo: ExtendedLikesInfo
+  @Prop({ type: Types.ObjectId, ref: ExtendedLikesInfo.name })
+  extendedLikesInfo: ExtendedLikesInfo;
 
   update(payload: PostInputModel) {
     this.title = payload.title;

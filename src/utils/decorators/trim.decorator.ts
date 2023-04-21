@@ -1,7 +1,7 @@
-import {Transform, TransformFnParams} from 'class-transformer';
+import { Transform, TransformFnParams } from 'class-transformer';
 
 export function Trim(): PropertyDecorator {
-    return Transform(({ value }: TransformFnParams) =>
-        typeof value === 'string' ? value.trim() : value,
-    );
+  return Transform(({ value }: TransformFnParams) =>
+    typeof value === 'string' ? value.trim() : value,
+  );
 }

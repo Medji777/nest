@@ -1,7 +1,4 @@
-import {CommentInputModelDto} from './CommentInputModel.dto';
-import {QueryCommentsDto} from './QueryComments.dto';
+import { CommentInputModelDto } from './CommentInputModel.dto';
+import { QueryCommentsDto } from './QueryComments.dto';
 
-export {
-    CommentInputModelDto,
-    QueryCommentsDto
-}
+export { CommentInputModelDto, QueryCommentsDto };

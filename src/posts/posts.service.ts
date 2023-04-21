@@ -12,9 +12,7 @@ import { LikeStatus } from '../types/types';
 
 @Injectable()
 export class PostsService {
-  constructor(
-    private readonly postsRepository: PostsRepository,
-  ) {}
+  constructor(private readonly postsRepository: PostsRepository) {}
   async create(payload: PostInputModel & BlogName): Promise<PostsViewModel> {
     const createPost = this.postsRepository.create(
       payload.title,

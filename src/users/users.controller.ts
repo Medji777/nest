@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UsersQueryRepository } from './users.query-repository';
-import { QueryUsersDto, UserInputModelDto } from "./dto";
+import { QueryUsersDto, UserInputModelDto } from './dto';
 
 @Controller('users')
 export class UsersController {

@@ -6,7 +6,7 @@ import { getSortNumber } from '../utils/sort';
 import { transformPagination } from '../utils/transform';
 import { Paginator } from '../types/types';
 import { UserViewModel } from '../types/users';
-import { QueryUsersDto } from "./dto";
+import { QueryUsersDto } from './dto';
 
 const projectionFilter = {
   _id: 0,
@@ -20,7 +20,14 @@ export class UsersQueryRepository {
   constructor(@InjectModel(Users.name) private UserModel: Model<Users>) {}
   async getAll(query: QueryUsersDto): Promise<Paginator<UserViewModel>> {
     const arrayFilters = [];
-    const {searchLoginTerm, searchEmailTerm, sortBy, sortDirection, pageNumber, pageSize} = query;
+    const {
+      searchLoginTerm,
+      searchEmailTerm,
+      sortBy,
+      sortDirection,
+      pageNumber,
+      pageSize,
+    } = query;
     const sortNumber = getSortNumber(sortDirection);
     if (!!searchLoginTerm) {
       arrayFilters.push({

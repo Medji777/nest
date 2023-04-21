@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { BlogsRepository } from './blogs.repository';
 import { BlogsViewModel } from '../types/blogs';
 import { BlogDocument } from './blogs.schema';
-import { BlogsInputModelDTO } from "./dto";
+import { BlogsInputModelDTO } from './dto';
 
 @Injectable()
 export class BlogsService {

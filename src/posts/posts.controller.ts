@@ -16,8 +16,8 @@ import { BlogsQueryRepository } from '../blogs/blogs.query-repository';
 import { CommentDBModel } from '../types/comments';
 import { CommentsService } from '../comments/comments.service';
 import { CommentsQueryRepository } from '../comments/comments.query-repository';
-import { PostInputModelDto, QueryPostsDto } from "./dto";
-import { CommentInputModelDto, QueryCommentsDto } from "../comments/dto";
+import { PostInputModelDto, QueryPostsDto } from './dto';
+import { CommentInputModelDto, QueryCommentsDto } from '../comments/dto';
 
 @Controller('posts')
 export class PostsController {
@@ -54,8 +54,8 @@ export class PostsController {
   @Put(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async updatePost(
-      @Param('id') id: string,
-      @Body() bodyDTO: PostInputModelDto
+    @Param('id') id: string,
+    @Body() bodyDTO: PostInputModelDto,
   ) {
     await this.postsService.update(id, bodyDTO);
   }

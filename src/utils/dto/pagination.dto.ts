@@ -1,21 +1,21 @@
-import {IsInt, IsOptional} from "class-validator";
-import {NumberSanitize, SortDirection, Trim} from "../decorators";
-import {SortDirections} from "../../types/types";
+import { IsInt, IsOptional } from 'class-validator';
+import { NumberSanitize, SortDirection, Trim } from '../decorators';
+import { SortDirections } from '../../types/types';
 
 export class PaginationDto {
-    @IsOptional()
-    @Trim()
-    readonly sortBy: string = 'createdAt';
-    @IsOptional()
-    @Trim()
-    @SortDirection()
-    readonly sortDirection: SortDirections = SortDirections.desc;
-    @IsOptional()
-    @NumberSanitize(1)
-    @IsInt()
-    readonly pageNumber: number = 1;
-    @IsOptional()
-    @NumberSanitize(10)
-    @IsInt()
-    readonly pageSize: number = 10;
+  @IsOptional()
+  @Trim()
+  readonly sortBy: string = 'createdAt';
+  @IsOptional()
+  @Trim()
+  @SortDirection()
+  readonly sortDirection: SortDirections = SortDirections.desc;
+  @IsOptional()
+  @NumberSanitize(1)
+  @IsInt()
+  readonly pageNumber: number = 1;
+  @IsOptional()
+  @NumberSanitize(10)
+  @IsInt()
+  readonly pageSize: number = 10;
 }

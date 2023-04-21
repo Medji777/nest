@@ -1,4 +1,4 @@
-import {forwardRef, Module} from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Posts, PostsSchema } from './posts.schema';
 import { PostsController } from './posts.controller';
@@ -15,11 +15,7 @@ import { CommentsModule } from '../comments/comments.module';
     CommentsModule,
   ],
   controllers: [PostsController],
-  providers: [
-    PostsService,
-    PostsRepository,
-    PostsQueryRepository,
-  ],
+  providers: [PostsService, PostsRepository, PostsQueryRepository],
   exports: [PostsService, PostsQueryRepository],
 })
 export class PostsModule {}

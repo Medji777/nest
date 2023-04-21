@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import {HydratedDocument, Model, Types} from 'mongoose';
+import { HydratedDocument, Model, Types } from 'mongoose';
 import { CommentInputModel } from '../types/comments';
 import { LikeInfoModel } from '../types/likes';
 

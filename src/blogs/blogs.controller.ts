@@ -12,9 +12,14 @@ import {
 } from '@nestjs/common';
 import { BlogsService } from './blogs.service';
 import { BlogsQueryRepository } from './blogs.query-repository';
-import { PostsService } from "../posts/posts.service";
-import { PostsQueryRepository } from "../posts/posts.query-repository";
-import { BlogPostInputModelDto, BlogsInputModelDTO, QueryBlogsDTO, QueryPostsDto } from "./dto";
+import { PostsService } from '../posts/posts.service';
+import { PostsQueryRepository } from '../posts/posts.query-repository';
+import {
+  BlogPostInputModelDto,
+  BlogsInputModelDTO,
+  QueryBlogsDTO,
+  QueryPostsDto,
+} from './dto';
 
 @Controller('blogs')
 export class BlogsController {
@@ -22,7 +27,7 @@ export class BlogsController {
     private readonly blogsService: BlogsService,
     private readonly postsService: PostsService,
     private readonly blogsQueryRepository: BlogsQueryRepository,
-    private readonly postsQueryRepository: PostsQueryRepository
+    private readonly postsQueryRepository: PostsQueryRepository,
   ) {}
 
   @Get()
@@ -56,18 +61,24 @@ export class BlogsController {
   }
 
   @Get(':blogId/posts')
-  async getPostByBlogIdWithQuery(@Param('blogId') id: string, @Query() query: QueryPostsDto) {
+  async getPostByBlogIdWithQuery(
+    @Param('blogId') id: string,
+    @Query() query: QueryPostsDto,
+  ) {
     await this.blogsQueryRepository.findById(id);
-    return this.postsQueryRepository.getPostsByBlogId(id,query)
+    return this.postsQueryRepository.getPostsByBlogId(id, query);
   }
 
   @Post(':blogId/posts')
-  async createPostForBlogId(@Param('blogId') id: string, @Body() bodyDTO: BlogPostInputModelDto) {
+  async createPostForBlogId(
+    @Param('blogId') id: string,
+    @Body() bodyDTO: BlogPostInputModelDto,
+  ) {
     const blog = await this.blogsQueryRepository.findById(id);
     return await this.postsService.create({
       ...bodyDTO,
       blogId: id,
-      blogName: blog.name
-    })
+      blogName: blog.name,
+    });
   }
 }

@@ -5,13 +5,14 @@ import { BlogsViewModel } from '../types/blogs';
 import { Paginator } from '../types/types';
 import { getSortNumber } from '../utils/sort';
 import { transformPagination } from '../utils/transform';
-import { QueryBlogsDTO } from "./dto";
+import { QueryBlogsDTO } from './dto';
 
 @Injectable()
 export class BlogsQueryRepository {
   constructor(@InjectModel(Blogs.name) private BlogsModel: BlogsModelType) {}
   async getAll(query: QueryBlogsDTO): Promise<Paginator<BlogsViewModel>> {
-    const { searchNameTerm, sortBy, sortDirection, pageNumber, pageSize } = query;
+    const { searchNameTerm, sortBy, sortDirection, pageNumber, pageSize } =
+      query;
     const sortNumber = getSortNumber(sortDirection);
     const filter = !searchNameTerm
       ? {}
@@ -31,7 +32,10 @@ export class BlogsQueryRepository {
     );
   }
   async findById(id: string): Promise<BlogsViewModel> {
-    const blog = await this.BlogsModel.findOne({ id }, { _id: 0, __v: 0 }).lean();
+    const blog = await this.BlogsModel.findOne(
+      { id },
+      { _id: 0, __v: 0 },
+    ).lean();
     if (!blog) {
       throw new NotFoundException('blog not found');
     }
