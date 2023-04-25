@@ -25,3 +25,13 @@ export type QueryUsers = {
   pageNumber: number;
   pageSize: number;
 };
+
+export type ConfirmModel = {
+  confirmationCode?: string | null;
+  expirationDate?: Date;
+  isConfirmed: boolean;
+};
+
+export type EmailConfirmUserModel = ConfirmModel;
+
+export type PasswordConfirmUserModel = ConfirmModel;

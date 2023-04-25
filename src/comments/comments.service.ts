@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import {Injectable, NotFoundException} from '@nestjs/common';
 import { CommentsRepository } from './comments.repository';
 import {
   CommentatorInfo,
@@ -9,13 +9,23 @@ import {
 } from '../types/comments';
 import { CommentsDocument } from './comments.schema';
 import { LikeStatus } from '../types/types';
-import { LikeInfoModel } from '../types/likes';
+import {LikeInfoModel, LikeInputModel} from '../types/likes';
+import {LikeCalculateService} from "../applications/likeCalculate.service";
+import {CommentsLikeQueryRepository} from "./like/commentsLike.query-repository";
+import {CommentsQueryRepository} from "./comments.query-repository";
+import {CommentsLikeService} from "./like/commentsLike.service";
 
 type CommentPayload = CommentInputModel & CommentatorInfo & PostId;
 
 @Injectable()
 export class CommentsService {
-  constructor(private readonly commentsRepository: CommentsRepository) {}
+  constructor(
+      private readonly likeCalculateService: LikeCalculateService,
+      private readonly commentsRepository: CommentsRepository,
+      private readonly commentsQueryRepository: CommentsQueryRepository,
+      private readonly commentsLikesService: CommentsLikeService,
+      private readonly commentsLikeQueryRepository: CommentsLikeQueryRepository
+  ) {}
   async create(payload: CommentPayload): Promise<CommentDBModel> {
     const doc = this.commentsRepository.create(
       payload.content,
@@ -24,31 +34,60 @@ export class CommentsService {
       payload.userLogin,
     );
     await this.commentsRepository.save(doc);
-    return this._mapComments(doc);
+    return this._likeCreateTransform(this._mapComments(doc));
   }
-  async update(id: string, payload: CommentInputModel): Promise<boolean> {
+
+  async update(id: string, payload: CommentInputModel): Promise<void> {
     const doc = await this.commentsRepository.findById(id);
-    if (!doc) return false;
+    if (!doc) {
+      throw new NotFoundException()
+    }
     doc.update(payload);
     await this.commentsRepository.save(doc);
-    return true;
   }
-  async delete(id: string): Promise<boolean> {
-    return this.commentsRepository.delete(id);
+
+  async delete(id: string): Promise<void> {
+    const isDeleted = this.commentsRepository.delete(id)
+    if(!isDeleted){
+      throw new NotFoundException()
+    }
   }
   async deleteAll(): Promise<void> {
     await this.commentsRepository.deleteAll();
   }
-  private async updateLikeInComment(
-    id: string,
-    likesInfoDTO: LikeInfoModel,
-  ): Promise<boolean> {
+
+  async updateLike(commentId: string, userId: string, payload: LikeInputModel): Promise<void> {
+    let lastStatus: LikeStatus = LikeStatus.None;
+    const comment = await this.commentsQueryRepository.findById(commentId)
+    if(!comment) {
+      throw new NotFoundException()
+    }
+    const likeInfo = await this.commentsLikeQueryRepository.getLike(userId, commentId);
+    if(!likeInfo){
+      await this.commentsLikesService.create(userId,commentId,payload.likeStatus)
+    } else {
+      await this.commentsLikesService.update(likeInfo, payload.likeStatus)
+      lastStatus = likeInfo.myStatus
+    }
+    const likeInfoCalc = await this.likeCalculateService.getUpdatedLike(
+        {
+          likesCount: comment.likesInfo.likesCount,
+          dislikesCount: comment.likesInfo.dislikesCount
+        },
+        lastStatus,
+        payload.likeStatus
+    );
+    await this.updateLikeInComment(comment.id!, likeInfoCalc)
+  }
+
+  private async updateLikeInComment(id: string, likesInfoDTO: LikeInfoModel): Promise<boolean> {
     const doc = await this.commentsRepository.findById(id);
     if (!doc) return false;
     doc.updateLikeInComment(likesInfoDTO);
     await this.commentsRepository.save(doc);
     return true;
   }
+
   private _mapComments(doc: CommentsDocument): CommentDBModel {
     return {
       id: doc.id,

@@ -17,13 +17,8 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
-//    "paths": {
-//      "@app": ["src/app"],
-//      "@app/*": ["src/app/*"],
-//      "@utils": ["src/utils"],
-//      "@utils/*": ["src/utils/*"],
-//      "@type": ["src/types"],
-//      "@type/*": ["src/types/*"]
-//    }
-  }
+    "esModuleInterop": true
+  },
+  "include": ["src"],
+  "files": ["src/types/index.d.ts"]
 }

@@ -22,6 +22,7 @@ export class UsersRepository {
       $or: [
         { login: uniqueField },
         { email: uniqueField },
+        { 'emailConfirmation.confirmationCode': uniqueField },
         { 'passwordConfirmation.confirmationCode': uniqueField },
       ],
     });

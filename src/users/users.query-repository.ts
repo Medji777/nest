@@ -1,12 +1,11 @@
 import { InjectModel } from '@nestjs/mongoose';
 import { NotFoundException } from '@nestjs/common';
-import { Model } from 'mongoose';
-import { Users } from './users.schema';
-import { getSortNumber } from '../utils/sort';
+import {Users, UsersModelType} from './users.schema';
 import { transformPagination } from '../utils/transform';
 import { Paginator } from '../types/types';
 import { UserViewModel } from '../types/users';
 import { QueryUsersDto } from './dto';
+import {PaginationService} from "../applications/pagination.service";
 
 const projectionFilter = {
   _id: 0,
@@ -17,18 +16,17 @@ const projectionFilter = {
 };
 
 export class UsersQueryRepository {
-  constructor(@InjectModel(Users.name) private UserModel: Model<Users>) {}
+  constructor(
+      @InjectModel(Users.name) private UserModel: UsersModelType,
+      private readonly paginationService: PaginationService
+  ) {}
   async getAll(query: QueryUsersDto): Promise<Paginator<UserViewModel>> {
     const arrayFilters = [];
     const {
       searchLoginTerm,
       searchEmailTerm,
-      sortBy,
-      sortDirection,
-      pageNumber,
-      pageSize,
+      ...restQuery
     } = query;
-    const sortNumber = getSortNumber(sortDirection);
     if (!!searchLoginTerm) {
       arrayFilters.push({
         login: { $regex: new RegExp(searchLoginTerm, 'gi') },
@@ -40,20 +38,14 @@ export class UsersQueryRepository {
       });
     }
     const filter = !arrayFilters.length ? {} : { $or: arrayFilters };
-    const skipNumber = (pageNumber - 1) * pageSize;
 
-    const count = await this.UserModel.countDocuments(filter);
-    const items = await this.UserModel.find(filter, projectionFilter)
-      .sort({ [sortBy]: sortNumber })
-      .skip(skipNumber)
-      .limit(pageSize)
-      .lean();
+    const pagination = await this.paginationService.createLean(restQuery,this.UserModel,projectionFilter,filter)
 
     return transformPagination<UserViewModel>(
-      items,
-      pageSize,
-      pageNumber,
-      count,
+        pagination.doc,
+        pagination.pageSize,
+        pagination.pageNumber,
+        pagination.count,
     );
   }
   async getUserByLoginOrEmail(input: string): Promise<Users> {
