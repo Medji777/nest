@@ -2,7 +2,7 @@ import {BadRequestException, Injectable, NotFoundException} from '@nestjs/common
 import {JwtService} from '@nestjs/jwt';
 import {isEqual} from "date-fns";
 import {SecurityRepository} from './security.repository';
-import {RefreshPayloadType, RefreshResponseType} from "../types/security";
+import {RefreshResponseType} from "../types/security";
 
 @Injectable()
 export class SecurityService {
@@ -63,5 +63,8 @@ export class SecurityService {
       }
     }
     return null
+  }
+  async deleteAll(): Promise<void>{
+    await this.securityRepository.deleteAll()
   }
 }

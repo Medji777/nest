@@ -14,16 +14,18 @@ import {
 import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { UsersQueryRepository } from '../users/users.query-repository';
-import { UserInputModel } from '../types/users';
+import { LocalAuthGuard } from "./guards/local-auth.guard";
+import { JwtRefreshGuard } from "./guards/jwt-refresh.guard";
+import { JwtAccessGuard } from "./guards/jwt-access.guard";
+import { UserInputModelDto } from "../users/dto";
 import {
-  NewPasswordRecoveryInputModel,
-  PasswordRecoveryInputModel,
-  RegistrationConfirmationCodeModel,
-  RegistrationEmailResending,
-} from '../types/auth';
-import {LocalAuthGuard} from "./guards/local-auth.guard";
-import {JwtRefreshGuard} from "./guards/jwt-refresh.guard";
-import {JwtAccessGuard} from "./guards/jwt-access.guard";
+  RegConfirmCodeModelDto,
+  RegEmailResendingDto,
+  PasswordRecoveryInputModelDto,
+  NewPassRecIMDto
+} from "./dto";
+import {Validate} from "class-validator";
+import {CheckUniqueLoginOrEmailValidate} from "../utils/validates";
 
 @Controller('auth')
 export class AuthController {
@@ -31,8 +33,9 @@ export class AuthController {
     private readonly authService: AuthService,
     private readonly usersQueryRepository: UsersQueryRepository,
   ) {}
-  @UseGuards(LocalAuthGuard)
+
   @Post('login')
+  @UseGuards(LocalAuthGuard)
   async login(
     @Req() req: Request,
     @Ip() ip: string,
@@ -48,16 +51,19 @@ export class AuthController {
     return authData.token;
   }
 
-  @UseGuards(JwtRefreshGuard)
   @Post('logout')
+  @UseGuards(JwtRefreshGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
-  async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+  async logout(
+      @Req() req: Request,
+      @Res({ passthrough: true }) res: Response
+  ) {
     await this.authService.deleteSessionByDeviceId(req.user.deviceId);
     res.clearCookie('refreshToken');
   }
 
-  @UseGuards(JwtAccessGuard)
   @Get('me')
+  @UseGuards(JwtAccessGuard)
   meProfile(@Req() req: Request) {
     return {
       email: req.user.email,
@@ -67,27 +73,28 @@ export class AuthController {
   }
 
   @Post('registration')
+  @Validate(CheckUniqueLoginOrEmailValidate)
   @HttpCode(HttpStatus.NO_CONTENT)
-  async registration(@Body() bodyDTO: UserInputModel) {
+  async registration(@Body() bodyDTO: UserInputModelDto) {
     await this.authService.saveUser(bodyDTO);
   }
 
   @Post('registration-confirmation')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async confirmation(@Body() bodyDTO: RegistrationConfirmationCodeModel) {
+  async confirmation(@Body() bodyDTO: RegConfirmCodeModelDto) {
     await this.authService.confirmUser(bodyDTO);
   }
 
   @Post('registration-email-resending')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async emailResending(@Body() bodyDTO: RegistrationEmailResending) {
+  async emailResending(@Body() bodyDTO: RegEmailResendingDto) {
     await this.authService.resendingCode(bodyDTO);
   }
 
   @Post('password-recovery')
   @HttpCode(HttpStatus.NO_CONTENT)
   async passwordRecovery(
-    @Body() bodyDTO: PasswordRecoveryInputModel,
+    @Body() bodyDTO: PasswordRecoveryInputModelDto,
     @Res({ passthrough: true }) res: Response,
   ) {
     const user = await this.usersQueryRepository.getUserByLoginOrEmail(
@@ -101,7 +108,7 @@ export class AuthController {
 
   @Post('new-password')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async newPassword(@Body() bodyDTO: NewPasswordRecoveryInputModel) {
+  async newPassword(@Body() bodyDTO: NewPassRecIMDto) {
     await this.authService.confirmRecoveryPassword(bodyDTO);
   }
 

@@ -23,4 +23,7 @@ export class PostsLikeRepository {
     async save(model: PostsLikeDocument): Promise<void> {
         await model.save()
     }
+    async deleteAll(): Promise<void> {
+        await this.PostsLikeModel.deleteMany({})
+    }
 }

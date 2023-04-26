@@ -17,4 +17,7 @@ export class CommentsLikeRepository {
     async save(model: CommentsLikeDocument): Promise<void> {
         await model.save()
     }
+    async deleteAll(): Promise<void> {
+        await this.CommentsLikeModel.deleteMany({})
+    }
 }

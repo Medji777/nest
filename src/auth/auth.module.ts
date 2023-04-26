@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
-import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
-import { settings } from '../config';
+import { AuthController } from './auth.controller';
+import { AuthService } from './auth.service';
 import { UsersModule } from '../users/users.module';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtAccessStrategy } from './strategies/jwt-access.strategy';
@@ -11,6 +10,13 @@ import { SecurityModule } from '../security/security.module';
 import { EmailAdapter } from '../adapters/email.adapter';
 import { ActiveCodeAdapter } from '../adapters/activeCode.adapter';
 import { JwtRefreshStrategy } from "./strategies/jwt-refresh.stategy";
+import {
+  CheckRecoveryCodeValidate,
+  CheckRegistrationEmailValidate,
+  CheckUniqueLoginOrEmailValidate,
+  CodeConfirmValidate
+} from "../utils/validates";
+import { settings } from '../config';
 
 @Module({
   imports: [
@@ -30,6 +36,10 @@ import { JwtRefreshStrategy } from "./strategies/jwt-refresh.stategy";
     JwtRefreshStrategy,
     EmailAdapter,
     ActiveCodeAdapter,
+    CodeConfirmValidate,
+    CheckRecoveryCodeValidate,
+    CheckRegistrationEmailValidate,
+    CheckUniqueLoginOrEmailValidate
   ],
   exports: [AuthService],
 })

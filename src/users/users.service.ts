@@ -3,16 +3,16 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import bcrypt from 'bcrypt';
 import { UsersRepository } from './users.repository';
 import { Users } from './users.schema';
+import {PassHashService} from "../applications/passHash.service";
 import {
   EmailConfirmUserModel,
   PasswordConfirmUserModel,
-  PasswordHash,
   UserViewModel,
 } from '../types/users';
 import { UserInputModelDto } from './dto';
+import {ErrorResponse} from "../types/types";
 
 type Cred = {
   check: boolean;
@@ -21,9 +21,12 @@ type Cred = {
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly usersRepository: UsersRepository) {}
+  constructor(
+      private readonly usersRepository: UsersRepository,
+      private readonly passHashService: PassHashService
+  ) {}
   async create(payload: UserInputModelDto, dto?) {
-    const passwordHash = await this._createPasswordHash(payload.password);
+    const passwordHash = await this.passHashService.create(payload.password);
     const doc = this.usersRepository.create(
       payload.login,
       payload.email,
@@ -52,6 +55,64 @@ export class UsersService {
     await this.usersRepository.deleteAll();
   }
 
+  async checkConfirmCode(code: string): Promise<ErrorResponse> {
+    const user = await this.usersRepository.getUserByUniqueField(code);
+    if(!user){
+      return {
+        check: false,
+        message: 'user with this code don\'t exist in the DB'
+      }
+    }
+    const resp = await user.checkValidCode()
+    if(!resp.check && resp.code === 'confirm'){
+      return {
+        check: resp.check,
+        message: 'email is already confirmed'
+      }
+    }
+    if(!resp.check && resp.code === 'expired'){
+      return {
+        check: resp.check,
+        message: 'code expired'
+      }
+    }
+    return {check: true}
+  }
+  async checkRegEmail(email: string): Promise<ErrorResponse> {
+    const user = await this.usersRepository.getUserByUniqueField(email);
+    if(!user){
+      return {
+        check: false,
+        message: 'user with this code don\'t exist in the DB'
+      }
+    }
+    const resp = await user.checkValidCode(true)
+    if(!resp.check && resp.code === 'confirm'){
+      return {
+        check: resp.check,
+        message: 'email is already confirmed'
+      }
+    }
+    return {check: true}
+  }
+  async checkRecoveryCode(code: string): Promise<ErrorResponse> {
+    const user = await this.usersRepository.getUserByUniqueField(code);
+    if(!user){
+      return {
+        check: false,
+        message: 'user with this code don\'t exist in the DB'
+      }
+    }
+    const resp = await user.checkValidRecoveryCode()
+    if(!resp.check && resp.code === 'expired'){
+      return {
+        check: resp.check,
+        message: 'code expired'
+      }
+    }
+    return {check: true}
+  }
+
   async checkCredentials(input: string, password: string): Promise<Cred> {
     const user = await this.usersRepository.getUserByUniqueField(input);
     if (!user) {
@@ -60,7 +121,7 @@ export class UsersService {
         user: null,
       };
     } else {
-      const check = await bcrypt.compare(password, user.passwordHash);
+      const check = await this.passHashService.validate(password, user.passwordHash)
       return {
         check,
         user,
@@ -94,7 +155,7 @@ export class UsersService {
     await this.usersRepository.save(doc);
   }
   async updatePassword(code: string, newPassword: string): Promise<void> {
-    const passwordHash = await this._createPasswordHash(newPassword);
+    const passwordHash = await this.passHashService.create(newPassword);
     const doc = await this.usersRepository.getUserByUniqueField(code);
     if (!doc) {
       throw new BadRequestException();
@@ -112,9 +173,5 @@ export class UsersService {
     }
     doc.updatePasswordConfirmationData(payload);
     await this.usersRepository.save(doc);
-  }
-  private async _createPasswordHash(password: string): Promise<string> {
-    const salt = await bcrypt.genSalt(10);
-    return bcrypt.hash(password, salt);
   }
 }

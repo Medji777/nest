@@ -9,21 +9,21 @@ import { Trim } from '../../utils/decorators';
 import { UserInputModel } from '../../types/users';
 
 export class UserInputModelDto implements UserInputModel {
-  @IsString({ message: 'input is string' })
-  @Trim()
-  @IsNotEmpty()
-  @Matches(/^[a-zA-Z0-9_-]*$/)
   @Length(3, 10)
+  @Matches(/^[a-zA-Z0-9_-]*$/)
+  @IsNotEmpty()
+  @Trim()
+  @IsString({ message: 'input is string' })
   login: string;
-  @IsString({ message: 'input is string' })
-  @Trim()
-  @IsNotEmpty()
   @Length(6, 20)
-  password: string;
-  @IsString({ message: 'input is string' })
-  @Trim()
   @IsNotEmpty()
-  @Matches(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/)
+  @Trim()
+  @IsString({ message: 'input is string' })
+  password: string;
   @IsEmail()
+  //@Matches(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/)
+  @IsNotEmpty()
+  @Trim()
+  @IsString({ message: 'input is string' })
   email: string;
 }

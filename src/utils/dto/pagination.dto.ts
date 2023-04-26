@@ -7,8 +7,8 @@ export class PaginationDto {
   @Trim()
   readonly sortBy: string = 'createdAt';
   @IsOptional()
-  @Trim()
   @SortDirection()
+  @Trim()
   readonly sortDirection: SortDirections = SortDirections.desc;
   @IsOptional()
   @NumberSanitize(1)

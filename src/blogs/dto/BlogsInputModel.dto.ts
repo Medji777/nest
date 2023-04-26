@@ -3,20 +3,20 @@ import { Trim } from '../../utils/decorators';
 import { BlogsInputModel } from '../../types/blogs';
 
 export class BlogsInputModelDTO implements BlogsInputModel {
-  @IsString({ message: 'input is string' })
-  @Trim()
-  @IsNotEmpty({ message: 'input is required' })
   @MaxLength(13, { message: 'input is max 13 symbol' })
+  @IsNotEmpty({ message: 'input is required' })
+  @Trim()
+  @IsString({ message: 'input is string' })
   readonly name: string;
-  @IsString({ message: 'input is string' })
-  @Trim()
-  @IsNotEmpty({ message: 'input is required' })
   @MaxLength(500, { message: 'input is max 500 symbol' })
-  readonly description: string;
-  @IsString({ message: 'input is string' })
-  @Trim()
   @IsNotEmpty({ message: 'input is required' })
-  @IsUrl({ protocols: ['https'] }, { message: 'input is URL' })
+  @Trim()
+  @IsString({ message: 'input is string' })
+  readonly description: string;
   @MaxLength(100, { message: 'input is max 100 symbol' })
+  @IsUrl({ protocols: ['https'] }, { message: 'input is URL' })
+  @IsNotEmpty({ message: 'input is required' })
+  @Trim()
+  @IsString({ message: 'input is string' })
   readonly websiteUrl: string;
 }

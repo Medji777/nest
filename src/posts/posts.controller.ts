@@ -8,21 +8,23 @@ import {
   Get,
   Post,
   Put,
-  Delete, UseGuards, Req, UseInterceptors,
+  Delete,
+  UseGuards,
+  Req,
+  UseInterceptors
 } from '@nestjs/common';
-import {Request} from 'express';
+import { Request } from 'express';
 import { PostsService } from './posts.service';
 import { PostsQueryRepository } from './posts.query-repository';
 import { BlogsQueryRepository } from '../blogs/blogs.query-repository';
 import { CommentDBModel } from '../types/comments';
 import { CommentsService } from '../comments/comments.service';
 import { CommentsQueryRepository } from '../comments/comments.query-repository';
-import { PostInputModelDto, QueryPostsDto } from './dto';
+import { PostInputModelDto, QueryPostsDto, LikeInputModelDto } from './dto';
 import { CommentInputModelDto, QueryCommentsDto } from '../comments/dto';
-//import { GetUserGuard } from "../auth/guards/getUser.guard";
 import { JwtAccessGuard } from "../auth/guards/jwt-access.guard";
-import { LikeInputModel } from "../types/likes";
 import { GetUserInterceptor } from "../auth/interceptors/getUser.interceptor";
+import { BasicGuard } from "../auth/guards/basic.guard";
 
 @Controller('posts')
 export class PostsController {
@@ -36,7 +38,6 @@ export class PostsController {
 
   @Get()
   @UseInterceptors(GetUserInterceptor)
-  //@UseGuards(GetUserGuard)
   @HttpCode(HttpStatus.OK)
   getPosts(@Query() query: QueryPostsDto, @Req() req: Request) {
     return this.postsQueryRepository.getAll(query, req.user.id);
@@ -44,13 +45,13 @@ export class PostsController {
 
   @Get(':id')
   @UseInterceptors(GetUserInterceptor)
-  //@UseGuards(GetUserGuard)
   @HttpCode(HttpStatus.OK)
   async getPostById(@Param('id') id: string, @Req() req: Request) {
     return await this.postsQueryRepository.findById(id, req.user.id);
   }
 
   @Post()
+  @UseGuards(BasicGuard)
   @HttpCode(HttpStatus.CREATED)
   async createPost(@Body() bodyDTO: PostInputModelDto) {
     const blog = await this.blogsQueryRepository.findById(bodyDTO.blogId);
@@ -61,6 +62,7 @@ export class PostsController {
   }
 
   @Put(':id')
+  @UseGuards(BasicGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async updatePost(
     @Param('id') id: string,
@@ -70,6 +72,7 @@ export class PostsController {
   }
 
   @Delete(':id')
+  @UseGuards(BasicGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async deletePost(@Param('id') id: string) {
     await this.postsService.delete(id);
@@ -77,7 +80,6 @@ export class PostsController {
 
   @Get('/:id/comments')
   @UseInterceptors(GetUserInterceptor)
-  //@UseGuards(GetUserGuard)
   @HttpCode(HttpStatus.OK)
   async getCommentByPost(
     @Param('id') id: string,
@@ -110,7 +112,7 @@ export class PostsController {
   @HttpCode(HttpStatus.NO_CONTENT)
   async updateStatusLike(
       @Param('id') id: string,
-      @Body() bodyDTO: LikeInputModel,
+      @Body() bodyDTO: LikeInputModelDto,
       @Req() req: Request
   ) {
     await this.postsService.updateStatusLike(

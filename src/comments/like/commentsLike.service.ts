@@ -31,4 +31,7 @@ export class CommentsLikeService {
         like.update(myStatus)
         await this.commentsLikeRepository.save(like)
     }
+    async deleteAll(): Promise<void> {
+        await this.commentsLikeRepository.deleteAll()
+    }
 }

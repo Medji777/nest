@@ -9,14 +9,15 @@ import {
   Put,
   Req,
   SetMetadata,
-  UseGuards
+  UseGuards, UseInterceptors
 } from '@nestjs/common';
 import { Request } from 'express';
 import { CommentsService} from "./comments.service";
 import { CommentsQueryRepository } from './comments.query-repository';
 import { CheckCommentsGuard } from "./guards/checkComments.guard";
-import { CommentInputModel } from "../types/comments";
-import { LikeInputModel } from "../types/likes";
+import { CommentInputModelDto, LikeInputModelDto } from './dto';
+import { JwtAccessGuard } from "../auth/guards/jwt-access.guard";
+import { GetUserInterceptor } from "../auth/interceptors/getUser.interceptor";
 
 @Controller('comments')
 export class CommentsController {
@@ -26,6 +27,7 @@ export class CommentsController {
   ) {}
 
   @Get(':id')
+  @UseInterceptors(GetUserInterceptor)
   @HttpCode(HttpStatus.OK)
   async getComments(@Param('id') id: string) {
     return this.commentsQueryRepository.findById(id);
@@ -33,21 +35,23 @@ export class CommentsController {
 
   @Put(':id')
   @UseGuards(CheckCommentsGuard)
+  @UseGuards(JwtAccessGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async updateComments(
       @Param('id') id: string,
-      @Body() bodyDTO: CommentInputModel
+      @Body() bodyDTO: CommentInputModelDto
   ) {
     await this.commentsService.update(id, bodyDTO);
   }
 
   @Put(':id/like-status')
-  @SetMetadata('checkUser',true)
   @UseGuards(CheckCommentsGuard)
+  @SetMetadata('checkUser',true)
+  @UseGuards(JwtAccessGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async updateLikeAtComment(
       @Param('id') id: string,
-      @Body() bodyDTO: LikeInputModel,
+      @Body() bodyDTO: LikeInputModelDto,
       @Req() req: Request
   ) {
     await this.commentsService.updateLike(id, req.user?.id, bodyDTO)
@@ -55,6 +59,7 @@ export class CommentsController {
 
   @Delete(':id')
   @UseGuards(CheckCommentsGuard)
+  @UseGuards(JwtAccessGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async deleteComments(@Param('id') id: string) {
     await this.commentsService.delete(id)

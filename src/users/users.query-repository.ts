@@ -49,17 +49,24 @@ export class UsersQueryRepository {
     );
   }
   async getUserByLoginOrEmail(input: string): Promise<Users> {
-    const user = await this.UserModel.findOne(
-      { $or: [{ login: input }, { email: input }] },
-      { _id: 0, __v: 0 },
-    ).lean();
+    const user = this._getUserByLoginOrEmail(input)
     if (!user) {
       throw new NotFoundException('user not found');
     }
     return user;
   }
+  async getIsUniqueUserByLoginOrEmail(input: string): Promise<boolean> {
+    const user = this._getUserByLoginOrEmail(input)
+    return !!user;
+  }
   async getUserByUserId(userId: string): Promise<Users | null> {
     return this.UserModel.findOne({ id: userId }).lean();
+  }
+  private async _getUserByLoginOrEmail(input: string): Promise<Users> {
+    return this.UserModel.findOne(
+        { $or: [{ login: input }, { email: input }] },
+        { _id: 0, __v: 0 },
+    ).lean();
   }
   async getUserByCode(code: string): Promise<Users | null> {
     return this.UserModel.findOne({

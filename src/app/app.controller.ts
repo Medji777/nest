@@ -4,6 +4,7 @@ import { BlogsService } from '../blogs/blogs.service';
 import { PostsService } from '../posts/posts.service';
 import { CommentsService } from '../comments/comments.service';
 import { UsersService } from '../users/users.service';
+import { SecurityService } from "../security/security.service";
 
 @Controller()
 export class AppController {
@@ -13,6 +14,7 @@ export class AppController {
     private readonly postService: PostsService,
     private readonly commentsService: CommentsService,
     private readonly userService: UsersService,
+    private readonly securityService: SecurityService
   ) {}
 
   @Get()
@@ -26,7 +28,10 @@ export class AppController {
   async testingAllDelete() {
     await this.blogService.deleteAll();
     await this.postService.deleteAll();
+    await this.postService.deleteAllLikes();
     await this.commentsService.deleteAll();
+    await this.commentsService.deleteAllLikes();
     await this.userService.deleteAll();
+    await this.securityService.deleteAll();
   }
 }

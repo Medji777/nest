@@ -8,7 +8,7 @@ import {
   Put,
   Delete,
   HttpCode,
-  HttpStatus, UseGuards,
+  HttpStatus, UseGuards, UseInterceptors,
 } from '@nestjs/common';
 import { BlogsService } from './blogs.service';
 import { BlogsQueryRepository } from './blogs.query-repository';
@@ -21,6 +21,7 @@ import {
   QueryPostsDto,
 } from './dto';
 import {BasicGuard} from "../auth/guards/basic.guard";
+import {GetUserInterceptor} from "../auth/interceptors/getUser.interceptor";
 
 @Controller('blogs')
 export class BlogsController {
@@ -68,6 +69,7 @@ export class BlogsController {
   }
 
   @Get(':blogId/posts')
+  @UseInterceptors(GetUserInterceptor)
   async getPostByBlogIdWithQuery(
     @Param('blogId') id: string,
     @Query() query: QueryPostsDto,

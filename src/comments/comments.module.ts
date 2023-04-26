@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
+import { JwtModule } from "@nestjs/jwt";
+import { MongooseModule } from '@nestjs/mongoose';
 import { CommentsController } from './comments.controller';
 import { CommentsService } from './comments.service';
 import { CommentsRepository } from './comments.repository';
-import { MongooseModule } from '@nestjs/mongoose';
 import { Comments, CommentsSchema } from './comments.schema';
 import { CommentsQueryRepository } from './comments.query-repository';
 import { JwtAccessStrategy } from "../auth/strategies/jwt-access.strategy";
@@ -10,12 +11,18 @@ import { CommentsLikeModule } from "./like/commentsLike.module";
 import { LikeCalculateService } from "../applications/likeCalculate.service";
 import { UsersModule } from "../users/users.module";
 import { PaginationService } from "../applications/pagination.service";
+import { JwtService } from "../applications/jwt.service";
+import { settings } from "../config";
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       {name: Comments.name, schema: CommentsSchema},
     ]),
+    JwtModule.register({
+      secret: settings.JWT_SECRET,
+      signOptions: { expiresIn: '1h' },
+    }),
     CommentsLikeModule,
     UsersModule
   ],
@@ -26,7 +33,8 @@ import { PaginationService } from "../applications/pagination.service";
     CommentsQueryRepository,
     JwtAccessStrategy,
     LikeCalculateService,
-    PaginationService
+    PaginationService,
+    JwtService
   ],
   exports: [CommentsService, CommentsQueryRepository],
 })

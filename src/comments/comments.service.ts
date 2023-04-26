@@ -9,11 +9,12 @@ import {
 } from '../types/comments';
 import { CommentsDocument } from './comments.schema';
 import { LikeStatus } from '../types/types';
-import {LikeInfoModel, LikeInputModel} from '../types/likes';
+import {LikeInfoModel} from '../types/likes';
 import {LikeCalculateService} from "../applications/likeCalculate.service";
 import {CommentsLikeQueryRepository} from "./like/commentsLike.query-repository";
 import {CommentsQueryRepository} from "./comments.query-repository";
 import {CommentsLikeService} from "./like/commentsLike.service";
+import {CommentInputModelDto, LikeInputModelDto} from "./dto";
 
 type CommentPayload = CommentInputModel & CommentatorInfo & PostId;
 
@@ -36,8 +37,7 @@ export class CommentsService {
     await this.commentsRepository.save(doc);
     return this._likeCreateTransform(this._mapComments(doc));
   }
-
-  async update(id: string, payload: CommentInputModel): Promise<void> {
+  async update(id: string, payload: CommentInputModelDto): Promise<void> {
     const doc = await this.commentsRepository.findById(id);
     if (!doc) {
       throw new NotFoundException()
@@ -45,7 +45,6 @@ export class CommentsService {
     doc.update(payload);
     await this.commentsRepository.save(doc);
   }
-
   async delete(id: string): Promise<void> {
     const isDeleted = this.commentsRepository.delete(id)
     if(!isDeleted){
@@ -55,8 +54,10 @@ export class CommentsService {
   async deleteAll(): Promise<void> {
     await this.commentsRepository.deleteAll();
   }
-
-  async updateLike(commentId: string, userId: string, payload: LikeInputModel): Promise<void> {
+  async deleteAllLikes(): Promise<void> {
+    await this.commentsLikesService.deleteAll();
+  }
+  async updateLike(commentId: string, userId: string, payload: LikeInputModelDto): Promise<void> {
     let lastStatus: LikeStatus = LikeStatus.None;
     const comment = await this.commentsQueryRepository.findById(commentId)
     if(!comment) {

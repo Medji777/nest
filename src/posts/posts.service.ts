@@ -50,6 +50,9 @@ export class PostsService {
   async deleteAll(): Promise<void> {
     await this.postsRepository.deleteAll();
   }
+  async deleteAllLikes(): Promise<void> {
+    await this.postsLikeService.deleteAll();
+  }
   async updateStatusLike(userId: string, login: string, postId: string, newStatus: LikeInputModel ): Promise<void> {
     let lastStatus: LikeStatus = LikeStatus.None
     const post = await this.postsRepository.findById(postId)

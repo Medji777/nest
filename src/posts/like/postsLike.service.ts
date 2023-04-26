@@ -24,5 +24,7 @@ export class PostsLikeService {
         like.myStatus = myStatus
         await this.postsLikeRepository.save(like)
     }
-
+    async deleteAll(): Promise<void> {
+        await this.postsLikeRepository.deleteAll()
+    }
 }

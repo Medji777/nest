@@ -35,11 +35,6 @@ export class SecurityRepository {
   ): Promise<SecurityDocument> {
     return this.SecurityModel.findOne({ userId, deviceId });
   }
-  updateLastActiveDataSession(
-    userId: string,
-    deviceId: string,
-    issueAt: string,
-  ) {}
   async deleteAllSessionsWithoutCurrent(
     userId: string,
     deviceId: string,
@@ -56,5 +51,8 @@ export class SecurityRepository {
   }
   async save(model: SecurityDocument): Promise<void> {
     await model.save();
+  }
+  async deleteAll(): Promise<void> {
+    await this.SecurityModel.deleteMany({})
   }
 }
