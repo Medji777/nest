@@ -121,11 +121,10 @@ export class Users {
 export const UsersSchema = SchemaFactory.createForClass(Users);
 
 UsersSchema.methods = {
-  checkExpiredCode: Users.prototype.checkValidCode,
+  checkValidCode: Users.prototype.checkValidCode,
   checkValidRecoveryCode: Users.prototype.checkValidRecoveryCode,
   updatePassword: Users.prototype.updatePassword,
-  updatePasswordConfirmationData:
-    Users.prototype.updatePasswordConfirmationData,
+  updatePasswordConfirmationData: Users.prototype.updatePasswordConfirmationData,
   updateConfirmation: Users.prototype.updateConfirmation,
   updateConfirmationData: Users.prototype.updateConfirmationData,
 };
