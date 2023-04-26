@@ -5,7 +5,7 @@ import {
 import { Injectable } from '@nestjs/common';
 import { UsersService } from '../../users/users.service';
 
-@ValidatorConstraint({ name: 'codeConfirmValidate', async: true })
+@ValidatorConstraint({ name: 'codeConfirm', async: true })
 @Injectable()
 export class CodeConfirmValidate implements ValidatorConstraintInterface {
   private error: string;

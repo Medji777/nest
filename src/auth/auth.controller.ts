@@ -34,6 +34,7 @@ export class AuthController {
 
   @Post('login')
   @UseGuards(LocalAuthGuard)
+  @HttpCode(HttpStatus.OK)
   async login(
     @Req() req: Request,
     @Ip() ip: string,

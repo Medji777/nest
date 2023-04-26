@@ -3,9 +3,7 @@ import { RegistrationConfirmationCodeModel } from '../../types/auth';
 import { Trim } from '../../utils/decorators';
 import { CodeConfirmValidate } from '../../utils/validates';
 
-export class RegConfirmCodeModelDto
-  implements RegistrationConfirmationCodeModel
-{
+export class RegConfirmCodeModelDto implements RegistrationConfirmationCodeModel {
   @Validate(CodeConfirmValidate)
   @Trim()
   @IsString({ message: 'input is string' })
