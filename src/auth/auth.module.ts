@@ -13,7 +13,8 @@ import { JwtRefreshStrategy } from './strategies/jwt-refresh.stategy';
 import {
   CheckRecoveryCodeValidate,
   CheckRegistrationEmailValidate,
-  CheckUniqueLoginOrEmailValidate,
+  CheckUniqueEmailValidate,
+  CheckUniqueLoginValidate,
   CodeConfirmValidate,
 } from '../utils/validates';
 import { settings } from '../config';
@@ -39,7 +40,8 @@ import { settings } from '../config';
     CodeConfirmValidate,
     CheckRecoveryCodeValidate,
     CheckRegistrationEmailValidate,
-    CheckUniqueLoginOrEmailValidate,
+    CheckUniqueEmailValidate,
+    CheckUniqueLoginValidate
   ],
   exports: [AuthService],
 })

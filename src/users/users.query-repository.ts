@@ -58,7 +58,15 @@ export class UsersQueryRepository {
   }
   async getIsUniqueUserByLoginOrEmail(input: string): Promise<boolean> {
     const user = this._getUserByLoginOrEmail(input);
-    return !!user;
+    return !user;
+  }
+  async getIsUniqueUserByLogin(login: string): Promise<boolean> {
+    const user = await this.UserModel.findOne({ login }).lean()
+    return !user;
+  }
+  async getIsUniqueUserByEmail(email: string): Promise<boolean> {
+    const user = await this.UserModel.findOne({ email }).lean()
+    return !user;
   }
   async getUserByUserId(userId: string): Promise<Users | null> {
     return this.UserModel.findOne({ id: userId }).lean();
