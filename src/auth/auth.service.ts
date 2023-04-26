@@ -12,6 +12,8 @@ import {
 } from '../types/auth';
 import { UserInputModel } from '../types/users';
 
+type PayloadType = {userId: string, deviceName: string, ip: string}
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -21,14 +23,14 @@ export class AuthService {
     private readonly emailAdapter: EmailAdapter,
     private readonly activeCodeAdapter: ActiveCodeAdapter,
   ) {}
-  async createAuth(payload: any): Promise<TokenPayload> {
+  async createAuth(payload: PayloadType): Promise<TokenPayload> {
     const deviceId = this.activeCodeAdapter.generateId();
     const accessToken = await this.jwtService.signAsync(
-      { userId: payload.id },
+      { userId: payload.userId },
       { expiresIn: '1h' },
     );
     const refreshToken = await this.jwtService.signAsync(
-      { userId: payload.id, deviceId },
+      { userId: payload.userId, deviceId },
       { expiresIn: '1d' },
     );
     await this.securityService.createSession(
