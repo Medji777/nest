@@ -132,20 +132,21 @@ export class UsersService {
     }
   }
   async confirmUser(code: string): Promise<void> {
-    const user = await this.usersRepository.getUserByUniqueField(code);
-    if (!user) {
+    const doc = await this.usersRepository.getUserByUniqueField(code);
+    //const doc = await this.usersRepository.findById(user.id);
+    if (!doc) {
       throw new BadRequestException();
     }
-    user.updateConfirmation();
-    await this.usersRepository.save(user);
-  }
-  async updateConfirmation(id: string): Promise<boolean> {
-    const doc = await this.usersRepository.findById(id);
-    if (!doc) return false;
     doc.updateConfirmation();
     await this.usersRepository.save(doc);
-    return true;
   }
+  // async updateConfirmation(id: string): Promise<boolean> {
+  //   const doc = await this.usersRepository.findById(id);
+  //   if (!doc) return false;
+  //   await doc.updateConfirmation();
+  //   await this.usersRepository.save(doc);
+  //   return true;
+  // }
   async updateConfirmationData(
     email: string,
     payload: EmailConfirmUserModel,

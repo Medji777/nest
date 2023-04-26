@@ -11,6 +11,7 @@ import {
   TokenPayload,
 } from '../types/auth';
 import { UserInputModel } from '../types/users';
+import {RegConfirmCodeModelDto} from "./dto";
 
 type PayloadType = {userId: string, deviceName: string, ip: string}
 
@@ -65,8 +66,8 @@ export class AuthService {
       await this.usersService.deleteUser(newUser.id);
     }
   }
-  async confirmUser(payload: RegistrationConfirmationCodeModel): Promise<void> {
-    await this.usersService.confirmUser(payload.code);
+  async confirmUser(dto: RegConfirmCodeModelDto): Promise<void> {
+    await this.usersService.confirmUser(dto.code);
   }
   async resendingCode(dto: RegistrationEmailResending): Promise<void> {
     const emailConfirmation = this.activeCodeAdapter.createCode();
