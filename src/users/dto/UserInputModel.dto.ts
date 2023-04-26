@@ -3,12 +3,14 @@ import {
   IsNotEmpty,
   IsString,
   Length,
-  Matches,
+  Matches, Validate,
 } from 'class-validator';
 import { Trim } from '../../utils/decorators';
 import { UserInputModel } from '../../types/users';
+import { CheckUniqueLoginOrEmailValidate } from "../../utils/validates";
 
 export class UserInputModelDto implements UserInputModel {
+  @Validate(CheckUniqueLoginOrEmailValidate)
   @Length(3, 10)
   @Matches(/^[a-zA-Z0-9_-]*$/)
   @IsNotEmpty()
@@ -20,6 +22,7 @@ export class UserInputModelDto implements UserInputModel {
   @Trim()
   @IsString({ message: 'input is string' })
   password: string;
+  @Validate(CheckUniqueLoginOrEmailValidate)
   @IsEmail()
   //@Matches(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/)
   @IsNotEmpty()

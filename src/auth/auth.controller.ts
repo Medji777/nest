@@ -24,8 +24,6 @@ import {
   PasswordRecoveryInputModelDto,
   NewPassRecIMDto,
 } from './dto';
-import { Validate } from 'class-validator';
-import { CheckUniqueLoginOrEmailValidate } from '../utils/validates';
 
 @Controller('auth')
 export class AuthController {
@@ -70,7 +68,6 @@ export class AuthController {
   }
 
   @Post('registration')
-  @Validate(CheckUniqueLoginOrEmailValidate)
   @HttpCode(HttpStatus.NO_CONTENT)
   async registration(@Body() bodyDTO: UserInputModelDto) {
     await this.authService.saveUser(bodyDTO);

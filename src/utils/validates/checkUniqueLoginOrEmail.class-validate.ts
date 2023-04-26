@@ -8,9 +8,7 @@ import { Injectable } from '@nestjs/common';
 
 @ValidatorConstraint({ name: 'checkUniqueLoginOrEmail', async: true })
 @Injectable()
-export class CheckUniqueLoginOrEmailValidate
-  implements ValidatorConstraintInterface
-{
+export class CheckUniqueLoginOrEmailValidate implements ValidatorConstraintInterface {
   constructor(private usersQueryRepository: UsersQueryRepository) {}
   async validate(
     loginOrEmail: string,
