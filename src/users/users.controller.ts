@@ -7,12 +7,13 @@ import {
   HttpStatus,
   Get,
   Post,
-  Delete, UseGuards,
+  Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UsersQueryRepository } from './users.query-repository';
 import { QueryUsersDto, UserInputModelDto } from './dto';
-import { BasicGuard } from "../auth/guards/basic.guard";
+import { BasicGuard } from '../auth/guards/basic.guard';
 
 @Controller('users')
 export class UsersController {

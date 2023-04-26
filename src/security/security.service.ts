@@ -1,8 +1,12 @@
-import {BadRequestException, Injectable, NotFoundException} from '@nestjs/common';
-import {JwtService} from '@nestjs/jwt';
-import {isEqual} from "date-fns";
-import {SecurityRepository} from './security.repository';
-import {RefreshResponseType} from "../types/security";
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { isEqual } from 'date-fns';
+import { SecurityRepository } from './security.repository';
+import { RefreshResponseType } from '../types/security';
 
 @Injectable()
 export class SecurityService {
@@ -38,33 +42,46 @@ export class SecurityService {
     doc.update(meta);
     await this.securityRepository.save(doc);
   }
-  async deleteAllSessionsWithoutCurrent(userId: string, deviceId: string): Promise<void> {
-    const isDeleted = await this.securityRepository.deleteAllSessionsWithoutCurrent(userId, deviceId)
-    if(!isDeleted){
-      throw new BadRequestException()
+  async deleteAllSessionsWithoutCurrent(
+    userId: string,
+    deviceId: string,
+  ): Promise<void> {
+    const isDeleted =
+      await this.securityRepository.deleteAllSessionsWithoutCurrent(
+        userId,
+        deviceId,
+      );
+    if (!isDeleted) {
+      throw new BadRequestException();
     }
   }
-  async deleteSessionByDeviceId(deviceId: string, isException: boolean = false): Promise<boolean> {
-    const isDeleted = this.securityRepository.deleteSessionByDeviceId(deviceId)
-    if(isException && !isDeleted){
-      throw new NotFoundException()
+  async deleteSessionByDeviceId(
+    deviceId: string,
+    isException: boolean = false,
+  ): Promise<boolean> {
+    const isDeleted = this.securityRepository.deleteSessionByDeviceId(deviceId);
+    if (isException && !isDeleted) {
+      throw new NotFoundException();
     }
-    return isDeleted
+    return isDeleted;
   }
-  async checkRefreshTokenParsed(meta): Promise<RefreshResponseType | null>{
-    if(meta?.userId){
-      const lastActiveTokenData = new Date(+meta.iat * 1000)
-      const data = await this.securityRepository.findSession(meta.userId,meta.deviceId);
-      if(data && isEqual(lastActiveTokenData,new Date(data.lastActiveDate))){
-        return ({
+  async checkRefreshTokenParsed(meta): Promise<RefreshResponseType | null> {
+    if (meta?.userId) {
+      const lastActiveTokenData = new Date(+meta.iat * 1000);
+      const data = await this.securityRepository.findSession(
+        meta.userId,
+        meta.deviceId,
+      );
+      if (data && isEqual(lastActiveTokenData, new Date(data.lastActiveDate))) {
+        return {
           userId: meta.userId,
-          deviceId: meta.deviceId
-        })
+          deviceId: meta.deviceId,
+        };
       }
     }
-    return null
+    return null;
   }
-  async deleteAll(): Promise<void>{
-    await this.securityRepository.deleteAll()
+  async deleteAll(): Promise<void> {
+    await this.securityRepository.deleteAll();
   }
 }

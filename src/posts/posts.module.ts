@@ -7,20 +7,20 @@ import { PostsRepository } from './posts.repository';
 import { PostsQueryRepository } from './posts.query-repository';
 import { BlogsModule } from '../blogs/blogs.module';
 import { CommentsModule } from '../comments/comments.module';
-import { JwtAccessStrategy } from "../auth/strategies/jwt-access.strategy";
-import { PostsLikeModule } from "./like/postsLike.module";
-import { LikeCalculateService } from "../applications/likeCalculate.service";
-import { UsersModule } from "../users/users.module";
-import { JwtService } from "../applications/jwt.service";
-import { PaginationService } from "../applications/pagination.service";
+import { JwtAccessStrategy } from '../auth/strategies/jwt-access.strategy';
+import { PostsLikeModule } from './like/postsLike.module';
+import { LikeCalculateService } from '../applications/likeCalculate.service';
+import { UsersModule } from '../users/users.module';
+import { JwtService } from '../applications/jwt.service';
+import { PaginationService } from '../applications/pagination.service';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{name: Posts.name, schema: PostsSchema}]),
+    MongooseModule.forFeature([{ name: Posts.name, schema: PostsSchema }]),
     forwardRef(() => BlogsModule),
     CommentsModule,
     PostsLikeModule,
-    UsersModule
+    UsersModule,
   ],
   controllers: [PostsController],
   providers: [
@@ -30,7 +30,7 @@ import { PaginationService } from "../applications/pagination.service";
     JwtAccessStrategy,
     LikeCalculateService,
     JwtService,
-    PaginationService
+    PaginationService,
   ],
   exports: [PostsService, PostsQueryRepository],
 })

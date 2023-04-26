@@ -5,9 +5,9 @@ import { UsersRepository } from './users.repository';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Users, UsersSchema } from './users.schema';
 import { UsersQueryRepository } from './users.query-repository';
-import { PaginationService } from "../applications/pagination.service";
-import {PassHashService} from "../applications/passHash.service";
-import {BasicStrategy} from "../auth/strategies/basic.strategy";
+import { PaginationService } from '../applications/pagination.service';
+import { PassHashService } from '../applications/passHash.service';
+import { BasicStrategy } from '../auth/strategies/basic.strategy';
 
 @Module({
   imports: [
@@ -20,7 +20,7 @@ import {BasicStrategy} from "../auth/strategies/basic.strategy";
     UsersQueryRepository,
     PaginationService,
     PassHashService,
-    BasicStrategy
+    BasicStrategy,
   ],
   exports: [UsersService, UsersQueryRepository],
 })

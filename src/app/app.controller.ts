@@ -4,7 +4,7 @@ import { BlogsService } from '../blogs/blogs.service';
 import { PostsService } from '../posts/posts.service';
 import { CommentsService } from '../comments/comments.service';
 import { UsersService } from '../users/users.service';
-import { SecurityService } from "../security/security.service";
+import { SecurityService } from '../security/security.service';
 
 @Controller()
 export class AppController {
@@ -14,7 +14,7 @@ export class AppController {
     private readonly postService: PostsService,
     private readonly commentsService: CommentsService,
     private readonly userService: UsersService,
-    private readonly securityService: SecurityService
+    private readonly securityService: SecurityService,
   ) {}
 
   @Get()

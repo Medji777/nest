@@ -1,11 +1,11 @@
 import { InjectModel } from '@nestjs/mongoose';
 import { NotFoundException } from '@nestjs/common';
-import {Users, UsersModelType} from './users.schema';
+import { Users, UsersModelType } from './users.schema';
 import { transformPagination } from '../utils/transform';
 import { Paginator } from '../types/types';
 import { UserViewModel } from '../types/users';
 import { QueryUsersDto } from './dto';
-import {PaginationService} from "../applications/pagination.service";
+import { PaginationService } from '../applications/pagination.service';
 
 const projectionFilter = {
   _id: 0,
@@ -17,16 +17,12 @@ const projectionFilter = {
 
 export class UsersQueryRepository {
   constructor(
-      @InjectModel(Users.name) private UserModel: UsersModelType,
-      private readonly paginationService: PaginationService
+    @InjectModel(Users.name) private UserModel: UsersModelType,
+    private readonly paginationService: PaginationService,
   ) {}
   async getAll(query: QueryUsersDto): Promise<Paginator<UserViewModel>> {
     const arrayFilters = [];
-    const {
-      searchLoginTerm,
-      searchEmailTerm,
-      ...restQuery
-    } = query;
+    const { searchLoginTerm, searchEmailTerm, ...restQuery } = query;
     if (!!searchLoginTerm) {
       arrayFilters.push({
         login: { $regex: new RegExp(searchLoginTerm, 'gi') },
@@ -39,24 +35,29 @@ export class UsersQueryRepository {
     }
     const filter = !arrayFilters.length ? {} : { $or: arrayFilters };
 
-    const pagination = await this.paginationService.createLean(restQuery,this.UserModel,projectionFilter,filter)
+    const pagination = await this.paginationService.createLean(
+      restQuery,
+      this.UserModel,
+      projectionFilter,
+      filter,
+    );
 
     return transformPagination<UserViewModel>(
-        pagination.doc,
-        pagination.pageSize,
-        pagination.pageNumber,
-        pagination.count,
+      pagination.doc,
+      pagination.pageSize,
+      pagination.pageNumber,
+      pagination.count,
     );
   }
   async getUserByLoginOrEmail(input: string): Promise<Users> {
-    const user = this._getUserByLoginOrEmail(input)
+    const user = this._getUserByLoginOrEmail(input);
     if (!user) {
       throw new NotFoundException('user not found');
     }
     return user;
   }
   async getIsUniqueUserByLoginOrEmail(input: string): Promise<boolean> {
-    const user = this._getUserByLoginOrEmail(input)
+    const user = this._getUserByLoginOrEmail(input);
     return !!user;
   }
   async getUserByUserId(userId: string): Promise<Users | null> {
@@ -64,8 +65,8 @@ export class UsersQueryRepository {
   }
   private async _getUserByLoginOrEmail(input: string): Promise<Users> {
     return this.UserModel.findOne(
-        { $or: [{ login: input }, { email: input }] },
-        { _id: 0, __v: 0 },
+      { $or: [{ login: input }, { email: input }] },
+      { _id: 0, __v: 0 },
     ).lean();
   }
   async getUserByCode(code: string): Promise<Users | null> {

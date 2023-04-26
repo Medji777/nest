@@ -9,13 +9,13 @@ import { JwtAccessStrategy } from './strategies/jwt-access.strategy';
 import { SecurityModule } from '../security/security.module';
 import { EmailAdapter } from '../adapters/email.adapter';
 import { ActiveCodeAdapter } from '../adapters/activeCode.adapter';
-import { JwtRefreshStrategy } from "./strategies/jwt-refresh.stategy";
+import { JwtRefreshStrategy } from './strategies/jwt-refresh.stategy';
 import {
   CheckRecoveryCodeValidate,
   CheckRegistrationEmailValidate,
   CheckUniqueLoginOrEmailValidate,
-  CodeConfirmValidate
-} from "../utils/validates";
+  CodeConfirmValidate,
+} from '../utils/validates';
 import { settings } from '../config';
 
 @Module({
@@ -39,7 +39,7 @@ import { settings } from '../config';
     CodeConfirmValidate,
     CheckRecoveryCodeValidate,
     CheckRegistrationEmailValidate,
-    CheckUniqueLoginOrEmailValidate
+    CheckUniqueLoginOrEmailValidate,
   ],
   exports: [AuthService],
 })

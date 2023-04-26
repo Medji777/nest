@@ -44,7 +44,7 @@ export enum LikeStatus {
 }
 
 export type ErrorResponse = {
-  check: boolean,
+  check: boolean;
   code?: string;
   message?: string;
-}
+};

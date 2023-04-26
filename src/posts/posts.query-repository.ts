@@ -5,20 +5,27 @@ import { PostsViewModel } from '../types/posts';
 import { LikeStatus, Paginator } from '../types/types';
 import { transformPagination } from '../utils/transform';
 import { QueryPostsDto } from './dto';
-import { PostsLikeQueryRepository } from "./like/postsLike.query-repository";
-import { PaginationService } from "../applications/pagination.service";
+import { PostsLikeQueryRepository } from './like/postsLike.query-repository';
+import { PaginationService } from '../applications/pagination.service';
 
 const projectionInit = { _id: 0, __v: 0 };
 
 @Injectable()
 export class PostsQueryRepository {
   constructor(
-      @InjectModel(Posts.name) private PostsModel: PostsModelType,
-      private readonly postsLikeQueryRepository: PostsLikeQueryRepository,
-      private readonly paginationService: PaginationService
+    @InjectModel(Posts.name) private PostsModel: PostsModelType,
+    private readonly postsLikeQueryRepository: PostsLikeQueryRepository,
+    private readonly paginationService: PaginationService,
   ) {}
-  async getAll(query: QueryPostsDto, userId: string): Promise<Paginator<PostsViewModel>> {
-    const pagination = await this.paginationService.create(query, this.PostsModel, projectionInit)
+  async getAll(
+    query: QueryPostsDto,
+    userId: string,
+  ): Promise<Paginator<PostsViewModel>> {
+    const pagination = await this.paginationService.create(
+      query,
+      this.PostsModel,
+      projectionInit,
+    );
 
     const mappedPost = pagination.doc.map(this._getOutputPost);
     const mappedPostWithStatusLike = await this._setStatusLikeMapped(
@@ -30,10 +37,10 @@ export class PostsQueryRepository {
     );
 
     return transformPagination<PostsViewModel>(
-        mappedFinishPost,
-        pagination.pageSize,
-        pagination.pageNumber,
-        pagination.count,
+      mappedFinishPost,
+      pagination.pageSize,
+      pagination.pageNumber,
+      pagination.count,
     );
   }
   async findById(id: string, userId: string): Promise<PostsViewModel> {
@@ -53,20 +60,30 @@ export class PostsQueryRepository {
   async getPostsByBlogId(
     id: string,
     query: QueryPostsDto,
-    userId?: string
+    userId?: string,
   ): Promise<Paginator<PostsViewModel>> {
     const filter = { blogId: id };
-    const pagination = await this.paginationService.create(query, this.PostsModel, projectionInit, filter)
+    const pagination = await this.paginationService.create(
+      query,
+      this.PostsModel,
+      projectionInit,
+      filter,
+    );
 
     const mappedPost = pagination.doc.map(this._getOutputPost);
-    const mappedPostWithStatusLike = await this._setStatusLikeMapped(mappedPost, userId!)
-    const mappedFinishPost = await this._setThreeLastUserMapped(mappedPostWithStatusLike)
+    const mappedPostWithStatusLike = await this._setStatusLikeMapped(
+      mappedPost,
+      userId!,
+    );
+    const mappedFinishPost = await this._setThreeLastUserMapped(
+      mappedPostWithStatusLike,
+    );
 
     return transformPagination<PostsViewModel>(
-        mappedFinishPost,
-        pagination.pageSize,
-        pagination.pageNumber,
-        pagination.count,
+      mappedFinishPost,
+      pagination.pageSize,
+      pagination.pageNumber,
+      pagination.count,
     );
   }
   private _getOutputPost(post: PostsDocument): PostsViewModel {
@@ -115,7 +132,8 @@ export class PostsQueryRepository {
     }
   }
   private async _setLastLike(model: PostsViewModel): Promise<void> {
-    const lastThreeLikes = await this.postsLikeQueryRepository.getLastThreeLikes(model.id);
+    const lastThreeLikes =
+      await this.postsLikeQueryRepository.getLastThreeLikes(model.id);
     if (lastThreeLikes) {
       model.extendedLikesInfo.newestLikes = lastThreeLikes;
     }

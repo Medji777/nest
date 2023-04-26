@@ -14,18 +14,18 @@ import {
 import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { UsersQueryRepository } from '../users/users.query-repository';
-import { LocalAuthGuard } from "./guards/local-auth.guard";
-import { JwtRefreshGuard } from "./guards/jwt-refresh.guard";
-import { JwtAccessGuard } from "./guards/jwt-access.guard";
-import { UserInputModelDto } from "../users/dto";
+import { LocalAuthGuard } from './guards/local-auth.guard';
+import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
+import { JwtAccessGuard } from './guards/jwt-access.guard';
+import { UserInputModelDto } from '../users/dto';
 import {
   RegConfirmCodeModelDto,
   RegEmailResendingDto,
   PasswordRecoveryInputModelDto,
-  NewPassRecIMDto
-} from "./dto";
-import {Validate} from "class-validator";
-import {CheckUniqueLoginOrEmailValidate} from "../utils/validates";
+  NewPassRecIMDto,
+} from './dto';
+import { Validate } from 'class-validator';
+import { CheckUniqueLoginOrEmailValidate } from '../utils/validates';
 
 @Controller('auth')
 export class AuthController {
@@ -54,10 +54,7 @@ export class AuthController {
   @Post('logout')
   @UseGuards(JwtRefreshGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
-  async logout(
-      @Req() req: Request,
-      @Res({ passthrough: true }) res: Response
-  ) {
+  async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
     await this.authService.deleteSessionByDeviceId(req.user.deviceId);
     res.clearCookie('refreshToken');
   }

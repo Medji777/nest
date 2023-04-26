@@ -53,6 +53,6 @@ export class SecurityRepository {
     await model.save();
   }
   async deleteAll(): Promise<void> {
-    await this.SecurityModel.deleteMany({})
+    await this.SecurityModel.deleteMany({});
   }
 }

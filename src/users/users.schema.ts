@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Model, Types } from 'mongoose';
 import { PasswordHash } from '../types/users';
-import { ErrorResponse } from "../types/types";
+import { ErrorResponse } from '../types/types';
 
 type PayloadType = EmailConfirmation | PasswordConfirmation;
 
@@ -60,22 +60,22 @@ export class Users {
   }
 
   async checkValidCode(isEmail: boolean = false): Promise<ErrorResponse> {
-    if(this.emailConfirmation.isConfirmed){
+    if (this.emailConfirmation.isConfirmed) {
       return {
         check: false,
-        code: 'confirm'
-      }
+        code: 'confirm',
+      };
     }
     const expirationDate = this.emailConfirmation.expirationDate;
     if (!isEmail && expirationDate && expirationDate < new Date()) {
       return {
         check: false,
-        code: 'expired'
-      }
+        code: 'expired',
+      };
     }
     return {
       check: true,
-    }
+    };
   }
 
   async checkValidRecoveryCode(): Promise<ErrorResponse> {
@@ -83,12 +83,12 @@ export class Users {
     if (expirationDate && expirationDate < new Date()) {
       return {
         check: false,
-        code: 'expired'
-      }
+        code: 'expired',
+      };
     }
     return {
       check: true,
-    }
+    };
   }
 
   static make(
@@ -124,7 +124,8 @@ UsersSchema.methods = {
   checkExpiredCode: Users.prototype.checkValidCode,
   checkValidRecoveryCode: Users.prototype.checkValidRecoveryCode,
   updatePassword: Users.prototype.updatePassword,
-  updatePasswordConfirmationData: Users.prototype.updatePasswordConfirmationData,
+  updatePasswordConfirmationData:
+    Users.prototype.updatePasswordConfirmationData,
   updateConfirmation: Users.prototype.updateConfirmation,
   updateConfirmationData: Users.prototype.updateConfirmationData,
 };

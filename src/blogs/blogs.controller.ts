@@ -8,7 +8,9 @@ import {
   Put,
   Delete,
   HttpCode,
-  HttpStatus, UseGuards, UseInterceptors,
+  HttpStatus,
+  UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { BlogsService } from './blogs.service';
 import { BlogsQueryRepository } from './blogs.query-repository';
@@ -20,8 +22,8 @@ import {
   QueryBlogsDTO,
   QueryPostsDto,
 } from './dto';
-import {BasicGuard} from "../auth/guards/basic.guard";
-import {GetUserInterceptor} from "../auth/interceptors/getUser.interceptor";
+import { BasicGuard } from '../auth/guards/basic.guard';
+import { GetUserInterceptor } from '../auth/interceptors/getUser.interceptor';
 
 @Controller('blogs')
 export class BlogsController {
@@ -55,8 +57,8 @@ export class BlogsController {
   @UseGuards(BasicGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async updateBlog(
-      @Param('id') id: string,
-      @Body() bodyDTO: BlogsInputModelDTO
+    @Param('id') id: string,
+    @Body() bodyDTO: BlogsInputModelDTO,
   ) {
     await this.blogsService.update(id, bodyDTO);
   }

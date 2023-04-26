@@ -11,7 +11,7 @@ import {
   Delete,
   UseGuards,
   Req,
-  UseInterceptors
+  UseInterceptors,
 } from '@nestjs/common';
 import { Request } from 'express';
 import { PostsService } from './posts.service';
@@ -22,9 +22,9 @@ import { CommentsService } from '../comments/comments.service';
 import { CommentsQueryRepository } from '../comments/comments.query-repository';
 import { PostInputModelDto, QueryPostsDto, LikeInputModelDto } from './dto';
 import { CommentInputModelDto, QueryCommentsDto } from '../comments/dto';
-import { JwtAccessGuard } from "../auth/guards/jwt-access.guard";
-import { GetUserInterceptor } from "../auth/interceptors/getUser.interceptor";
-import { BasicGuard } from "../auth/guards/basic.guard";
+import { JwtAccessGuard } from '../auth/guards/jwt-access.guard';
+import { GetUserInterceptor } from '../auth/interceptors/getUser.interceptor';
+import { BasicGuard } from '../auth/guards/basic.guard';
 
 @Controller('posts')
 export class PostsController {
@@ -84,10 +84,14 @@ export class PostsController {
   async getCommentByPost(
     @Param('id') id: string,
     @Query() query: QueryCommentsDto,
-    @Req() req: Request
+    @Req() req: Request,
   ) {
-    await this.postsQueryRepository.findById(id,req.user.id);
-    return this.commentsQueryRepository.getCommentsByPostId(id, query, req.user.id);
+    await this.postsQueryRepository.findById(id, req.user.id);
+    return this.commentsQueryRepository.getCommentsByPostId(
+      id,
+      query,
+      req.user.id,
+    );
   }
 
   @Post('/:id/comments')
@@ -96,7 +100,7 @@ export class PostsController {
   async createCommentByPost(
     @Param('id') id: string,
     @Body() bodyDTO: CommentInputModelDto,
-    @Req() req: Request
+    @Req() req: Request,
   ): Promise<CommentDBModel> {
     const post = await this.postsQueryRepository.findById(id, req.user.id);
     return this.commentsService.create({
@@ -111,15 +115,15 @@ export class PostsController {
   @UseGuards(JwtAccessGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async updateStatusLike(
-      @Param('id') id: string,
-      @Body() bodyDTO: LikeInputModelDto,
-      @Req() req: Request
+    @Param('id') id: string,
+    @Body() bodyDTO: LikeInputModelDto,
+    @Req() req: Request,
   ) {
     await this.postsService.updateStatusLike(
-        req.user.id,
-        req.user.login,
-        id,
-        bodyDTO
-    )
+      req.user.id,
+      req.user.login,
+      id,
+      bodyDTO,
+    );
   }
 }

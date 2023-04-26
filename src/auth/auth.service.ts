@@ -99,9 +99,11 @@ export class AuthService {
     );
   }
   async deleteSessionByDeviceId(deviceId: string): Promise<void> {
-    const isDeleted = await this.securityService.deleteSessionByDeviceId(deviceId);
-    if(!isDeleted){
-      throw new BadRequestException()
+    const isDeleted = await this.securityService.deleteSessionByDeviceId(
+      deviceId,
+    );
+    if (!isDeleted) {
+      throw new BadRequestException();
     }
   }
   async refreshToken(userId: string, deviceId: string): Promise<TokenPayload> {

@@ -6,8 +6,8 @@ import { UsersModule } from '../users/users.module';
 import { BlogsModule } from '../blogs/blogs.module';
 import { PostsModule } from '../posts/posts.module';
 import { CommentsModule } from '../comments/comments.module';
-import { AuthModule } from "../auth/auth.module";
-import { SecurityModule } from "../security/security.module";
+import { AuthModule } from '../auth/auth.module';
+import { SecurityModule } from '../security/security.module';
 import { settings } from '../config';
 
 @Module({
@@ -19,7 +19,7 @@ import { settings } from '../config';
     PostsModule,
     CommentsModule,
     AuthModule,
-    SecurityModule
+    SecurityModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -5,14 +5,14 @@ import {
 } from '@nestjs/common';
 import { UsersRepository } from './users.repository';
 import { Users } from './users.schema';
-import {PassHashService} from "../applications/passHash.service";
+import { PassHashService } from '../applications/passHash.service';
 import {
   EmailConfirmUserModel,
   PasswordConfirmUserModel,
   UserViewModel,
 } from '../types/users';
 import { UserInputModelDto } from './dto';
-import {ErrorResponse} from "../types/types";
+import { ErrorResponse } from '../types/types';
 
 type Cred = {
   check: boolean;
@@ -22,8 +22,8 @@ type Cred = {
 @Injectable()
 export class UsersService {
   constructor(
-      private readonly usersRepository: UsersRepository,
-      private readonly passHashService: PassHashService
+    private readonly usersRepository: UsersRepository,
+    private readonly passHashService: PassHashService,
   ) {}
   async create(payload: UserInputModelDto, dto?) {
     const passwordHash = await this.passHashService.create(payload.password);
@@ -57,60 +57,60 @@ export class UsersService {
 
   async checkConfirmCode(code: string): Promise<ErrorResponse> {
     const user = await this.usersRepository.getUserByUniqueField(code);
-    if(!user){
+    if (!user) {
       return {
         check: false,
-        message: 'user with this code don\'t exist in the DB'
-      }
+        message: "user with this code don't exist in the DB",
+      };
     }
-    const resp = await user.checkValidCode()
-    if(!resp.check && resp.code === 'confirm'){
+    const resp = await user.checkValidCode();
+    if (!resp.check && resp.code === 'confirm') {
       return {
         check: resp.check,
-        message: 'email is already confirmed'
-      }
+        message: 'email is already confirmed',
+      };
     }
-    if(!resp.check && resp.code === 'expired'){
+    if (!resp.check && resp.code === 'expired') {
       return {
         check: resp.check,
-        message: 'code expired'
-      }
+        message: 'code expired',
+      };
     }
-    return {check: true}
+    return { check: true };
   }
   async checkRegEmail(email: string): Promise<ErrorResponse> {
     const user = await this.usersRepository.getUserByUniqueField(email);
-    if(!user){
+    if (!user) {
       return {
         check: false,
-        message: 'user with this code don\'t exist in the DB'
-      }
+        message: "user with this code don't exist in the DB",
+      };
     }
-    const resp = await user.checkValidCode(true)
-    if(!resp.check && resp.code === 'confirm'){
+    const resp = await user.checkValidCode(true);
+    if (!resp.check && resp.code === 'confirm') {
       return {
         check: resp.check,
-        message: 'email is already confirmed'
-      }
+        message: 'email is already confirmed',
+      };
     }
-    return {check: true}
+    return { check: true };
   }
   async checkRecoveryCode(code: string): Promise<ErrorResponse> {
     const user = await this.usersRepository.getUserByUniqueField(code);
-    if(!user){
+    if (!user) {
       return {
         check: false,
-        message: 'user with this code don\'t exist in the DB'
-      }
+        message: "user with this code don't exist in the DB",
+      };
     }
-    const resp = await user.checkValidRecoveryCode()
-    if(!resp.check && resp.code === 'expired'){
+    const resp = await user.checkValidRecoveryCode();
+    if (!resp.check && resp.code === 'expired') {
       return {
         check: resp.check,
-        message: 'code expired'
-      }
+        message: 'code expired',
+      };
     }
-    return {check: true}
+    return { check: true };
   }
 
   async checkCredentials(input: string, password: string): Promise<Cred> {
@@ -121,7 +121,10 @@ export class UsersService {
         user: null,
       };
     } else {
-      const check = await this.passHashService.validate(password, user.passwordHash)
+      const check = await this.passHashService.validate(
+        password,
+        user.passwordHash,
+      );
       return {
         check,
         user,
