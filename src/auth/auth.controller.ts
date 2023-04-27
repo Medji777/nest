@@ -17,6 +17,8 @@ import { UsersQueryRepository } from '../users/users.query-repository';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
 import { JwtAccessGuard } from './guards/jwt-access.guard';
+import { LimitIpGuard } from "./guards/limitIp.guard";
+
 import { UserInputModelDto } from '../users/dto';
 import {
   RegConfirmCodeModelDto,
@@ -24,7 +26,6 @@ import {
   PasswordRecoveryInputModelDto,
   NewPassRecIMDto,
 } from './dto';
-
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -34,6 +35,7 @@ export class AuthController {
 
   @Post('login')
   @UseGuards(LocalAuthGuard)
+  @UseGuards(LimitIpGuard)
   @HttpCode(HttpStatus.OK)
   async login(
     @Req() req: Request,
@@ -69,24 +71,28 @@ export class AuthController {
   }
 
   @Post('registration')
+  @UseGuards(LimitIpGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async registration(@Body() bodyDTO: UserInputModelDto) {
     await this.authService.saveUser(bodyDTO);
   }
 
   @Post('registration-confirmation')
+  @UseGuards(LimitIpGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async confirmation(@Body() bodyDTO: RegConfirmCodeModelDto) {
     await this.authService.confirmUser(bodyDTO);
   }
 
   @Post('registration-email-resending')
+  @UseGuards(LimitIpGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async emailResending(@Body() bodyDTO: RegEmailResendingDto) {
     await this.authService.resendingCode(bodyDTO);
   }
 
   @Post('password-recovery')
+  @UseGuards(LimitIpGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async passwordRecovery(
     @Body() bodyDTO: PasswordRecoveryInputModelDto,
@@ -102,13 +108,14 @@ export class AuthController {
   }
 
   @Post('new-password')
+  @UseGuards(LimitIpGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async newPassword(@Body() bodyDTO: NewPassRecIMDto) {
     await this.authService.confirmRecoveryPassword(bodyDTO);
   }
 
-  @UseGuards(JwtRefreshGuard)
   @Post('refresh-token')
+  @UseGuards(JwtRefreshGuard)
   @HttpCode(HttpStatus.OK)
   async refreshToken(
     @Req() req: Request,

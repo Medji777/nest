@@ -41,7 +41,7 @@ import { settings } from '../config';
     CheckRecoveryCodeValidate,
     CheckRegistrationEmailValidate,
     CheckUniqueEmailValidate,
-    CheckUniqueLoginValidate
+    CheckUniqueLoginValidate,
   ],
   exports: [AuthService],
 })
