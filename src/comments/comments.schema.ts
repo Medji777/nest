@@ -52,8 +52,9 @@ export class Comments {
   }
 
   updateLikeInComment(payload: LikeInfoModel) {
-    this.likesInfo.likesCount = payload.likesCount;
-    this.likesInfo.dislikesCount = payload.dislikesCount;
+    this.likesInfo = payload;
+    // this.likesInfo.likesCount = payload.likesCount;
+    // this.likesInfo.dislikesCount = payload.dislikesCount;
   }
 
   static make(
