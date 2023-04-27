@@ -75,6 +75,16 @@ export class AuthService {
       dto.email,
       emailConfirmation,
     );
+    try {
+      await this.emailAdapter.sendCodeConfirmationMessage(
+          dto.email,
+          emailConfirmation.confirmationCode,
+          'confirm-registration',
+      );
+    } catch (err) {
+      console.log(err);
+      throw new BadRequestException()
+    }
   }
   async passwordRecovery(email: string): Promise<void> {
     const passwordConfirmation = this.activeCodeAdapter.createCode();

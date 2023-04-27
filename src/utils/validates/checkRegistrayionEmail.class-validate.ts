@@ -7,9 +7,7 @@ import { UsersService } from '../../users/users.service';
 
 @ValidatorConstraint({ name: 'checkRegistrationEmail', async: true })
 @Injectable()
-export class CheckRegistrationEmailValidate
-  implements ValidatorConstraintInterface
-{
+export class CheckRegistrationEmailValidate implements ValidatorConstraintInterface {
   private error: string;
   constructor(private usersService: UsersService) {}
   async validate(email: string): Promise<boolean> {

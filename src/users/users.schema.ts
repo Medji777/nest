@@ -56,8 +56,9 @@ export class Users {
     this.passwordConfirmation = payload;
   }
   updateConfirmation(model?: UsersDocument) {
-    this.emailConfirmation.isConfirmed = true;
-    model.markModified('emailConfirmation.isConfirmed')
+    let path = 'emailConfirmation.isConfirmed';
+    this[path] = true;
+    model.markModified(path)
   }
   updateConfirmationData(payload: EmailConfirmation) {
     this.emailConfirmation = payload;
