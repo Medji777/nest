@@ -13,6 +13,7 @@ import { LikeCalculateService } from '../applications/likeCalculate.service';
 import { UsersModule } from '../users/users.module';
 import { JwtService } from '../applications/jwt.service';
 import { PaginationService } from '../applications/pagination.service';
+import { CheckBlogIdValidate } from "../utils/validates";
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { PaginationService } from '../applications/pagination.service';
     LikeCalculateService,
     JwtService,
     PaginationService,
+    CheckBlogIdValidate
   ],
   exports: [PostsService, PostsQueryRepository],
 })

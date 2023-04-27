@@ -1,6 +1,7 @@
-import { PostInputModel } from '../../types/posts';
-import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
+import { IsNotEmpty, IsString, MaxLength, Validate } from 'class-validator';
 import { Trim } from '../../utils/decorators';
+import { CheckBlogIdValidate } from "../../utils/validates";
+import { PostInputModel } from '../../types/posts';
 
 export class PostInputModelDto implements PostInputModel {
   @IsString({ message: 'input is string' })
@@ -18,8 +19,9 @@ export class PostInputModelDto implements PostInputModel {
   @IsNotEmpty({ message: 'input is required' })
   @MaxLength(1000, { message: 'input is max 1000 symbol' })
   readonly content: string;
-  @IsString({ message: 'input is string' })
-  @Trim()
+  @Validate(CheckBlogIdValidate)
   @IsNotEmpty({ message: 'input is required' })
+  @Trim()
+  @IsString({ message: 'input is string' })
   readonly blogId: string;
 }

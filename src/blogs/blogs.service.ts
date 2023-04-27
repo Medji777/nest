@@ -17,6 +17,10 @@ export class BlogsService {
     await this.blogsRepository.save(createdBlog);
     return this._createMapBlogs(createdBlog);
   }
+  async checkBlogById(id: string): Promise<boolean> {
+    const blog = await this.blogsRepository.findBlogById(id);
+    return !!blog
+  }
   async update(id: string, payload: BlogsInputModelDTO): Promise<void> {
     const blog = await this.blogsRepository.findBlogById(id);
     if (!blog) {
