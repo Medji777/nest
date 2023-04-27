@@ -28,11 +28,11 @@ export class AuthService {
     const deviceId = this.activeCodeAdapter.generateId();
     const accessToken = await this.jwtService.signAsync(
       { userId: payload.userId },
-      { expiresIn: '1h' },
+      { expiresIn: '10s' },
     );
     const refreshToken = await this.jwtService.signAsync(
       { userId: payload.userId, deviceId },
-      { expiresIn: '1d' },
+      { expiresIn: '20s' },
     );
     await this.securityService.createSession(
       refreshToken,
@@ -122,11 +122,11 @@ export class AuthService {
   async refreshToken(userId: string, deviceId: string): Promise<TokenPayload> {
     const accessToken = await this.jwtService.signAsync(
       { userId },
-      { expiresIn: '1h' },
+      { expiresIn: '10s' },
     );
     const refreshToken = await this.jwtService.signAsync(
       { userId, deviceId },
-      { expiresIn: '1d' },
+      { expiresIn: '20s' },
     );
     await this.securityService.updateLastActiveDataSession(refreshToken);
     return {
