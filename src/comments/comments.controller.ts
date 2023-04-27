@@ -36,6 +36,7 @@ export class CommentsController {
 
   @Put(':id')
   @UseGuards(CheckCommentsGuard)
+  @SetMetadata('checkUser', true)
   @UseGuards(JwtAccessGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async updateComments(
@@ -47,7 +48,6 @@ export class CommentsController {
 
   @Put(':id/like-status')
   @UseGuards(CheckCommentsGuard)
-  @SetMetadata('checkUser', true)
   @UseGuards(JwtAccessGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async updateLikeAtComment(
@@ -60,6 +60,7 @@ export class CommentsController {
 
   @Delete(':id')
   @UseGuards(CheckCommentsGuard)
+  @SetMetadata('checkUser', true)
   @UseGuards(JwtAccessGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async deleteComments(@Param('id') id: string) {
