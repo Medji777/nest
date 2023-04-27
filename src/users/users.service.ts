@@ -136,8 +136,7 @@ export class UsersService {
     if (!doc) {
       throw new BadRequestException();
     }
-    doc.updateConfirmation();
-    doc.markModified('emailConfirmation.isConfirmed')
+    doc.updateConfirmation(doc);
     await this.usersRepository.save(doc);
   }
   async updateConfirmationData(

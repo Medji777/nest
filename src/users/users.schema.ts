@@ -3,7 +3,10 @@ import { HydratedDocument, Model, Types } from 'mongoose';
 import { PasswordHash } from '../types/users';
 import { ErrorResponse } from '../types/types';
 
-type PayloadType = EmailConfirmation | PasswordConfirmation;
+type PayloadType = {
+  emailConfirmation?: EmailConfirmation,
+  passwordConfirmation?: PasswordConfirmation
+};
 
 export type UsersDocument = HydratedDocument<Users>;
 export type UsersModelType = Model<UsersDocument> & UsersModelStatic;
@@ -52,8 +55,9 @@ export class Users {
   updatePasswordConfirmationData(payload: PasswordConfirmation) {
     this.passwordConfirmation = payload;
   }
-  updateConfirmation() {
+  updateConfirmation(model?: UsersDocument) {
     this.emailConfirmation.isConfirmed = true;
+    model.markModified('emailConfirmation.isConfirmed')
   }
   updateConfirmationData(payload: EmailConfirmation) {
     this.emailConfirmation = payload;
@@ -96,7 +100,7 @@ export class Users {
     email: string,
     passwordHash: string,
     UserModel: UsersModelType,
-    payload,
+    payload?: PayloadType,
   ): UsersDocument {
     const date = new Date();
     const newUser = {
