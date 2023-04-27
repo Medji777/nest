@@ -30,8 +30,8 @@ export class CommentsController {
   @Get(':id')
   @UseInterceptors(GetUserInterceptor)
   @HttpCode(HttpStatus.OK)
-  async getComments(@Param('id') id: string) {
-    return this.commentsQueryRepository.findById(id);
+  async getComments(@Param('id') id: string, @Req() req: Request) {
+    return this.commentsQueryRepository.findById(id, req.user?.id);
   }
 
   @Put(':id')

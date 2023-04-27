@@ -10,8 +10,9 @@ import {
   HttpCode,
   HttpStatus,
   UseGuards,
-  UseInterceptors,
+  UseInterceptors, Req,
 } from '@nestjs/common';
+import { Request } from "express";
 import { BlogsService } from './blogs.service';
 import { BlogsQueryRepository } from './blogs.query-repository';
 import { PostsService } from '../posts/posts.service';
@@ -75,9 +76,10 @@ export class BlogsController {
   async getPostByBlogIdWithQuery(
     @Param('blogId') id: string,
     @Query() query: QueryPostsDto,
+    @Req() req: Request
   ) {
     await this.blogsQueryRepository.findById(id);
-    return this.postsQueryRepository.getPostsByBlogId(id, query);
+    return this.postsQueryRepository.getPostsByBlogId(id, query, req.user?.id);
   }
 
   @Post(':blogId/posts')

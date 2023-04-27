@@ -40,14 +40,14 @@ export class PostsController {
   @UseInterceptors(GetUserInterceptor)
   @HttpCode(HttpStatus.OK)
   getPosts(@Query() query: QueryPostsDto, @Req() req: Request) {
-    return this.postsQueryRepository.getAll(query, req.user.id);
+    return this.postsQueryRepository.getAll(query, req.user?.id);
   }
 
   @Get(':id')
   @UseInterceptors(GetUserInterceptor)
   @HttpCode(HttpStatus.OK)
   async getPostById(@Param('id') id: string, @Req() req: Request) {
-    return await this.postsQueryRepository.findById(id, req.user.id);
+    return await this.postsQueryRepository.findById(id, req.user?.id);
   }
 
   @Post()
@@ -86,11 +86,11 @@ export class PostsController {
     @Query() query: QueryCommentsDto,
     @Req() req: Request,
   ) {
-    await this.postsQueryRepository.findById(id, req.user.id);
+    await this.postsQueryRepository.findById(id, req.user?.id);
     return this.commentsQueryRepository.getCommentsByPostId(
       id,
       query,
-      req.user.id,
+      req.user?.id,
     );
   }
 
