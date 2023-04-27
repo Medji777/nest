@@ -13,11 +13,7 @@ export class CommentsLikeService {
   constructor(
     private readonly commentsLikeRepository: CommentsLikeRepository,
   ) {}
-  async create(
-    userId: string,
-    commentId: string,
-    myStatus: LikeStatus,
-  ): Promise<CommentsLikeDocument> {
+  async create(userId: string, commentId: string, myStatus: LikeStatus): Promise<CommentsLikeDocument> {
     const doc = this.commentsLikeRepository.create(
       userId,
       commentId,

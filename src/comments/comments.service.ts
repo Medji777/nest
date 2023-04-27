@@ -57,11 +57,7 @@ export class CommentsService {
   async deleteAllLikes(): Promise<void> {
     await this.commentsLikesService.deleteAll();
   }
-  async updateLike(
-    commentId: string,
-    userId: string,
-    payload: LikeInputModelDto,
-  ): Promise<void> {
+  async updateLike(commentId: string, userId: string, payload: LikeInputModelDto): Promise<void> {
     let lastStatus: LikeStatus = LikeStatus.None;
     const comment = await this.commentsQueryRepository.findById(commentId);
     if (!comment) {
