@@ -17,8 +17,7 @@ export class CommentsLikeService {
     const doc = this.commentsLikeRepository.create(
       userId,
       commentId,
-      myStatus,
-      this.commentsLikeRepository,
+      myStatus
     );
     await this.commentsLikeRepository.save(doc);
     return doc;

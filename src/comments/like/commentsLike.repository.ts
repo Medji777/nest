@@ -17,13 +17,12 @@ export class CommentsLikeRepository {
     userId,
     commentId,
     myStatus: LikeStatus,
-    CommentsLike,
   ): CommentsLikeDocument {
     return this.CommentsLikeModel.make(
-      userId,
-      commentId,
-      myStatus,
-      CommentsLike,
+        userId,
+        commentId,
+        myStatus,
+        this.CommentsLikeModel,
     );
   }
   async findByUserIdAndCommentId(

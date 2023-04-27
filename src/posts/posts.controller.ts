@@ -106,8 +106,8 @@ export class PostsController {
     return this.commentsService.create({
       ...bodyDTO,
       postId: post.id,
-      userId: '',
-      userLogin: '',
+      userId: req.user.id,
+      userLogin: req.user.login,
     });
   }
 
