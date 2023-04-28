@@ -12,7 +12,7 @@ import { LikeCalculateService } from '../applications/likeCalculate.service';
 import { UsersModule } from '../users/users.module';
 import { PaginationService } from '../applications/pagination.service';
 import { JwtService } from '../applications/jwt.service';
-import { settings } from '../config';
+import {settings} from "../config";
 
 @Module({
   imports: [
@@ -20,8 +20,7 @@ import { settings } from '../config';
       { name: Comments.name, schema: CommentsSchema },
     ]),
     JwtModule.register({
-      secret: settings.JWT_SECRET,
-      signOptions: { expiresIn: '1h' },
+      secret: settings.JWT_SECRET
     }),
     CommentsLikeModule,
     UsersModule,

@@ -6,12 +6,12 @@ import { EmailAdapter } from '../adapters/email.adapter';
 import { ActiveCodeAdapter } from '../adapters/activeCode.adapter';
 import {
   NewPasswordRecoveryInputModel,
-  RegistrationConfirmationCodeModel,
   RegistrationEmailResending,
   TokenPayload,
 } from '../types/auth';
 import { UserInputModel } from '../types/users';
-import {RegConfirmCodeModelDto} from "./dto";
+import { RegConfirmCodeModelDto } from "./dto";
+import { settings } from "../config";
 
 type PayloadType = {userId: string, deviceName: string, ip: string}
 
@@ -28,11 +28,11 @@ export class AuthService {
     const deviceId = this.activeCodeAdapter.generateId();
     const accessToken = await this.jwtService.signAsync(
       { userId: payload.userId },
-      { expiresIn: '10s' },
+      { expiresIn: '10s', secret: settings.JWT_SECRET },
     );
     const refreshToken = await this.jwtService.signAsync(
       { userId: payload.userId, deviceId },
-      { expiresIn: '20s' },
+      { expiresIn: '20s', secret: settings.JWT_SECRET },
     );
     await this.securityService.createSession(
       refreshToken,
@@ -46,7 +46,7 @@ export class AuthService {
       refreshToken,
       options: {
         httpOnly: true,
-        secure: true,
+        secure: false,
       },
     };
   }
@@ -122,11 +122,11 @@ export class AuthService {
   async refreshToken(userId: string, deviceId: string): Promise<TokenPayload> {
     const accessToken = await this.jwtService.signAsync(
       { userId },
-      { expiresIn: '10s' },
+      { expiresIn: '10s', secret: settings.JWT_SECRET },
     );
     const refreshToken = await this.jwtService.signAsync(
       { userId, deviceId },
-      { expiresIn: '20s' },
+      { expiresIn: '20s', secret: settings.JWT_SECRET },
     );
     await this.securityService.updateLastActiveDataSession(refreshToken);
     return {
@@ -136,7 +136,7 @@ export class AuthService {
       refreshToken,
       options: {
         httpOnly: true,
-        secure: true,
+        secure: false,
       },
     };
   }

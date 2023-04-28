@@ -7,7 +7,7 @@ import { SecurityRepository } from './security.repository';
 import { SecurityQueryRepository } from './security.query-repository';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtRefreshStrategy } from '../auth/strategies/jwt-refresh.stategy';
-import { settings } from '../config';
+import {settings} from "../config";
 
 @Module({
   imports: [
@@ -15,8 +15,7 @@ import { settings } from '../config';
       { name: Security.name, schema: SecuritySchema },
     ]),
     JwtModule.register({
-      secret: settings.JWT_SECRET,
-      signOptions: { expiresIn: '1h' },
+      secret: settings.JWT_SECRET
     }),
   ],
   controllers: [SecurityController],

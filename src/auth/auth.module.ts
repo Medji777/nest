@@ -17,7 +17,7 @@ import {
   CheckUniqueLoginValidate,
   CodeConfirmValidate,
 } from '../utils/validates';
-import { settings } from '../config';
+import {settings} from "../config";
 
 @Module({
   imports: [
@@ -25,8 +25,7 @@ import { settings } from '../config';
     PassportModule,
     SecurityModule,
     JwtModule.register({
-      secret: settings.JWT_SECRET,
-      signOptions: { expiresIn: '1h' },
+      secret: settings.JWT_SECRET
     }),
   ],
   controllers: [AuthController],

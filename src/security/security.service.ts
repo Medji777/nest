@@ -39,7 +39,8 @@ export class SecurityService {
     if (!doc) {
       throw new BadRequestException();
     }
-    doc.update(meta);
+    const lastActiveDate = new Date(meta.iat * 1000).toISOString();
+    doc.update({lastActiveDate});
     await this.securityRepository.save(doc);
   }
   async deleteAllSessionsWithoutCurrent(
