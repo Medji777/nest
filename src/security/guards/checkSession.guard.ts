@@ -14,9 +14,7 @@ export class CheckSessionGuard implements CanActivate {
     private readonly securityQueryRepository: SecurityQueryRepository,
   ) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const req: Request<{ deviceId: string }> = context
-      .switchToHttp()
-      .getRequest();
+    const req: Request<{ deviceId: string }> = context.switchToHttp().getRequest();
     const isInclude = await this.securityQueryRepository.checkSessionByDeviceId(
       req.params.deviceId,
     );

@@ -23,15 +23,15 @@ export class SecurityController {
   @Get('devices')
   @UseGuards(JwtRefreshGuard)
   async getDevices(@Req() req: Request) {
-    return this.securityQueryRepository.getAllActiveSessions(req.user.id);
+    return this.securityQueryRepository.getAllActiveSessions(req.user.userId);
   }
   @Delete('devices')
   @UseGuards(JwtRefreshGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async deleteAllDevices(@Req() req: Request) {
     await this.securityService.deleteAllSessionsWithoutCurrent(
-      req.user!.id,
-      req.deviceId!,
+      req.user.userId,
+      req.user.deviceId,
     );
   }
   @Delete('devices/:deviceId')
