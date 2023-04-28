@@ -46,7 +46,7 @@ export class AuthService {
       refreshToken,
       options: {
         httpOnly: true,
-        secure: false,
+        secure: true,
       },
     };
   }
@@ -136,7 +136,7 @@ export class AuthService {
       refreshToken,
       options: {
         httpOnly: true,
-        secure: false,
+        secure: true,
       },
     };
   }
