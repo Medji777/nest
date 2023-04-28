@@ -22,7 +22,7 @@ export class CheckSessionGuard implements CanActivate {
       throw new NotFoundException();
     }
     const session = await this.securityQueryRepository.findSession(
-      req.user.id,
+      req.user.userId,
       req.params.deviceId,
     );
     if (!session) {
