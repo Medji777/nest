@@ -18,9 +18,12 @@ import {
   CodeConfirmValidate,
 } from '../utils/validates';
 import {settings} from "../config";
+import {CqrsModule} from "@nestjs/cqrs";
+import {CreateAuthCommandHandler} from "./useCase/handlers/createAuth.command-handler";
 
 @Module({
   imports: [
+    CqrsModule,
     UsersModule,
     PassportModule,
     SecurityModule,
@@ -41,6 +44,7 @@ import {settings} from "../config";
     CheckRegistrationEmailValidate,
     CheckUniqueEmailValidate,
     CheckUniqueLoginValidate,
+    CreateAuthCommandHandler
   ],
   exports: [AuthService],
 })
