@@ -35,11 +35,12 @@ export class UsersQueryRepository {
     }
     const filter = !arrayFilters.length ? {} : { $or: arrayFilters };
 
-    const pagination = await this.paginationService.createLean(
-      restQuery,
-      this.UserModel,
-      projectionFilter,
-      filter,
+    const pagination = await this.paginationService.create(
+        restQuery,
+        this.UserModel,
+        projectionFilter,
+        filter,
+        true
     );
 
     return transformPagination<UserViewModel>(

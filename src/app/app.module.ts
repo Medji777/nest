@@ -9,17 +9,28 @@ import { CommentsModule } from '../comments/comments.module';
 import { AuthModule } from '../auth/auth.module';
 import { SecurityModule } from '../security/security.module';
 import { settings } from '../config';
+import { BloggerBlogModule } from "../bloggers/blogs/blogs.module";
+import { SABlogsModule } from "../sa/blogs/blogs.module";
+import { SAUsersModule } from "../sa/users/users.module";
+
+const PublicModule = [
+  UsersModule,
+  BlogsModule,
+  PostsModule,
+  CommentsModule,
+  AuthModule,
+  SecurityModule
+]
+const SAModule = [SABlogsModule, SAUsersModule]
+const BloggerModule = [BloggerBlogModule]
 
 @Module({
   imports: [
     settings.START_MODULE,
     MongooseModule.forRoot(settings.mongoURI),
-    UsersModule,
-    BlogsModule,
-    PostsModule,
-    CommentsModule,
-    AuthModule,
-    SecurityModule,
+    ...PublicModule,
+    ...BloggerModule,
+    ...SAModule
   ],
   controllers: [AppController],
   providers: [AppService],

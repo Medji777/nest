@@ -9,14 +9,18 @@ export class BlogsRepository {
     name: string,
     description: string,
     websiteUrl: string,
+    userId: string,
+    userLogin: string,
     isMembership: boolean,
   ): BlogDocument {
     return this.BlogsModel.make(
-      name,
-      description,
-      websiteUrl,
-      isMembership,
-      this.BlogsModel,
+        name,
+        description,
+        websiteUrl,
+        userId,
+        userLogin,
+        isMembership,
+        this.BlogsModel,
     );
   }
   async findBlogById(id: string): Promise<BlogDocument | null> {

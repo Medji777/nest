@@ -34,6 +34,6 @@ import { CheckBlogIdValidate } from "../utils/validates";
     PaginationService,
     CheckBlogIdValidate
   ],
-  exports: [PostsService, PostsQueryRepository],
+  exports: [PostsService, PostsRepository, PostsQueryRepository],
 })
 export class PostsModule {}

@@ -24,6 +24,9 @@ export class PostsRepository {
   async findById(id: string): Promise<PostsDocument> {
     return this.PostsModel.findOne({ id });
   }
+  async findByIdAndBlogId(id: string, blogId: string): Promise<PostsDocument> {
+    return this.PostsModel.findOne({ id, blogId });
+  }
   async deleteById(id: string): Promise<boolean> {
     const result = await this.PostsModel.deleteOne({ id });
     return result.deletedCount === 1;
