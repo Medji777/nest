@@ -73,7 +73,7 @@ export class PostsQueryRepository {
     const mappedPost = pagination.doc.map(this._getOutputPost);
     const mappedPostWithStatusLike = await this._setStatusLikeMapped(
       mappedPost,
-      userId!,
+      userId,
     );
     const mappedFinishPost = await this._setThreeLastUserMapped(
       mappedPostWithStatusLike,
@@ -132,8 +132,7 @@ export class PostsQueryRepository {
     }
   }
   private async _setLastLike(model: PostsViewModel): Promise<void> {
-    const lastThreeLikes =
-      await this.postsLikeQueryRepository.getLastThreeLikes(model.id);
+    const lastThreeLikes = await this.postsLikeQueryRepository.getLastThreeLikes(model.id);
     if (lastThreeLikes) {
       model.extendedLikesInfo.newestLikes = lastThreeLikes;
     }

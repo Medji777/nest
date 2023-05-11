@@ -43,6 +43,12 @@ export enum LikeStatus {
   Dislike = 'Dislike',
 }
 
+export enum BanStatus {
+  all = 'all',
+  banned = 'banned',
+  notBanned = 'notBanned'
+}
+
 export type ErrorResponse = {
   check: boolean;
   code?: string;

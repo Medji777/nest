@@ -13,6 +13,18 @@ export type UserViewModel = {
   createdAt?: string;
 };
 
+export type BanInfoModel = {
+  isBanned: boolean;
+  banDate: string | null;
+  banReason: string | null;
+}
+
+export type BanInputModel = Omit<BanInfoModel, 'banDate'>
+
+export type UserViewModelSA = UserViewModel & {
+  banInfo: BanInfoModel
+}
+
 export type PasswordHash = {
   passwordHash: string;
 };

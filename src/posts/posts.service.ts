@@ -105,7 +105,8 @@ export class PostsService {
     return {
       ...post,
       extendedLikesInfo: {
-        ...post.extendedLikesInfo,
+        likesCount: post.extendedLikesInfo.likesCount,
+        dislikesCount: post.extendedLikesInfo.dislikesCount,
         myStatus: LikeStatus.None,
         newestLikes: [],
       },

@@ -5,9 +5,8 @@ import {
   Get,
   HttpCode,
   HttpStatus,
-  UseInterceptors, Req,
+  UseInterceptors,
 } from '@nestjs/common';
-import { Request } from "express";
 import { BlogsService } from './blogs.service';
 import { BlogsQueryRepository } from './blogs.query-repository';
 import { PostsService } from '../posts/posts.service';
@@ -17,6 +16,8 @@ import {
   QueryPostsDto,
 } from './dto';
 import { GetUserInterceptor } from '../auth/interceptors/getUser.interceptor';
+import {User} from "../utils/decorators";
+import {Users} from "../users/users.schema";
 
 @Controller('blogs')
 export class BlogsController {
@@ -30,13 +31,13 @@ export class BlogsController {
   @Get()
   @HttpCode(HttpStatus.OK)
   async getBlogs(@Query() query: QueryBlogsDTO) {
-    return this.blogsQueryRepository.getAll(query);
+    return this.blogsQueryRepository.getAll(query,{ blogOwnerInfo: false });
   }
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   async getBlogOnId(@Param('id') id: string) {
-    return this.blogsQueryRepository.findById(id);
+    return this.blogsQueryRepository.findById(id,{ blogOwnerInfo: false });
   }
 
   @Get(':blogId/posts')
@@ -44,47 +45,9 @@ export class BlogsController {
   async getPostByBlogIdWithQuery(
     @Param('blogId') id: string,
     @Query() query: QueryPostsDto,
-    @Req() req: Request
+    @User() user: Users,
   ) {
     await this.blogsQueryRepository.findById(id);
-    return this.postsQueryRepository.getPostsByBlogId(id, query, req.user?.id);
+    return this.postsQueryRepository.getPostsByBlogId(id, query, user?.id);
   }
-
-  // @Post()
-  // @UseGuards(BasicGuard)
-  // @HttpCode(HttpStatus.CREATED)
-  // async createBlog(@Body() body: BlogsInputModelDTO) {
-  //   return this.blogsService.create(body);
-  // }
-
-  // @Put(':id')
-  // @UseGuards(BasicGuard)
-  // @HttpCode(HttpStatus.NO_CONTENT)
-  // async updateBlog(
-  //   @Param('id') id: string,
-  //   @Body() bodyDTO: BlogsInputModelDTO,
-  // ) {
-  //   await this.blogsService.update(id, bodyDTO);
-  // }
-
-  // @Delete(':id')
-  // @UseGuards(BasicGuard)
-  // @HttpCode(HttpStatus.NO_CONTENT)
-  // async deleteBlog(@Param('id') id: string) {
-  //   await this.blogsService.delete(id);
-  // }
-
-  // @Post(':blogId/posts')
-  // @UseGuards(BasicGuard)
-  // async createPostForBlogId(
-  //   @Param('blogId') id: string,
-  //   @Body() bodyDTO: BlogPostInputModelDto,
-  // ) {
-  //   const blog = await this.blogsQueryRepository.findById(id);
-  //   return await this.postsService.create({
-  //     ...bodyDTO,
-  //     blogId: id,
-  //     blogName: blog.name,
-  //   });
-  // }
 }

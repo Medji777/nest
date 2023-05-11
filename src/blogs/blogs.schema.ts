@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { HydratedDocument, Model } from 'mongoose';
 import { BlogsInputModel, BlogsViewModelDTO } from '../types/blogs';
-import {HydratedDocument, Model, Types} from 'mongoose';
 
 export type BlogDocument = HydratedDocument<Blogs>;
 export type BlogsModelType = Model<BlogDocument> & BlogsModelStatic;
@@ -8,10 +8,10 @@ export type BlogsModelType = Model<BlogDocument> & BlogsModelStatic;
 @Schema({ _id: false })
 class BlogOwnerInfo {
   @Prop({ required: true })
-  userId: string;
+  userId: string | null;
 
   @Prop({ required: true })
-  userLogin: string;
+  userLogin: string | null;
 
   @Prop({ default: false })
   isBanned: boolean;
@@ -48,8 +48,16 @@ export class Blogs {
     this.websiteUrl = payload.websiteUrl;
   }
 
+  updateBindUser(userId: string) {
+    this.blogOwnerInfo.userId = userId;
+  }
+
   checkIncludeUser(userId: string): boolean {
     return this.blogOwnerInfo.userId === userId
+  }
+
+  checkBindUser(): boolean {
+    return this.blogOwnerInfo.userId !== null
   }
 
   static make(
@@ -84,7 +92,9 @@ export const BlogsSchema = SchemaFactory.createForClass(Blogs);
 
 BlogsSchema.methods = {
   update: Blogs.prototype.update,
-  checkIncludeUser: Blogs.prototype.checkIncludeUser
+  updateBindUser: Blogs.prototype.updateBindUser,
+  checkIncludeUser: Blogs.prototype.checkIncludeUser,
+  checkBindUser: Blogs.prototype.checkBindUser
 };
 
 const blogsStaticMethods: BlogsModelStatic = {

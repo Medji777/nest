@@ -13,7 +13,6 @@ export class BlogsQueryRepository {
         @InjectModel(Blogs.name) private BlogsModel: BlogsModelType,
         private paginationService: PaginationService
     ) {}
-
     async getAllBlogByIdAndUserId(query: QueryBlogsDTO, userId: string) {
         const { searchNameTerm, ...restQuery } = query;
         let filter = {};
@@ -33,9 +32,8 @@ export class BlogsQueryRepository {
 
         return this.paginationService.transformPagination<BlogsViewModel,BlogDocument>(pagination)
     }
-
-    async findByIdAndUserId(id: string, userId: string): Promise<BlogsViewModel> {
-        const blog = await this.BlogsModel.findOne({ id, userId }, projection).lean();
+    async findById(id: string): Promise<BlogsViewModel> {
+        const blog = await this.BlogsModel.findOne({ id }, projection).lean();
         if (!blog) {
             throw new NotFoundException('blog not found');
         }

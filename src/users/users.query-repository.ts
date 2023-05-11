@@ -1,11 +1,10 @@
-import { InjectModel } from '@nestjs/mongoose';
-import { NotFoundException } from '@nestjs/common';
-import { Users, UsersModelType } from './users.schema';
-import { transformPagination } from '../utils/transform';
-import { Paginator } from '../types/types';
-import { UserViewModel } from '../types/users';
-import { QueryUsersDto } from './dto';
-import { PaginationService } from '../applications/pagination.service';
+import {InjectModel} from '@nestjs/mongoose';
+import {Injectable, NotFoundException} from '@nestjs/common';
+import {Users, UsersDocument, UsersModelType} from './users.schema';
+import {BanStatus, Paginator} from '../types/types';
+import {UserViewModel} from '../types/users';
+import {QueryUsersDto} from './dto';
+import {PaginationService} from '../applications/pagination.service';
 
 const projectionFilter = {
   _id: 0,
@@ -15,6 +14,7 @@ const projectionFilter = {
   __v: 0,
 };
 
+@Injectable()
 export class UsersQueryRepository {
   constructor(
     @InjectModel(Users.name) private UserModel: UsersModelType,
@@ -22,7 +22,7 @@ export class UsersQueryRepository {
   ) {}
   async getAll(query: QueryUsersDto): Promise<Paginator<UserViewModel>> {
     const arrayFilters = [];
-    const { searchLoginTerm, searchEmailTerm, ...restQuery } = query;
+    const { searchLoginTerm, searchEmailTerm, banStatus, ...restQuery } = query;
     if (!!searchLoginTerm) {
       arrayFilters.push({
         login: { $regex: new RegExp(searchLoginTerm, 'gi') },
@@ -33,9 +33,14 @@ export class UsersQueryRepository {
         email: { $regex: new RegExp(searchEmailTerm, 'gi') },
       });
     }
+    if(banStatus !== BanStatus.all) {
+      arrayFilters.push({
+        "banInfo.isBanned": banStatus === BanStatus.banned
+      })
+    }
     const filter = !arrayFilters.length ? {} : { $or: arrayFilters };
 
-    const pagination = await this.paginationService.create(
+    const pagination = await this.paginationService.create<UsersModelType,UsersDocument>(
         restQuery,
         this.UserModel,
         projectionFilter,
@@ -43,12 +48,7 @@ export class UsersQueryRepository {
         true
     );
 
-    return transformPagination<UserViewModel>(
-      pagination.doc,
-      pagination.pageSize,
-      pagination.pageNumber,
-      pagination.count,
-    );
+    return this.paginationService.transformPagination<UserViewModel,UsersDocument>(pagination)
   }
   async getUserByLoginOrEmail(input: string): Promise<Users> {
     const user = this._getUserByLoginOrEmail(input);

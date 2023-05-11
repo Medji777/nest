@@ -38,7 +38,7 @@ export class CommentsQueryRepository {
     query: QueryCommentsDto,
     userId?: string,
   ): Promise<Paginator<CommentViewModel>> {
-    const filter = { postId: id };
+    const filter = { postId: id, "commentatorInfo.isBanned": false };
     const { doc, pageSize, pageNumber, count } =
       await this.paginationService.create(
         query,
@@ -64,7 +64,10 @@ export class CommentsQueryRepository {
     return {
       id: comment.id,
       content: comment.content,
-      commentatorInfo: comment.commentatorInfo,
+      commentatorInfo: {
+        userId: comment.commentatorInfo.userId,
+        userLogin: comment.commentatorInfo.userLogin
+      },
       createdAt: comment.createdAt,
       likesInfo: {
         likesCount: comment.likesInfo.likesCount,

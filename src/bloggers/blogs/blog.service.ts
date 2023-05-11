@@ -6,7 +6,7 @@ import {BlogDocument} from "../../blogs/blogs.schema";
 export class BlogService {
     constructor(private blogsRepository: BlogsRepository) {}
     async checkExistAndGet(id: string, userId: string): Promise<BlogDocument> {
-        const blog = await this.blogsRepository.findBlogById(id)
+        const blog = await this.blogsRepository.findById(id)
         if(!blog){
             throw new NotFoundException('blog not found')
         }

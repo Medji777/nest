@@ -14,14 +14,11 @@ export class BlogsQueryRepository {
     @InjectModel(Blogs.name) private BlogsModel: BlogsModelType,
     private readonly paginationService: PaginationService,
   ) {}
-  async getAll(query: QueryBlogsDTO, userId?: string, proj = {}): Promise<Paginator<BlogsViewModel>> {
+  async getAll(query: QueryBlogsDTO, proj = {}): Promise<Paginator<BlogsViewModel>> {
     const { searchNameTerm, ...restQuery } = query;
     let filter = {};
     if(searchNameTerm) {
       filter = { name: { $regex: new RegExp(searchNameTerm, 'gi') } }
-    }
-    if(userId){
-      filter = {...filter, "blogOwnerInfo.userId": userId}
     }
     const pagination = await this.paginationService.create<BlogsModelType,BlogDocument>(
         restQuery,
@@ -32,12 +29,8 @@ export class BlogsQueryRepository {
     );
     return this.paginationService.transformPagination<BlogsViewModel,BlogDocument>(pagination);
   }
-  async findById(id: string, userId?: string): Promise<BlogsViewModel> {
-    let filter = {}
-    if(userId){
-      filter = {userId}
-    }
-    const blog = await this.BlogsModel.findOne({ id, ...filter }, projection).lean();
+  async findById(id: string, proj = {}): Promise<BlogsViewModel> {
+    const blog = await this.BlogsModel.findOne({ id }, {...projection, ...proj}).lean();
     if (!blog) {
       throw new NotFoundException('blog not found');
     }

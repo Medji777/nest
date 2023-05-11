@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Model, Types } from 'mongoose';
-import { PasswordHash } from '../types/users';
+import {BanInputModel, PasswordHash} from '../types/users';
 import { ErrorResponse } from '../types/types';
 
 type PayloadType = {
@@ -26,6 +26,20 @@ class EmailConfirmation {
 @Schema()
 class PasswordConfirmation extends EmailConfirmation {}
 
+@Schema({ _id: false })
+class BanInfo {
+  @Prop({ default: false })
+  isBanned: boolean
+
+  @Prop({ default: null })
+  banDate: string | null
+
+  @Prop({ default: null })
+  banReason: string | null
+}
+
+const BanInfoSchema = SchemaFactory.createForClass(BanInfo)
+
 @Schema()
 export class Users {
   @Prop({ required: true })
@@ -49,6 +63,9 @@ export class Users {
   @Prop({ type: Types.ObjectId, ref: PasswordConfirmation.name })
   passwordConfirmation: PasswordConfirmation;
 
+  @Prop({ type: BanInfoSchema, default: () => ({}) })
+  banInfo: BanInfo
+
   updatePassword(payload: PasswordHash) {
     this.passwordHash = payload.passwordHash;
   }
@@ -62,6 +79,11 @@ export class Users {
   }
   updateConfirmationData(payload: EmailConfirmation) {
     this.emailConfirmation = payload;
+  }
+  updateBan(payload: BanInputModel) {
+    this.banInfo.isBanned = payload.isBanned;
+    this.banInfo.banReason = payload.banReason;
+    this.banInfo.banDate = new Date().toISOString();
   }
 
   async checkValidCode(isEmail: boolean = false): Promise<ErrorResponse> {
@@ -132,6 +154,7 @@ UsersSchema.methods = {
   updatePasswordConfirmationData: Users.prototype.updatePasswordConfirmationData,
   updateConfirmation: Users.prototype.updateConfirmation,
   updateConfirmationData: Users.prototype.updateConfirmationData,
+  updateBan: Users.prototype.updateBan
 };
 
 const userStaticMethods: UsersModelStatic = {

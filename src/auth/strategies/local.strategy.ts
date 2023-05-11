@@ -22,6 +22,9 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     if (!checkData.user || !checkData.check) {
       throw new UnauthorizedException();
     }
+    if(checkData.user.banInfo.isBanned) {
+      throw new UnauthorizedException();
+    }
     if (!checkData.user.emailConfirmation.isConfirmed) {
       throw new UnauthorizedException();
     }

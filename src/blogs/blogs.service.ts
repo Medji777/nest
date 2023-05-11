@@ -5,7 +5,7 @@ import { BlogsRepository } from './blogs.repository';
 export class BlogsService {
   constructor(private readonly blogsRepository: BlogsRepository) {}
   async checkBlogById(id: string): Promise<boolean> {
-    const blog = await this.blogsRepository.findBlogById(id);
+    const blog = await this.blogsRepository.findById(id);
     return !!blog
   }
   async deleteAll(): Promise<void> {

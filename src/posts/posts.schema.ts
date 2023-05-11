@@ -1,12 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, HydratedDocument, Model, Types } from 'mongoose';
+import { HydratedDocument, Model } from 'mongoose';
 import { PostInputModel } from '../types/posts';
 import { LikeInfoModel } from '../types/likes';
+import { LikeStatus } from "../types/types";
 
 export type PostsDocument = HydratedDocument<Posts>;
 export type PostsModelType = Model<PostsDocument> & PostsModelStatic;
 
-@Schema()
+@Schema({ _id: false })
 class ExtendedLikesInfo {
   @Prop({ default: 0 })
   likesCount: number;
@@ -14,8 +15,10 @@ class ExtendedLikesInfo {
   dislikesCount: number;
 }
 
+const ExtendedLikesInfoSchema = SchemaFactory.createForClass(ExtendedLikesInfo)
+
 @Schema()
-export class Posts extends Document {
+export class Posts {
   @Prop({ required: true })
   id: string;
   @Prop({ required: true })
@@ -30,7 +33,7 @@ export class Posts extends Document {
   blogName: string;
   @Prop()
   createdAt?: string;
-  @Prop({ type: Types.ObjectId, ref: ExtendedLikesInfo.name })
+  @Prop({ type: ExtendedLikesInfoSchema, default: () => ({}) })
   extendedLikesInfo: ExtendedLikesInfo;
 
   update(payload: PostInputModel) {
@@ -41,6 +44,27 @@ export class Posts extends Document {
   }
   updateLikeInPost(payload: LikeInfoModel) {
     this.extendedLikesInfo = payload;
+  }
+
+  updateLikesCount(
+      statusLike: LikeStatus,
+      isBanned: boolean
+  ) {
+    if (isBanned) {
+      if (statusLike === LikeStatus.Like) {
+        this.extendedLikesInfo.likesCount--;
+      }
+      if (statusLike === LikeStatus.Dislike) {
+        this.extendedLikesInfo.dislikesCount--;
+      }
+    } else {
+      if (statusLike === LikeStatus.Like) {
+        this.extendedLikesInfo.likesCount++;
+      }
+      if (statusLike === LikeStatus.Dislike) {
+        this.extendedLikesInfo.dislikesCount++;
+      }
+    }
   }
 
   static make(
@@ -60,10 +84,6 @@ export class Posts extends Document {
       blogId: blogId,
       blogName: blogName,
       createdAt: date.toISOString(),
-      extendedLikesInfo: {
-        likesCount: 0,
-        dislikesCount: 0,
-      },
     };
     return new PostsModel(newPost);
   }
@@ -74,6 +94,7 @@ export const PostsSchema = SchemaFactory.createForClass(Posts);
 PostsSchema.methods = {
   update: Posts.prototype.update,
   updateLikeInPost: Posts.prototype.updateLikeInPost,
+  updateLikesCount: Posts.prototype.updateLikesCount
 };
 
 const staticsMethods = {

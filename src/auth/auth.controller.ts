@@ -28,12 +28,13 @@ import {
 } from './dto';
 import {CommandBus} from "@nestjs/cqrs";
 import {CreateAuthCommand} from "./useCase/commads";
+
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly usersQueryRepository: UsersQueryRepository,
-    protected commandBus: CommandBus
+    private commandBus: CommandBus
   ) {}
 
   @Post('login')
@@ -49,11 +50,6 @@ export class AuthController {
     const authData = await this.commandBus.execute(
         new CreateAuthCommand(req.user.id,userAgent || 'device', ip)
     )
-    // const authData = await this.authService.createAuth({
-    //   userId: req.user.id,
-    //   deviceName: userAgent || 'device',
-    //   ip,
-    // });
     res.cookie('refreshToken', authData.refreshToken, authData.options);
     return authData.token;
   }

@@ -55,4 +55,7 @@ export class SecurityRepository {
   async deleteAll(): Promise<void> {
     await this.SecurityModel.deleteMany({});
   }
+  async deleteAllByUserId(userId: string): Promise<void> {
+    await this.SecurityModel.deleteMany({userId});
+  }
 }

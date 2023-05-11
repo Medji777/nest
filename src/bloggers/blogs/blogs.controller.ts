@@ -14,7 +14,7 @@ import {JwtAccessGuard} from "../../auth/guards/jwt-access.guard";
 import {BlogsQueryRepository as BloggerQueryRepository} from "./blogs.query-repository";
 import {UpdatePostDto} from "./dto";
 
-@Controller('bloggers/blogs')
+@Controller('blogger/blogs')
 export class BlogsController {
     constructor(
         private commandBus: CommandBus,
@@ -42,7 +42,7 @@ export class BlogsController {
     }
 
     @UseGuards(JwtAccessGuard)
-    @Post(':blogId/post')
+    @Post(':blogId/posts')
     @HttpCode(HttpStatus.CREATED)
     async createNewPostByBlog(
         @Param('blogId') id: string,

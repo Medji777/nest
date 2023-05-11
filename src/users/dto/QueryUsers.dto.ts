@@ -1,7 +1,8 @@
-import { IsOptional } from 'class-validator';
-import { Nullable, Trim } from '../../utils/decorators';
+import { IsOptional} from 'class-validator';
+import { Nullable, Trim, BanStatus as BanStatusSanitize } from '../../utils/decorators';
 import { PaginationDto } from '../../utils/dto/pagination.dto';
 import { QueryUsers } from '../../types/users';
+import { BanStatus } from "../../types/types";
 
 export class QueryUsersDto extends PaginationDto implements QueryUsers {
   @IsOptional()
@@ -12,4 +13,8 @@ export class QueryUsersDto extends PaginationDto implements QueryUsers {
   @Trim()
   @Nullable()
   searchEmailTerm: string | null = null;
+  @IsOptional()
+  @BanStatusSanitize()
+  @Trim()
+  banStatus: BanStatus = BanStatus.all
 }

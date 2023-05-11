@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Model, Types } from 'mongoose';
 import { CommentInputModel } from '../types/comments';
 import { LikeInfoModel } from '../types/likes';
+import {LikeStatus} from "../types/types";
 
 export type CommentsDocument = HydratedDocument<Comments>;
 export type CommentsModuleType = Model<CommentsDocument> &
@@ -22,15 +23,21 @@ class CommentatorInfo {
   userId: string;
   @Prop({ required: true })
   userLogin: string;
+  @Prop({ default: false })
+  isBanned: boolean;
 }
+
+const CommentatorInfoSchema = SchemaFactory.createForClass(CommentatorInfo)
 
 @Schema()
 class LikesInfo {
-  @Prop({ required: true })
+  @Prop({ default: 0, required: true })
   likesCount: number;
-  @Prop({ required: true })
+  @Prop({ default: 0, required: true })
   dislikesCount: number;
 }
+
+const LikesInfoSchema = SchemaFactory.createForClass(LikesInfo)
 
 @Schema()
 export class Comments {
@@ -38,13 +45,13 @@ export class Comments {
   id: string;
   @Prop({ required: true })
   content: string;
-  @Prop({ type: Types.ObjectId, ref: CommentatorInfo.name })
+  @Prop({ type: CommentatorInfoSchema, default: () => ({}) })
   commentatorInfo: CommentatorInfo;
   @Prop({ required: true })
   createdAt: string;
   @Prop({ required: true })
   postId: string;
-  @Prop({ type: Types.ObjectId, ref: LikesInfo.name })
+  @Prop({ type: LikesInfoSchema, default: () => ({}) })
   likesInfo: LikesInfo;
 
   update(payload: CommentInputModel) {
@@ -53,8 +60,30 @@ export class Comments {
 
   updateLikeInComment(payload: LikeInfoModel) {
     this.likesInfo = payload;
-    // this.likesInfo.likesCount = payload.likesCount;
-    // this.likesInfo.dislikesCount = payload.dislikesCount;
+  }
+  updateBan(isBanned: boolean) {
+    this.commentatorInfo.isBanned = isBanned
+  }
+
+  updateLikesCount(
+      statusLike: LikeStatus,
+      isBanned: boolean
+  ) {
+    if (isBanned) {
+      if (statusLike === LikeStatus.Like) {
+        this.likesInfo.likesCount--;
+      }
+      if (statusLike === LikeStatus.Dislike) {
+        this.likesInfo.dislikesCount--;
+      }
+    } else {
+      if (statusLike === LikeStatus.Like) {
+        this.likesInfo.likesCount++;
+      }
+      if (statusLike === LikeStatus.Dislike) {
+        this.likesInfo.dislikesCount++;
+      }
+    }
   }
 
   static make(
@@ -88,6 +117,8 @@ export const CommentsSchema = SchemaFactory.createForClass(Comments);
 CommentsSchema.methods = {
   update: Comments.prototype.update,
   updateLikeInComment: Comments.prototype.updateLikeInComment,
+  updateBan: Comments.prototype.updateBan,
+  updateLikesCount: Comments.prototype.updateLikesCount
 };
 
 const staticMethods: CommentsStaticMethods = {

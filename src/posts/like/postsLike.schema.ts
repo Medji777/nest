@@ -26,6 +26,12 @@ export class PostsLike {
     default: Date.now.toString,
   })
   addedAt: string;
+  @Prop({ default: false })
+  isBanned: boolean;
+
+  updateBan(isBanned: boolean) {
+    this.isBanned = isBanned
+  }
 
   static make(
     userId: string,
@@ -46,6 +52,10 @@ export class PostsLike {
 }
 
 export const PostsLikeSchema = SchemaFactory.createForClass(PostsLike);
+
+PostsLikeSchema.methods = {
+  updateBan: PostsLike.prototype.updateBan
+}
 
 const staticsMethods = {
   make: PostsLike.make,

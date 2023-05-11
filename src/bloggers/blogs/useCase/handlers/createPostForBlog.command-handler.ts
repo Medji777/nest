@@ -15,7 +15,7 @@ export class CreatePostForBlogCommandHandler implements ICommandHandler<CreatePo
     async execute(command: CreatePostForBlogCommand): Promise<PostsViewModel> {
         const {id, userId, bodyDTO} = command;
         const blog = await this.blogService.checkExistAndGet(id, userId);
-        return await this.postsService.create({
+        return this.postsService.create({
             ...bodyDTO,
             blogId: id,
             blogName: blog.name,

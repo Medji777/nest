@@ -23,7 +23,7 @@ export class BlogsRepository {
         this.BlogsModel,
     );
   }
-  async findBlogById(id: string): Promise<BlogDocument | null> {
+  async findById(id: string): Promise<BlogDocument | null> {
     return this.BlogsModel.findOne({ id });
   }
   async save(model: BlogDocument): Promise<BlogDocument> {

@@ -19,9 +19,14 @@ export class CommentsLike {
     required: true,
   })
   myStatus: LikeStatus;
+  @Prop({ default: false })
+  isBanned: boolean;
 
   update(myStatus: LikeStatus) {
     this.myStatus = myStatus;
+  }
+  updateBan(isBanned: boolean) {
+    this.isBanned = isBanned
   }
 
   static make(
@@ -39,6 +44,7 @@ export const CommentsLikeSchema = SchemaFactory.createForClass(CommentsLike);
 
 CommentsLikeSchema.methods = {
   update: CommentsLike.prototype.update,
+  updateBan: CommentsLike.prototype.updateBan
 };
 
 const staticMethod: CommentsLikeMethodsStatic = {
