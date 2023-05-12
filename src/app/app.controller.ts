@@ -20,7 +20,7 @@ export class AppController {
   @Get()
   @HttpCode(HttpStatus.OK)
   getHello(): string {
-    return this.appService.getHello();
+    return this.appService.getInit();
   }
 
   @Delete('testing/all-data')

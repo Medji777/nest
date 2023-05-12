@@ -23,6 +23,7 @@ import {PostsLike, PostsLikeSchema} from "../../posts/like/postsLike.schema";
 import {CommentsRepository} from "../../comments/comments.repository";
 import {PostsRepository} from "../../posts/posts.repository";
 import {Posts, PostsSchema} from "../../posts/posts.schema";
+import {LikeCalculateService} from "../../applications/likeCalculate.service";
 
 const CommandHandlers = [CreateUserCommandHandler, DeleteUserCommandHandler, BanUserCommandHandler]
 const Repository = [
@@ -50,6 +51,7 @@ const Repository = [
     providers: [
         PaginationService,
         PassHashService,
+        LikeCalculateService,
         UsersService,
         BasicStrategy,
         ...Repository,

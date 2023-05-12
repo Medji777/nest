@@ -7,6 +7,7 @@ import {SecurityRepository} from "../../../../security/security.repository";
 import {CommandRepository} from "../../repo/command.repository";
 import {CommentsRepository} from "../../../../comments/comments.repository";
 import {PostsRepository} from "../../../../posts/posts.repository";
+import {LikeCalculateService} from "../../../../applications/likeCalculate.service";
 
 @CommandHandler(BanUserCommand)
 export class BanUserCommandHandler implements ICommandHandler<BanUserCommand> {
@@ -16,6 +17,7 @@ export class BanUserCommandHandler implements ICommandHandler<BanUserCommand> {
         private commandRepository: CommandRepository,
         private commentsRepository: CommentsRepository,
         private postsRepository: PostsRepository,
+        private likeCalculate: LikeCalculateService
     ) {}
     async execute(command: BanUserCommand): Promise<any> {
         const {userId, bodyDTO} = command;
@@ -58,12 +60,12 @@ export class BanUserCommandHandler implements ICommandHandler<BanUserCommand> {
         modelLikes: M,
         isBanned: boolean,
         repo: R | any,
-        prop: 'commentId' | 'postId'
+        prop: 'commentId' | 'postId',
     ): Promise<void> {
         for (let i = 0; i < modelLikes.length; i++) {
             const model = await repo.findById(modelLikes[i][prop]);
             const statusLike = modelLikes[i].myStatus;
-            model.updateLikesCount(statusLike, isBanned);
+            model.updateLikesCount(statusLike, isBanned, this.likeCalculate.updateLikesBanCount);
             await repo.save(model);
         }
     }

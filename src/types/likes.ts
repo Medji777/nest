@@ -50,3 +50,5 @@ export type LikesPostsExtendedViewModel = {
   userId: string;
   login: string;
 };
+
+export type UpdateLikeBan<M> = (statusLike: LikeStatus, isBanned: boolean, model: M) => void

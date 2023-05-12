@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Model } from 'mongoose';
 import { PostInputModel } from '../types/posts';
-import { LikeInfoModel } from '../types/likes';
+import {LikeInfoModel, UpdateLikeBan} from '../types/likes';
 import { LikeStatus } from "../types/types";
 
 export type PostsDocument = HydratedDocument<Posts>;
@@ -48,23 +48,10 @@ export class Posts {
 
   updateLikesCount(
       statusLike: LikeStatus,
-      isBanned: boolean
+      isBanned: boolean,
+      update: UpdateLikeBan<ExtendedLikesInfo>
   ) {
-    if (isBanned) {
-      if (statusLike === LikeStatus.Like) {
-        this.extendedLikesInfo.likesCount--;
-      }
-      if (statusLike === LikeStatus.Dislike) {
-        this.extendedLikesInfo.dislikesCount--;
-      }
-    } else {
-      if (statusLike === LikeStatus.Like) {
-        this.extendedLikesInfo.likesCount++;
-      }
-      if (statusLike === LikeStatus.Dislike) {
-        this.extendedLikesInfo.dislikesCount++;
-      }
-    }
+    update(statusLike, isBanned, this.extendedLikesInfo)
   }
 
   static make(

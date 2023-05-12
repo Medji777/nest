@@ -17,10 +17,7 @@ export class PostsQueryRepository {
     private readonly postsLikeQueryRepository: PostsLikeQueryRepository,
     private readonly paginationService: PaginationService,
   ) {}
-  async getAll(
-    query: QueryPostsDto,
-    userId: string,
-  ): Promise<Paginator<PostsViewModel>> {
+  async getAll(query: QueryPostsDto, userId: string): Promise<Paginator<PostsViewModel>> {
     const pagination = await this.paginationService.create(
       query,
       this.PostsModel,
@@ -103,10 +100,7 @@ export class PostsQueryRepository {
       },
     };
   }
-  private async _setStatusLikeMapped(
-    posts: Array<PostsViewModel>,
-    userId?: string,
-  ): Promise<Array<PostsViewModel>> {
+  private async _setStatusLikeMapped(posts: Array<PostsViewModel>, userId?: string): Promise<Array<PostsViewModel>> {
     if (!userId) return posts;
     await Promise.all(
       posts.map(async (post: PostsViewModel) => {
@@ -115,9 +109,7 @@ export class PostsQueryRepository {
     );
     return posts;
   }
-  private async _setThreeLastUserMapped(
-    posts: Array<PostsViewModel>,
-  ): Promise<Array<PostsViewModel>> {
+  private async _setThreeLastUserMapped(posts: Array<PostsViewModel>): Promise<Array<PostsViewModel>> {
     await Promise.all(
       posts.map(async (post: PostsViewModel) => {
         await this._setLastLike(post);

@@ -8,11 +8,22 @@ import { SecurityQueryRepository } from './security.query-repository';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtRefreshStrategy } from '../auth/strategies/jwt-refresh.stategy';
 import {settings} from "../config";
+import {
+  DeleteAllSessionsWithoutCurrentCommandHandler,
+  DeleteSessionByDeviceIdCommandHandler
+} from "./useCase/handler";
+import {CqrsModule} from "@nestjs/cqrs";
+
+const CommandHandlers = [
+  DeleteAllSessionsWithoutCurrentCommandHandler,
+  DeleteSessionByDeviceIdCommandHandler
+]
 
 @Module({
   imports: [
+    CqrsModule,
     MongooseModule.forFeature([
-      { name: Security.name, schema: SecuritySchema },
+      {name: Security.name, schema: SecuritySchema},
     ]),
     JwtModule.register({
       secret: settings.JWT_SECRET
@@ -24,6 +35,7 @@ import {settings} from "../config";
     SecurityRepository,
     SecurityQueryRepository,
     JwtRefreshStrategy,
+    ...CommandHandlers
   ],
   exports: [SecurityService],
 })

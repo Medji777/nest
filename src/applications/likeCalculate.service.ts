@@ -37,4 +37,25 @@ export class LikeCalculateService {
     }
     return likesInfo;
   }
+  updateLikesBanCount(
+      statusLike: LikeStatus,
+      isBanned: boolean,
+      model: any
+  ) {
+    if (isBanned) {
+      if (statusLike === LikeStatus.Like) {
+        model.likesCount--;
+      }
+      if (statusLike === LikeStatus.Dislike) {
+        model.dislikesCount--;
+      }
+    } else {
+      if (statusLike === LikeStatus.Like) {
+        model.likesCount++;
+      }
+      if (statusLike === LikeStatus.Dislike) {
+        model.dislikesCount++;
+      }
+    }
+  }
 }

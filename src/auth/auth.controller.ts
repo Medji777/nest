@@ -11,14 +11,22 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
+import { CommandBus } from "@nestjs/cqrs";
 import { Request, Response } from 'express';
-import { AuthService } from './auth.service';
 import { UsersQueryRepository } from '../users/users.query-repository';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
 import { JwtAccessGuard } from './guards/jwt-access.guard';
 import { LimitIpGuard } from "./guards/limitIp.guard";
-
+import {
+  CreateAuthCommand,
+  DeleteSessionByDeviceIdCommand,
+  PasswordRecoveryCommand,
+  RefreshTokenCommand,
+  ResendingCodeCommand,
+  SaveUserCommand
+} from "./useCase/commands";
+import { UsersService } from "../users/users.service";
 import { UserInputModelDto } from '../users/dto';
 import {
   RegConfirmCodeModelDto,
@@ -26,14 +34,12 @@ import {
   PasswordRecoveryInputModelDto,
   NewPassRecIMDto,
 } from './dto';
-import {CommandBus} from "@nestjs/cqrs";
-import {CreateAuthCommand} from "./useCase/commads";
 
 @Controller('auth')
 export class AuthController {
   constructor(
-    private readonly authService: AuthService,
-    private readonly usersQueryRepository: UsersQueryRepository,
+    private usersService: UsersService,
+    private usersQueryRepository: UsersQueryRepository,
     private commandBus: CommandBus
   ) {}
 
@@ -57,8 +63,13 @@ export class AuthController {
   @Post('logout')
   @UseGuards(JwtRefreshGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
-  async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
-    await this.authService.deleteSessionByDeviceId(req.user.deviceId);
+  async logout(
+      @Req() req: Request,
+      @Res({ passthrough: true }) res: Response
+  ) {
+    await this.commandBus.execute(
+        new DeleteSessionByDeviceIdCommand(req.user.deviceId)
+    )
     res.clearCookie('refreshToken');
   }
 
@@ -76,21 +87,25 @@ export class AuthController {
   @UseGuards(LimitIpGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async registration(@Body() bodyDTO: UserInputModelDto) {
-    await this.authService.saveUser(bodyDTO);
+    await this.commandBus.execute(
+        new SaveUserCommand(bodyDTO)
+    )
   }
 
   @Post('registration-confirmation')
   @UseGuards(LimitIpGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async confirmation(@Body() bodyDTO: RegConfirmCodeModelDto) {
-    await this.authService.confirmUser(bodyDTO);
+    await this.usersService.confirmUser(bodyDTO.code);
   }
 
   @Post('registration-email-resending')
   @UseGuards(LimitIpGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async emailResending(@Body() bodyDTO: RegEmailResendingDto) {
-    await this.authService.resendingCode(bodyDTO);
+    await this.commandBus.execute(
+        new ResendingCodeCommand(bodyDTO)
+    )
   }
 
   @Post('password-recovery')
@@ -100,20 +115,20 @@ export class AuthController {
     @Body() bodyDTO: PasswordRecoveryInputModelDto,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const user = await this.usersQueryRepository.getUserByLoginOrEmail(
-      bodyDTO.email,
-    );
+    const user = await this.usersQueryRepository.getUserByLoginOrEmail(bodyDTO.email);
     if (!user) {
       return res.sendStatus(HttpStatus.NO_CONTENT);
     }
-    await this.authService.passwordRecovery(bodyDTO.email);
+    await this.commandBus.execute(
+        new PasswordRecoveryCommand(bodyDTO.email)
+    )
   }
 
   @Post('new-password')
   @UseGuards(LimitIpGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async newPassword(@Body() bodyDTO: NewPassRecIMDto) {
-    await this.authService.confirmRecoveryPassword(bodyDTO);
+    await this.usersService.updatePassword(bodyDTO.recoveryCode, bodyDTO.newPassword);
   }
 
   @Post('refresh-token')
@@ -123,10 +138,9 @@ export class AuthController {
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const authData = await this.authService.refreshToken(
-      req.user.userId,
-      req.user.deviceId,
-    );
+    const authData = await this.commandBus.execute(
+        new RefreshTokenCommand(req.user.userId, req.user.deviceId)
+    )
     res.cookie('refreshToken', authData.refreshToken, authData.options);
     return authData.token;
   }

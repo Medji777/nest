@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument, Model, Types } from 'mongoose';
+import { HydratedDocument, Model } from 'mongoose';
 import { CommentInputModel } from '../types/comments';
-import { LikeInfoModel } from '../types/likes';
+import {LikeInfoModel, UpdateLikeBan} from '../types/likes';
 import {LikeStatus} from "../types/types";
 
 export type CommentsDocument = HydratedDocument<Comments>;
@@ -17,7 +17,7 @@ export type CommentsStaticMethods = {
   ) => CommentsDocument;
 };
 
-@Schema()
+@Schema({_id: false})
 class CommentatorInfo {
   @Prop({ required: true })
   userId: string;
@@ -29,11 +29,11 @@ class CommentatorInfo {
 
 const CommentatorInfoSchema = SchemaFactory.createForClass(CommentatorInfo)
 
-@Schema()
+@Schema({_id: false})
 class LikesInfo {
-  @Prop({ default: 0, required: true })
+  @Prop({ default: 0 })
   likesCount: number;
-  @Prop({ default: 0, required: true })
+  @Prop({ default: 0 })
   dislikesCount: number;
 }
 
@@ -67,23 +67,10 @@ export class Comments {
 
   updateLikesCount(
       statusLike: LikeStatus,
-      isBanned: boolean
+      isBanned: boolean,
+      update: UpdateLikeBan<LikesInfo>
   ) {
-    if (isBanned) {
-      if (statusLike === LikeStatus.Like) {
-        this.likesInfo.likesCount--;
-      }
-      if (statusLike === LikeStatus.Dislike) {
-        this.likesInfo.dislikesCount--;
-      }
-    } else {
-      if (statusLike === LikeStatus.Like) {
-        this.likesInfo.likesCount++;
-      }
-      if (statusLike === LikeStatus.Dislike) {
-        this.likesInfo.dislikesCount++;
-      }
-    }
+    update(statusLike,isBanned,this.likesInfo)
   }
 
   static make(

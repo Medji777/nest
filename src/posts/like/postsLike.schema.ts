@@ -29,7 +29,11 @@ export class PostsLike {
   @Prop({ default: false })
   isBanned: boolean;
 
-  updateBan(isBanned: boolean) {
+  updateStatus(status: LikeStatus): void {
+    this.myStatus = status
+  }
+
+  updateBan(isBanned: boolean): void {
     this.isBanned = isBanned
   }
 
@@ -54,7 +58,8 @@ export class PostsLike {
 export const PostsLikeSchema = SchemaFactory.createForClass(PostsLike);
 
 PostsLikeSchema.methods = {
-  updateBan: PostsLike.prototype.updateBan
+  updateBan: PostsLike.prototype.updateBan,
+  updateStatus: PostsLike.prototype.updateStatus
 }
 
 const staticsMethods = {

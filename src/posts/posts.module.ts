@@ -1,10 +1,12 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { CqrsModule } from "@nestjs/cqrs";
 import { Posts, PostsSchema } from './posts.schema';
 import { PostsController } from './posts.controller';
 import { PostsService } from './posts.service';
 import { PostsRepository } from './posts.repository';
 import { PostsQueryRepository } from './posts.query-repository';
+import { UpdateStatusLikeCommandHandler } from "./useCase/handler";
 import { BlogsModule } from '../blogs/blogs.module';
 import { CommentsModule } from '../comments/comments.module';
 import { JwtAccessStrategy } from '../auth/strategies/jwt-access.strategy';
@@ -17,7 +19,8 @@ import { CheckBlogIdValidate } from "../utils/validates";
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Posts.name, schema: PostsSchema }]),
+    CqrsModule,
+    MongooseModule.forFeature([{name: Posts.name, schema: PostsSchema}]),
     forwardRef(() => BlogsModule),
     CommentsModule,
     PostsLikeModule,
@@ -32,7 +35,8 @@ import { CheckBlogIdValidate } from "../utils/validates";
     LikeCalculateService,
     JwtService,
     PaginationService,
-    CheckBlogIdValidate
+    CheckBlogIdValidate,
+    UpdateStatusLikeCommandHandler
   ],
   exports: [PostsService, PostsRepository, PostsQueryRepository],
 })

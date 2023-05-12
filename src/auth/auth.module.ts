@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
+import { CqrsModule } from "@nestjs/cqrs";
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { UsersModule } from '../users/users.module';
@@ -17,9 +18,41 @@ import {
   CheckUniqueLoginValidate,
   CodeConfirmValidate,
 } from '../utils/validates';
+import {
+  CreateAuthCommandHandler,
+  SaveUserCommandHandler,
+  DeleteSessionByDeviceIdCommandHandler,
+  ResendingCodeCommandHandler,
+  RefreshTokenCommandHandler,
+  PasswordRecoveryCommandHandler
+} from "./useCase/handlers";
 import {settings} from "../config";
-import {CqrsModule} from "@nestjs/cqrs";
-import {CreateAuthCommandHandler} from "./useCase/handlers/createAuth.command-handler";
+
+const Strategy = [
+  LocalStrategy,
+  JwtAccessStrategy,
+  JwtRefreshStrategy,
+]
+const Validates = [
+  CodeConfirmValidate,
+  CheckRecoveryCodeValidate,
+  CheckRegistrationEmailValidate,
+  CheckUniqueEmailValidate,
+  CheckUniqueLoginValidate,
+]
+const CommandHandlers = [
+  CreateAuthCommandHandler,
+  SaveUserCommandHandler,
+  DeleteSessionByDeviceIdCommandHandler,
+  ResendingCodeCommandHandler,
+  PasswordRecoveryCommandHandler,
+  RefreshTokenCommandHandler
+]
+const Services = [
+  AuthService,
+  EmailAdapter,
+  ActiveCodeAdapter,
+]
 
 @Module({
   imports: [
@@ -33,19 +66,10 @@ import {CreateAuthCommandHandler} from "./useCase/handlers/createAuth.command-ha
   ],
   controllers: [AuthController],
   providers: [
-    AuthService,
-    LocalStrategy,
-    JwtAccessStrategy,
-    JwtRefreshStrategy,
-    EmailAdapter,
-    ActiveCodeAdapter,
-    CodeConfirmValidate,
-    CheckRecoveryCodeValidate,
-    CheckRegistrationEmailValidate,
-    CheckUniqueEmailValidate,
-    CheckUniqueLoginValidate,
-    CreateAuthCommandHandler
+    ...Strategy,
+    ...Services,
+    ...Validates,
+    ...CommandHandlers,
   ],
-  exports: [AuthService],
 })
 export class AuthModule {}

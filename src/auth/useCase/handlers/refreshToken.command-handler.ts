@@ -1,28 +1,24 @@
 import {CommandHandler, ICommandHandler} from "@nestjs/cqrs";
-import {CreateAuthCommand} from "../commands";
+import {RefreshTokenCommand} from "../commands";
 import {SecurityService} from "../../../security/security.service";
-import {ActiveCodeAdapter} from "../../../adapters/activeCode.adapter";
-import {AuthService} from "../../auth.service";
 import {TokenPayload} from "../../../types/auth";
+import {AuthService} from "../../auth.service";
 
-@CommandHandler(CreateAuthCommand)
-export class CreateAuthCommandHandler implements ICommandHandler<CreateAuthCommand> {
+@CommandHandler(RefreshTokenCommand)
+export class RefreshTokenCommandHandler implements ICommandHandler<RefreshTokenCommand> {
     constructor(
         private authService: AuthService,
         private securityService: SecurityService,
-        private activeCodeAdapter: ActiveCodeAdapter,
     ) {}
-    async execute(command: CreateAuthCommand): Promise<TokenPayload> {
-        const {userId,deviceName,ip} = command;
-
-        const deviceId = this.activeCodeAdapter.generateId();
+    async execute(command: RefreshTokenCommand): Promise<TokenPayload> {
+        const {userId, deviceId} = command;
 
         const {
             accessToken,
             refreshToken
         } = await this.authService.createTokens(userId, deviceId)
 
-        await this.securityService.createSession(refreshToken, deviceName, ip);
+        await this.securityService.updateLastActiveDataSession(refreshToken);
         return {
             token: {
                 accessToken,

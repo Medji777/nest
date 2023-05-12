@@ -7,11 +7,9 @@ import { PostsLikeService } from './postsLike.service';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([
-      { name: PostsLike.name, schema: PostsLikeSchema },
-    ]),
+    MongooseModule.forFeature([{ name: PostsLike.name, schema: PostsLikeSchema }]),
   ],
   providers: [PostsLikeService, PostsLikeRepository, PostsLikeQueryRepository],
-  exports: [PostsLikeService, PostsLikeQueryRepository],
+  exports: [PostsLikeService, PostsLikeRepository, PostsLikeQueryRepository],
 })
 export class PostsLikeModule {}
