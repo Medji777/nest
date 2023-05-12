@@ -7,11 +7,11 @@ import {
     CreatePostForBlogCommand,
     UpdatePostByBlogCommand, DeletePostByBlogCommand
 } from "./useCase/commands";
-import {BlogPostInputModelDto, BlogsInputModelDTO, QueryBlogsDTO} from "../../blogs/dto";
+import {BlogPostInputModelDto, BlogsInputModelDTO, QueryBlogsDTO} from "../../public/blogs/dto";
 import {User} from "../../utils/decorators";
-import {Users} from "../../users/users.schema";
-import {JwtAccessGuard} from "../../auth/guards/jwt-access.guard";
-import {BlogsQueryRepository as BloggerQueryRepository} from "./blogs.query-repository";
+import {Users} from "../../users/entity/users.schema";
+import {JwtAccessGuard} from "../../public/auth/guards/jwt-access.guard";
+import {BlogsQueryRepository as BloggerQueryRepository} from "./repo/blogs.query-repository";
 import {UpdatePostDto} from "./dto";
 
 @Controller('blogger/blogs')

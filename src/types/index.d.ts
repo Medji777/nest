@@ -1,4 +1,4 @@
-import { Users } from '../users/users.schema';
+import { Users } from '../users/entity/users.schema';
 
 declare global {
   declare namespace Express {

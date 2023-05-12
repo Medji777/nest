@@ -3,8 +3,8 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { UsersRepository } from './users.repository';
-import { Users } from './users.schema';
+import { UsersRepository } from './repo/users.repository';
+import { Users } from './entity/users.schema';
 import { PassHashService } from '../applications/passHash.service';
 import {
   EmailConfirmUserModel,
@@ -121,10 +121,7 @@ export class UsersService {
         user: null,
       };
     } else {
-      const check = await this.passHashService.validate(
-        password,
-        user.passwordHash,
-      );
+      const check = await this.passHashService.validate(password, user.passwordHash);
       return {
         check,
         user,

@@ -1,8 +1,8 @@
 import {CommandHandler, ICommandHandler} from "@nestjs/cqrs";
 import {NotFoundException} from "@nestjs/common";
 import {UpdatePostByBlogCommand} from "../commands";
-import {BlogsRepository} from "../../../../blogs/blogs.repository";
-import {PostsRepository} from "../../../../posts/posts.repository";
+import {BlogsRepository} from "../../../../public/blogs/repo/blogs.repository";
+import {PostsRepository} from "../../../../public/posts/repo/posts.repository";
 import {BlogService} from "../../blog.service";
 
 @CommandHandler(UpdatePostByBlogCommand)

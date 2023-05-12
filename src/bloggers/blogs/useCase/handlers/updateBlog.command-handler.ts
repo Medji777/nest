@@ -1,6 +1,6 @@
 import {CommandHandler, ICommandHandler} from "@nestjs/cqrs";
 import {UpdateBlogCommand} from "../commands";
-import {BlogsRepository} from "../../../../blogs/blogs.repository";
+import {BlogsRepository} from "../../../../public/blogs/repo/blogs.repository";
 import {BlogService} from "../../blog.service";
 
 @CommandHandler(UpdateBlogCommand)

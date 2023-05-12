@@ -9,13 +9,13 @@ import {
     DeletePostByBlogCommandHandler
 } from "./useCase/handlers";
 import {MongooseModule} from "@nestjs/mongoose";
-import {BlogsRepository} from "../../blogs/blogs.repository";
-import {Blogs, BlogsSchema} from "../../blogs/blogs.schema";
+import {BlogsRepository} from "../../public/blogs/repo/blogs.repository";
+import {Blogs, BlogsSchema} from "../../public/blogs/entity/blogs.schema";
 import {BlogsController} from "./blogs.controller";
 import {PaginationService} from "../../applications/pagination.service";
-import {BlogsQueryRepository} from "./blogs.query-repository";
-import {PostsModule} from "../../posts/posts.module";
-import {BloggerBlogsRepository} from "./blogs.repository";
+import {BlogsQueryRepository} from "./repo/blogs.query-repository";
+import {PostsModule} from "../../public/posts/posts.module";
+import {BloggerBlogsRepository} from "./repo/blogs.repository";
 import {BlogService} from "./blog.service";
 
 const CommandHandlers = [

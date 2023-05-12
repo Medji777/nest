@@ -1,8 +1,8 @@
 import {CommandHandler, ICommandHandler} from "@nestjs/cqrs";
 import {CreateUserCommand} from "../command";
 import {PassHashService} from "../../../../applications/passHash.service";
-import {UsersRepository} from "../../../../users/users.repository";
-import {UsersDocument} from "../../../../users/users.schema";
+import {UsersRepository} from "../../../../users/repo/users.repository";
+import {UsersDocument} from "../../../../users/entity/users.schema";
 
 @CommandHandler(CreateUserCommand)
 export class CreateUserCommandHandler implements ICommandHandler<CreateUserCommand> {

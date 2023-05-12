@@ -2,7 +2,7 @@ import {
     ValidatorConstraint,
     ValidatorConstraintInterface,
 } from 'class-validator';
-import { UsersQueryRepository } from '../../users/users.query-repository';
+import { UsersQueryRepository } from '../../users/repo/users.query-repository';
 import { Injectable } from '@nestjs/common';
 
 @ValidatorConstraint({ name: 'checkUniqueEmail', async: true })

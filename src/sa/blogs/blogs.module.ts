@@ -2,13 +2,13 @@ import {Module} from "@nestjs/common";
 import {SABlogsController} from "./blogs.controller";
 import {CqrsModule} from "@nestjs/cqrs";
 import {MongooseModule} from "@nestjs/mongoose";
-import {Blogs, BlogsSchema} from "../../blogs/blogs.schema";
+import {Blogs, BlogsSchema} from "../../public/blogs/entity/blogs.schema";
 import {PaginationService} from "../../applications/pagination.service";
 import {BindBlogByUserCommandHandler} from "./useCase/handler";
-import {BlogsRepository} from "../../blogs/blogs.repository";
-import {UsersRepository} from "../../users/users.repository";
-import {Users, UsersSchema} from "../../users/users.schema";
-import {BlogsQueryRepository} from "../../blogs/blogs.query-repository";
+import {BlogsRepository} from "../../public/blogs/repo/blogs.repository";
+import {UsersRepository} from "../../users/repo/users.repository";
+import {Users, UsersSchema} from "../../users/entity/users.schema";
+import {BlogsQueryRepository} from "../../public/blogs/repo/blogs.query-repository";
 
 const CommandHandlers = [BindBlogByUserCommandHandler]
 const Repository = [BlogsRepository, UsersRepository, BlogsQueryRepository]

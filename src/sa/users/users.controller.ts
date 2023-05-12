@@ -2,8 +2,8 @@ import {Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Q
 import {CommandBus} from "@nestjs/cqrs";
 import {BanUserCommand, CreateUserCommand, DeleteUserCommand} from "./useCase/command";
 import {UsersService} from "./users.service";
-import {BasicGuard} from "../../auth/guards/basic.guard";
-import {UsersQueryRepository} from "../../users/users.query-repository";
+import {BasicGuard} from "../../public/auth/guards/basic.guard";
+import {UsersQueryRepository} from "../../users/repo/users.query-repository";
 import {QueryUsersDto, UserInputModelDto} from "../../users/dto";
 import {BanInputDto} from "./dto";
 

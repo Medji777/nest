@@ -10,19 +10,19 @@ import {
 } from "./useCase/handlers";
 import {CommandRepository} from "./repo/command.repository";
 import {PassHashService} from "../../applications/passHash.service";
-import {Users, UsersSchema} from "../../users/users.schema";
+import {Users, UsersSchema} from "../../users/entity/users.schema";
 import {PaginationService} from "../../applications/pagination.service";
-import {BasicStrategy} from "../../auth/strategies/basic.strategy";
-import {UsersRepository} from "../../users/users.repository";
-import {UsersQueryRepository} from "../../users/users.query-repository";
-import {SecurityRepository} from "../../security/security.repository";
-import {Security, SecuritySchema} from "../../security/security.schema";
-import {Comments, CommentsSchema} from "../../comments/comments.schema";
-import {CommentsLike, CommentsLikeSchema} from "../../comments/like/commentsLike.schema";
-import {PostsLike, PostsLikeSchema} from "../../posts/like/postsLike.schema";
-import {CommentsRepository} from "../../comments/comments.repository";
-import {PostsRepository} from "../../posts/posts.repository";
-import {Posts, PostsSchema} from "../../posts/posts.schema";
+import {BasicStrategy} from "../../public/auth/strategies/basic.strategy";
+import {UsersRepository} from "../../users/repo/users.repository";
+import {UsersQueryRepository} from "../../users/repo/users.query-repository";
+import {SecurityRepository} from "../../public/security/repo/security.repository";
+import {Security, SecuritySchema} from "../../public/security/entity/security.schema";
+import {Comments, CommentsSchema} from "../../public/comments/entity/comments.schema";
+import {CommentsLike, CommentsLikeSchema} from "../../public/comments/like/entity/commentsLike.schema";
+import {PostsLike, PostsLikeSchema} from "../../public/posts/like/entity/postsLike.schema";
+import {CommentsRepository} from "../../public/comments/repo/comments.repository";
+import {PostsRepository} from "../../public/posts/repo/posts.repository";
+import {Posts, PostsSchema} from "../../public/posts/entity/posts.schema";
 import {LikeCalculateService} from "../../applications/likeCalculate.service";
 
 const CommandHandlers = [CreateUserCommandHandler, DeleteUserCommandHandler, BanUserCommandHandler]

@@ -1,5 +1,5 @@
 import {Injectable} from "@nestjs/common";
-import {UsersDocument} from "../../users/users.schema";
+import {UsersDocument} from "../../users/entity/users.schema";
 import {UserViewModelSA} from "../../types/users";
 
 @Injectable()

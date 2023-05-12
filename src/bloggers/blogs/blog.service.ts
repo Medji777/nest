@@ -1,6 +1,6 @@
 import {ForbiddenException, Injectable, NotFoundException} from "@nestjs/common";
-import {BlogsRepository} from "../../blogs/blogs.repository";
-import {BlogDocument} from "../../blogs/blogs.schema";
+import {BlogsRepository} from "../../public/blogs/repo/blogs.repository";
+import {BlogDocument} from "../../public/blogs/entity/blogs.schema";
 
 @Injectable()
 export class BlogService {

@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { UsersRepository } from './users.repository';
+import { UsersRepository } from './repo/users.repository';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Users, UsersSchema } from './users.schema';
-import { UsersQueryRepository } from './users.query-repository';
+import { Users, UsersSchema } from './entity/users.schema';
+import { UsersQueryRepository } from './repo/users.query-repository';
 import { PaginationService } from '../applications/pagination.service';
 import { PassHashService } from '../applications/passHash.service';
-import { BasicStrategy } from '../auth/strategies/basic.strategy';
+import { BasicStrategy } from '../public/auth/strategies/basic.strategy';
 
 @Module({
   imports: [

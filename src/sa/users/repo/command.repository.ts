@@ -1,8 +1,8 @@
 import {Injectable} from "@nestjs/common";
 import {InjectModel} from "@nestjs/mongoose";
-import {Comments, CommentsModuleType} from "../../../comments/comments.schema";
-import {CommentsLike, CommentsLikeDocument, CommentsLikeModelType} from "../../../comments/like/commentsLike.schema";
-import {PostsLike, PostsLikeDocument, PostsLikeModelType} from "../../../posts/like/postsLike.schema";
+import {Comments, CommentsModuleType} from "../../../public/comments/entity/comments.schema";
+import {CommentsLike, CommentsLikeDocument, CommentsLikeModelType} from "../../../public/comments/like/entity/commentsLike.schema";
+import {PostsLike, PostsLikeDocument, PostsLikeModelType} from "../../../public/posts/like/entity/postsLike.schema";
 
 @Injectable()
 export class CommandRepository {

@@ -3,7 +3,7 @@ import {
     ValidatorConstraintInterface,
 } from 'class-validator';
 import { Injectable } from '@nestjs/common';
-import  {BlogsService } from "../../blogs/blogs.service";
+import  {BlogsService } from "../../public/blogs/blogs.service";
 
 @ValidatorConstraint({ name: 'checkBlogId', async: true })
 @Injectable()
