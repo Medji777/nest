@@ -1,7 +1,7 @@
 import {Controller, Get, Param, Put, Query, UseGuards} from "@nestjs/common";
 import {CommandBus} from "@nestjs/cqrs";
 import {BindBlogByUserCommand} from "./useCase/command";
-import {BlogsQueryRepository} from "../../public/blogs/repo/blogs.query-repository";
+import {BlogsQueryRepository} from "../../public/blogs/repository/blogs.query-repository";
 import {BasicGuard} from "../../public/auth/guards/basic.guard";
 import {QueryBlogsDTO} from "../../public/blogs/dto";
 

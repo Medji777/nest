@@ -11,7 +11,7 @@ import {BlogPostInputModelDto, BlogsInputModelDTO, QueryBlogsDTO} from "../../pu
 import {User} from "../../utils/decorators";
 import {Users} from "../../users/entity/users.schema";
 import {JwtAccessGuard} from "../../public/auth/guards/jwt-access.guard";
-import {BlogsQueryRepository as BloggerQueryRepository} from "./repo/blogs.query-repository";
+import {BlogsQueryRepository as BloggerQueryRepository} from "./repository/blogs.query-repository";
 import {UpdatePostDto} from "./dto";
 
 @Controller('blogger/blogs')

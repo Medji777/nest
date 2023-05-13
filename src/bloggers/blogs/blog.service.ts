@@ -1,5 +1,5 @@
 import {ForbiddenException, Injectable, NotFoundException} from "@nestjs/common";
-import {BlogsRepository} from "../../public/blogs/repo/blogs.repository";
+import {BlogsRepository} from "../../public/blogs/repository/blogs.repository";
 import {BlogDocument} from "../../public/blogs/entity/blogs.schema";
 
 @Injectable()

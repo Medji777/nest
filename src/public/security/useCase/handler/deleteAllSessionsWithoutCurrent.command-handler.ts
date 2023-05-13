@@ -1,6 +1,6 @@
 import {CommandHandler, ICommandHandler} from "@nestjs/cqrs";
 import {DeleteAllSessionsWithoutCurrentCommand} from "../command";
-import {SecurityRepository} from "../../repo/security.repository";
+import {SecurityRepository} from "../../repository/security.repository";
 import {BadRequestException} from "@nestjs/common";
 
 @CommandHandler(DeleteAllSessionsWithoutCurrentCommand)

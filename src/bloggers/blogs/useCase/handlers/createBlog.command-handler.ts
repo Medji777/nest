@@ -1,6 +1,6 @@
 import {CommandHandler, ICommandHandler} from "@nestjs/cqrs";
 import {CreateBlogCommand} from "../commands";
-import {BlogsRepository} from "../../../../public/blogs/repo/blogs.repository";
+import {BlogsRepository} from "../../../../public/blogs/repository/blogs.repository";
 import {BlogDocument} from "../../../../public/blogs/entity/blogs.schema";
 import {BlogsViewModel} from "../../../../types/blogs";
 

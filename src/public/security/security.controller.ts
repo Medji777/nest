@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { CommandBus } from "@nestjs/cqrs";
 import { Request } from 'express';
-import { SecurityQueryRepository } from './repo/security.query-repository';
+import { SecurityQueryRepository } from './repository/security.query-repository';
 import { CheckSessionGuard } from './guards/checkSession.guard';
 import { JwtRefreshGuard } from '../auth/guards/jwt-refresh.guard';
 

@@ -8,9 +8,9 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { BlogsService } from './blogs.service';
-import { BlogsQueryRepository } from './repo/blogs.query-repository';
+import { BlogsQueryRepository } from './repository/blogs.query-repository';
 import { PostsService } from '../posts/posts.service';
-import { PostsQueryRepository } from '../posts/repo/posts.query-repository';
+import { PostsQueryRepository } from '../posts/repository/posts.query-repository';
 import {
   QueryBlogsDTO,
   QueryPostsDto,

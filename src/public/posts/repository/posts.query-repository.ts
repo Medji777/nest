@@ -5,7 +5,7 @@ import { PostsViewModel } from '../../../types/posts';
 import { LikeStatus, Paginator } from '../../../types/types';
 import { transformPagination } from '../../../utils/transform';
 import { QueryPostsDto } from '../dto';
-import { PostsLikeQueryRepository } from '../like/repo/postsLike.query-repository';
+import { PostsLikeQueryRepository } from '../like/repository/postsLike.query-repository';
 import { PaginationService } from '../../../applications/pagination.service';
 
 const projectionInit = { _id: 0, __v: 0 };

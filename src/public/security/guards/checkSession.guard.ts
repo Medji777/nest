@@ -5,13 +5,13 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { SecurityQueryRepository } from '../repo/security.query-repository';
+import { SecurityQueryRepository } from '../repository/security.query-repository';
 import { Request } from 'express';
 
 @Injectable()
 export class CheckSessionGuard implements CanActivate {
   constructor(
-    private readonly securityQueryRepository: SecurityQueryRepository,
+    private readonly securityQueryRepository: SecurityQueryRepository
   ) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req: Request<{ deviceId: string }> = context.switchToHttp().getRequest();

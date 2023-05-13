@@ -3,10 +3,10 @@ import {NotFoundException} from "@nestjs/common";
 import {HydratedDocument} from "mongoose";
 import {BanUserCommand} from "../command";
 import {UsersRepository} from "../../../../users/repo/users.repository";
-import {SecurityRepository} from "../../../../public/security/repo/security.repository";
-import {CommandRepository} from "../../repo/command.repository";
-import {CommentsRepository} from "../../../../public/comments/repo/comments.repository";
-import {PostsRepository} from "../../../../public/posts/repo/posts.repository";
+import {SecurityRepository} from "../../../../public/security/repository/security.repository";
+import {CommandRepository} from "../../repository/command.repository";
+import {CommentsRepository} from "../../../../public/comments/repository/comments.repository";
+import {PostsRepository} from "../../../../public/posts/repository/posts.repository";
 import {LikeCalculateService} from "../../../../applications/likeCalculate.service";
 
 @CommandHandler(BanUserCommand)

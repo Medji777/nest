@@ -14,7 +14,7 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { CommentsService } from './comments.service';
-import { CommentsQueryRepository } from './repo/comments.query-repository';
+import { CommentsQueryRepository } from './repository/comments.query-repository';
 import { CheckCommentsGuard } from './guards/checkComments.guard';
 import { CommentInputModelDto, LikeInputModelDto } from './dto';
 import { JwtAccessGuard } from '../auth/guards/jwt-access.guard';

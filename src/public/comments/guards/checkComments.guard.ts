@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { CommentsQueryRepository } from '../repo/comments.query-repository';
+import { CommentsQueryRepository } from '../repository/comments.query-repository';
 import { Reflector } from '@nestjs/core';
 
 export class CheckCommentsGuard implements CanActivate {

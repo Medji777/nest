@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PostsRepository } from './repo/posts.repository';
+import { PostsRepository } from './repository/posts.repository';
 import {
   BlogName,
   PostInputModel,

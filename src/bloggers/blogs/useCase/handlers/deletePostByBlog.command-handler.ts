@@ -1,7 +1,7 @@
 import {CommandHandler, ICommandHandler} from "@nestjs/cqrs";
 import {DeletePostByBlogCommand} from "../commands";
-import {PostsRepository} from "../../../../public/posts/repo/posts.repository";
-import {BlogsRepository} from "../../../../public/blogs/repo/blogs.repository";
+import {PostsRepository} from "../../../../public/posts/repository/posts.repository";
+import {BlogsRepository} from "../../../../public/blogs/repository/blogs.repository";
 import {NotFoundException} from "@nestjs/common";
 import {BlogService} from "../../blog.service";
 

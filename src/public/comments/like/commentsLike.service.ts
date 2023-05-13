@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CommentsLikeRepository } from './repo/commentsLike.repository';
+import { CommentsLikeRepository } from './repository/commentsLike.repository';
 import { LikeStatus } from '../../../types/types';
 import { CommentsLikeDocument } from './entity/commentsLike.schema';
 

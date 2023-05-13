@@ -1,5 +1,6 @@
 import {Module} from "@nestjs/common";
 import {CqrsModule} from '@nestjs/cqrs';
+import {MongooseModule} from "@nestjs/mongoose";
 import {
     CreateBlogCommandHandler,
     UpdateBlogCommandHandler,
@@ -8,14 +9,13 @@ import {
     UpdatePostByBlogCommandHandler,
     DeletePostByBlogCommandHandler
 } from "./useCase/handlers";
-import {MongooseModule} from "@nestjs/mongoose";
-import {BlogsRepository} from "../../public/blogs/repo/blogs.repository";
+import {BlogsRepository} from "../../public/blogs/repository/blogs.repository";
 import {Blogs, BlogsSchema} from "../../public/blogs/entity/blogs.schema";
 import {BlogsController} from "./blogs.controller";
 import {PaginationService} from "../../applications/pagination.service";
-import {BlogsQueryRepository} from "./repo/blogs.query-repository";
+import {BlogsQueryRepository} from "./repository/blogs.query-repository";
+import {BloggerBlogsRepository} from "./repository/blogs.repository";
 import {PostsModule} from "../../public/posts/posts.module";
-import {BloggerBlogsRepository} from "./repo/blogs.repository";
 import {BlogService} from "./blog.service";
 
 const CommandHandlers = [

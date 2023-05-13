@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PostsLikeRepository } from './repo/postsLike.repository';
+import { PostsLikeRepository } from './repository/postsLike.repository';
 
 @Injectable()
 export class PostsLikeService {

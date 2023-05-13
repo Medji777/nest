@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PostsLike, PostsLikeSchema } from './entity/postsLike.schema';
-import { PostsLikeRepository } from './repo/postsLike.repository';
-import { PostsLikeQueryRepository } from './repo/postsLike.query-repository';
+import { PostsLikeRepository } from './repository/postsLike.repository';
+import { PostsLikeQueryRepository } from './repository/postsLike.query-repository';
 import { PostsLikeService } from './postsLike.service';
 
 @Module({

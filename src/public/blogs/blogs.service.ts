@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { BlogsRepository } from './repo/blogs.repository';
+import { BlogsRepository } from './repository/blogs.repository';
 
 @Injectable()
 export class BlogsService {

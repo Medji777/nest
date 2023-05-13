@@ -15,10 +15,10 @@ import {
 import { Request } from 'express';
 import { CommandBus } from "@nestjs/cqrs";
 import { UpdateStatusLikeCommand } from "./useCase/command";
-import { PostsQueryRepository } from './repo/posts.query-repository';
+import { PostsQueryRepository } from './repository/posts.query-repository';
 import { CommentDBModel } from '../../types/comments';
 import { CommentsService } from '../comments/comments.service';
-import { CommentsQueryRepository } from '../comments/repo/comments.query-repository';
+import { CommentsQueryRepository } from '../comments/repository/comments.query-repository';
 import { QueryPostsDto, LikeInputModelDto } from './dto';
 import { CommentInputModelDto, QueryCommentsDto } from '../comments/dto';
 import { JwtAccessGuard } from '../auth/guards/jwt-access.guard';

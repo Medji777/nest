@@ -1,8 +1,8 @@
 import {CommandHandler, ICommandHandler} from "@nestjs/cqrs";
 import {NotFoundException} from "@nestjs/common";
 import {UpdateStatusLikeCommand} from "../command";
-import {PostsRepository} from "../../repo/posts.repository";
-import {PostsLikeRepository} from "../../like/repo/postsLike.repository";
+import {PostsRepository} from "../../repository/posts.repository";
+import {PostsLikeRepository} from "../../like/repository/postsLike.repository";
 import {LikeCalculateService} from "../../../../applications/likeCalculate.service";
 import {LikeStatus} from "../../../../types/types";
 

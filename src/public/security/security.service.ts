@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { isEqual } from 'date-fns';
-import { SecurityRepository } from './repo/security.repository';
+import { SecurityRepository } from './repository/security.repository';
 import { RefreshResponseType } from '../../types/security';
 
 @Injectable()

@@ -6,11 +6,10 @@ import {
   CommentsModuleType,
 } from '../entity/comments.schema';
 import { CommentViewModel } from '../../../types/comments';
-import { LikeStatus, Paginator, SortDirections } from '../../../types/types';
-import { getSortNumber } from '../../../utils/sort';
+import { LikeStatus, Paginator } from '../../../types/types';
 import { transformPagination } from '../../../utils/transform';
 import { QueryCommentsDto } from '../dto';
-import { CommentsLikeQueryRepository } from '../like/repo/commentsLike.query-repository';
+import { CommentsLikeQueryRepository } from '../like/repository/commentsLike.query-repository';
 import { PaginationService } from '../../../applications/pagination.service';
 
 const projection = { _id: 0, postId: 0, __v: 0 };

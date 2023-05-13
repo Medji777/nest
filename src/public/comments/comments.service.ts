@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CommentsRepository } from './repo/comments.repository';
+import { CommentsRepository } from './repository/comments.repository';
 import {
   CommentatorInfo,
   CommentDBModel,
@@ -11,8 +11,8 @@ import { CommentsDocument } from './entity/comments.schema';
 import { LikeStatus } from '../../types/types';
 import { LikeInfoModel } from '../../types/likes';
 import { LikeCalculateService } from '../../applications/likeCalculate.service';
-import { CommentsLikeQueryRepository } from './like/repo/commentsLike.query-repository';
-import { CommentsQueryRepository } from './repo/comments.query-repository';
+import { CommentsLikeQueryRepository } from './like/repository/commentsLike.query-repository';
+import { CommentsQueryRepository } from './repository/comments.query-repository';
 import { CommentsLikeService } from './like/commentsLike.service';
 import { CommentInputModelDto, LikeInputModelDto } from './dto';
 
