@@ -10,40 +10,33 @@ import {
 } from "./useCase/handlers";
 import {CommandRepository} from "./repository/command.repository";
 import {PassHashService} from "../../applications/passHash.service";
-import {Users, UsersSchema} from "../../users/entity/users.schema";
 import {PaginationService} from "../../applications/pagination.service";
 import {BasicStrategy} from "../../public/auth/strategies/basic.strategy";
-import {UsersRepository} from "../../users/repo/users.repository";
-import {UsersQueryRepository} from "../../users/repo/users.query-repository";
-import {SecurityRepository} from "../../public/security/repository/security.repository";
-import {Security, SecuritySchema} from "../../public/security/entity/security.schema";
 import {Comments, CommentsSchema} from "../../public/comments/entity/comments.schema";
 import {CommentsLike, CommentsLikeSchema} from "../../public/comments/like/entity/commentsLike.schema";
 import {PostsLike, PostsLikeSchema} from "../../public/posts/like/entity/postsLike.schema";
-import {CommentsRepository} from "../../public/comments/repository/comments.repository";
-import {PostsRepository} from "../../public/posts/repository/posts.repository";
-import {Posts, PostsSchema} from "../../public/posts/entity/posts.schema";
 import {LikeCalculateService} from "../../applications/likeCalculate.service";
+import {UsersModule} from "../../users/users.module";
+import {SecurityModule} from "../../public/security/security.module";
+import {CommentsModule} from "../../public/comments/comments.module";
+import {PostsModule} from "../../public/posts/posts.module";
 
-const CommandHandlers = [CreateUserCommandHandler, DeleteUserCommandHandler, BanUserCommandHandler]
-const Repository = [
-    UsersRepository,
-    UsersQueryRepository,
-    SecurityRepository,
-    CommentsRepository,
-    PostsRepository,
-    CommandRepository,
+const CommandHandlers = [
+    CreateUserCommandHandler,
+    DeleteUserCommandHandler,
+    BanUserCommandHandler
 ]
 
 @Module({
     imports: [
         CqrsModule,
+        UsersModule,
+        SecurityModule,
+        CommentsModule,
+        PostsModule,
         MongooseModule.forFeature([
-            { name: Users.name, schema: UsersSchema },
-            { name: Security.name, schema: SecuritySchema },
             { name: Comments.name, schema: CommentsSchema },
             { name: CommentsLike.name, schema: CommentsLikeSchema },
-            { name: Posts.name, schema: PostsSchema },
             { name: PostsLike.name, schema: PostsLikeSchema }
         ]),
     ],
@@ -54,7 +47,7 @@ const Repository = [
         LikeCalculateService,
         UsersService,
         BasicStrategy,
-        ...Repository,
+        CommandRepository,
         ...CommandHandlers
     ]
 })

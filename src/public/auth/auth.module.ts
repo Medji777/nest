@@ -2,6 +2,14 @@ import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { CqrsModule } from "@nestjs/cqrs";
+import {
+  CreateAuthCommandHandler,
+  SaveUserCommandHandler,
+  DeleteSessionByDeviceIdCommandHandler,
+  ResendingCodeCommandHandler,
+  RefreshTokenCommandHandler,
+  PasswordRecoveryCommandHandler
+} from "./useCase/handlers";
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { UsersModule } from '../../users/users.module';
@@ -18,14 +26,7 @@ import {
   CheckUniqueLoginValidate,
   CodeConfirmValidate,
 } from '../../utils/validates';
-import {
-  CreateAuthCommandHandler,
-  SaveUserCommandHandler,
-  DeleteSessionByDeviceIdCommandHandler,
-  ResendingCodeCommandHandler,
-  RefreshTokenCommandHandler,
-  PasswordRecoveryCommandHandler
-} from "./useCase/handlers";
+
 import {settings} from "../../config";
 
 const Strategy = [

@@ -9,14 +9,13 @@ import {
     UpdatePostByBlogCommandHandler,
     DeletePostByBlogCommandHandler
 } from "./useCase/handlers";
-import {BlogsRepository} from "../../public/blogs/repository/blogs.repository";
-import {Blogs, BlogsSchema} from "../../public/blogs/entity/blogs.schema";
 import {BlogsController} from "./blogs.controller";
-import {PaginationService} from "../../applications/pagination.service";
 import {BlogsQueryRepository} from "./repository/blogs.query-repository";
-import {BloggerBlogsRepository} from "./repository/blogs.repository";
-import {PostsModule} from "../../public/posts/posts.module";
 import {BlogService} from "./blog.service";
+import {Blogs, BlogsSchema} from "../../public/blogs/entity/blogs.schema";
+import {PaginationService} from "../../applications/pagination.service";
+import {PostsModule} from "../../public/posts/posts.module";
+import {BlogsModule} from "../../public/blogs/blogs.module";
 
 const CommandHandlers = [
     CreateBlogCommandHandler,
@@ -31,15 +30,14 @@ const CommandHandlers = [
     imports: [
         CqrsModule,
         MongooseModule.forFeature([{ name: Blogs.name, schema: BlogsSchema }]),
-        PostsModule
+        PostsModule,
+        BlogsModule,
     ],
     controllers: [BlogsController],
     providers: [
         ...CommandHandlers,
         BlogService,
-        BlogsRepository,
         BlogsQueryRepository,
-        BloggerBlogsRepository,
         PaginationService,
     ]
 })

@@ -26,6 +26,6 @@ import { JwtService } from '../../applications/jwt.service';
     PaginationService,
     JwtService,
   ],
-  exports: [BlogsService, BlogsQueryRepository],
+  exports: [BlogsService, BlogsRepository, BlogsQueryRepository],
 })
 export class BlogsModule {}

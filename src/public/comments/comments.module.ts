@@ -12,7 +12,7 @@ import { LikeCalculateService } from '../../applications/likeCalculate.service';
 import { UsersModule } from '../../users/users.module';
 import { PaginationService } from '../../applications/pagination.service';
 import { JwtService } from '../../applications/jwt.service';
-import {settings} from "../../config";
+import { settings } from "../../config";
 
 @Module({
   imports: [
@@ -23,7 +23,7 @@ import {settings} from "../../config";
       secret: settings.JWT_SECRET
     }),
     CommentsLikeModule,
-    UsersModule,
+    UsersModule
   ],
   controllers: [CommentsController],
   providers: [
@@ -35,6 +35,6 @@ import {settings} from "../../config";
     PaginationService,
     JwtService,
   ],
-  exports: [CommentsService, CommentsQueryRepository],
+  exports: [CommentsService, CommentsRepository, CommentsQueryRepository],
 })
 export class CommentsModule {}

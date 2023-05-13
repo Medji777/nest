@@ -1,18 +1,18 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { CqrsModule } from "@nestjs/cqrs";
+import { JwtModule } from '@nestjs/jwt';
+import {
+  DeleteAllSessionsWithoutCurrentCommandHandler,
+  DeleteSessionByDeviceIdCommandHandler
+} from "./useCase/handler";
 import { Security, SecuritySchema } from './entity/security.schema';
 import { SecurityController } from './security.controller';
 import { SecurityService } from './security.service';
 import { SecurityRepository } from './repository/security.repository';
 import { SecurityQueryRepository } from './repository/security.query-repository';
-import { JwtModule } from '@nestjs/jwt';
 import { JwtRefreshStrategy } from '../auth/strategies/jwt-refresh.stategy';
-import {settings} from "../../config";
-import {
-  DeleteAllSessionsWithoutCurrentCommandHandler,
-  DeleteSessionByDeviceIdCommandHandler
-} from "./useCase/handler";
-import {CqrsModule} from "@nestjs/cqrs";
+import { settings } from "../../config";
 
 const CommandHandlers = [
   DeleteAllSessionsWithoutCurrentCommandHandler,
@@ -37,6 +37,6 @@ const CommandHandlers = [
     JwtRefreshStrategy,
     ...CommandHandlers
   ],
-  exports: [SecurityService],
+  exports: [SecurityService, SecurityRepository, SecurityQueryRepository],
 })
 export class SecurityModule {}

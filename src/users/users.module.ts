@@ -20,6 +20,6 @@ import { BasicStrategy } from '../public/auth/strategies/basic.strategy';
     PassHashService,
     BasicStrategy,
   ],
-  exports: [UsersService, UsersQueryRepository],
+  exports: [UsersService, UsersRepository, UsersQueryRepository],
 })
 export class UsersModule {}
