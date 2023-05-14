@@ -1,8 +1,8 @@
 import {CommandHandler, ICommandHandler} from "@nestjs/cqrs";
+import {NotFoundException} from "@nestjs/common";
 import {DeletePostByBlogCommand} from "../commands";
 import {PostsRepository} from "../../../../public/posts/repository/posts.repository";
 import {BlogsRepository} from "../../../../public/blogs/repository/blogs.repository";
-import {NotFoundException} from "@nestjs/common";
 import {BlogService} from "../../blog.service";
 
 @CommandHandler(DeletePostByBlogCommand)
@@ -20,6 +20,5 @@ export class DeletePostByBlogCommandHandler implements ICommandHandler<DeletePos
             throw new NotFoundException()
         }
         post.deleteOne()
-        await this.postsRepository.save(post)
     }
 }

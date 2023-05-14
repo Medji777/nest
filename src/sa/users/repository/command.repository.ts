@@ -1,7 +1,11 @@
 import {Injectable} from "@nestjs/common";
 import {InjectModel} from "@nestjs/mongoose";
 import {Comments, CommentsModuleType} from "../../../public/comments/entity/comments.schema";
-import {CommentsLike, CommentsLikeDocument, CommentsLikeModelType} from "../../../public/comments/like/entity/commentsLike.schema";
+import {
+    CommentsLike,
+    CommentsLikeDocument,
+    CommentsLikeModelType
+} from "../../../public/comments/like/entity/commentsLike.schema";
 import {PostsLike, PostsLikeDocument, PostsLikeModelType} from "../../../public/posts/like/entity/postsLike.schema";
 
 @Injectable()
@@ -20,7 +24,7 @@ export class CommandRepository {
     async updateAllBanInfoUserAtComments(userId: string, isBanned: boolean) {
         await this.CommentsModel.updateMany(
             {"commentatorInfo.userId": userId},
-            {$set: {isBanned}}
+            {$set: {"commentatorInfo.isBanned": isBanned}}
         )
     }
     async updateAllBanInfoUserAtCommentsLike(userId: string, isBanned: boolean) {
