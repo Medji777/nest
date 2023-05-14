@@ -13,7 +13,6 @@ export class DeleteBlogCommandHandler implements ICommandHandler<DeleteBlogComma
         const {id, userId} = command;
         const blog = await this.blogService.checkExistAndGet(id, userId);
         blog.deleteOne()
-        await this.blogsRepository.save(blog)
         // await this.blogsRepository.deleteById(id);
     }
 }

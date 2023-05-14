@@ -81,9 +81,14 @@ export class Users {
     this.emailConfirmation = payload;
   }
   updateBan(payload: BanInputModel) {
+    if(payload.isBanned) {
+      this.banInfo.banReason = payload.banReason;
+      this.banInfo.banDate = new Date().toISOString();
+    } else {
+      this.banInfo.banReason = null;
+      this.banInfo.banDate = null;
+    }
     this.banInfo.isBanned = payload.isBanned;
-    this.banInfo.banReason = payload.banReason;
-    this.banInfo.banDate = new Date().toISOString();
   }
 
   async checkValidCode(isEmail: boolean = false): Promise<ErrorResponse> {

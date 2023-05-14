@@ -22,7 +22,7 @@ export class CommentsQueryRepository {
     private readonly paginationService: PaginationService,
   ) {}
   async findById(id: string, userId?: string): Promise<CommentViewModel> {
-    const doc = await this.CommentsModel.findOne({ id }, projection);
+    const doc = await this.CommentsModel.findOne({ id, "commentatorInfo.isBanned": false }, projection);
     if (!doc) {
       throw new NotFoundException('comment not found');
     }

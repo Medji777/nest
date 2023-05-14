@@ -8,6 +8,7 @@ import {CommandRepository} from "../../repository/command.repository";
 import {CommentsRepository} from "../../../../public/comments/repository/comments.repository";
 import {PostsRepository} from "../../../../public/posts/repository/posts.repository";
 import {LikeCalculateService} from "../../../../applications/likeCalculate.service";
+import {LikeStatus} from "../../../../types/types";
 
 @CommandHandler(BanUserCommand)
 export class BanUserCommandHandler implements ICommandHandler<BanUserCommand> {
@@ -64,7 +65,7 @@ export class BanUserCommandHandler implements ICommandHandler<BanUserCommand> {
     ): Promise<void> {
         for (let i = 0; i < modelLikes.length; i++) {
             const model = await repo.findById(modelLikes[i][prop]);
-            const statusLike = modelLikes[i].myStatus;
+            const statusLike: LikeStatus = modelLikes[i].myStatus;
             model.updateLikesCount(statusLike, isBanned, this.likeCalculate.updateLikesBanCount);
             await repo.save(model);
         }
