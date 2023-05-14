@@ -1,4 +1,5 @@
 import {
+  ValidationArguments,
   ValidatorConstraint,
   ValidatorConstraintInterface,
 } from 'class-validator';
@@ -10,12 +11,12 @@ import { UsersService } from '../../users/users.service';
 export class CodeConfirmValidate implements ValidatorConstraintInterface {
   private error: string;
   constructor(private usersService: UsersService) {}
-  async validate(code: string): Promise<boolean> {
+  async validate(code: string, validationArguments: ValidationArguments): Promise<boolean> {
     const resp = await this.usersService.checkConfirmCode(code);
     if (resp.message) this.error = resp.message;
     return resp.check;
   }
-  defaultMessage() {
+  defaultMessage(validationArguments: ValidationArguments): string {
     return this.error;
   }
 }

@@ -13,7 +13,7 @@ export class PostsLikeQueryRepository {
   async getLastThreeLikes(postId: string): Promise<LikesPostsExtendedViewModel[]> {
     const desc = -1;
     const threeLastUser = 3;
-    const result = await this.PostsLikeModel.find({ postId: postId, myStatus: LikeStatus.Like })
+    const result = await this.PostsLikeModel.find({ postId: postId, myStatus: LikeStatus.Like, isBanned: false })
       .sort({ addedAt: desc })
       .limit(threeLastUser);
 

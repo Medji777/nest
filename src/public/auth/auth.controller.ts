@@ -17,7 +17,7 @@ import { UsersQueryRepository } from '../../users/repo/users.query-repository';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
 import { JwtAccessGuard } from './guards/jwt-access.guard';
-import { LimitIpGuard } from "./guards/limitIp.guard";
+//import { LimitIpGuard } from "./guards/limitIp.guard";
 import {
   CreateAuthCommand,
   DeleteSessionByDeviceIdCommand,
