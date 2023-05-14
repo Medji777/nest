@@ -51,7 +51,7 @@ export class Posts {
       isBanned: boolean,
       update: UpdateLikeBan<ExtendedLikesInfo>
   ) {
-    update(statusLike, isBanned, this.extendedLikesInfo)
+    update(statusLike,isBanned,this.extendedLikesInfo)
   }
 
   static make(
@@ -71,6 +71,10 @@ export class Posts {
       blogId: blogId,
       blogName: blogName,
       createdAt: date.toISOString(),
+      extendedLikesInfo: {
+        likesCount: 0,
+        dislikesCount: 0,
+      },
     };
     return new PostsModel(newPost);
   }
