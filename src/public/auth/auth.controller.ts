@@ -45,7 +45,7 @@ export class AuthController {
 
   @Post('login')
   @UseGuards(LocalAuthGuard)
-  @UseGuards(LimitIpGuard)
+  //@UseGuards(LimitIpGuard)
   @HttpCode(HttpStatus.OK)
   async login(
     @Req() req: Request,
@@ -84,7 +84,7 @@ export class AuthController {
   }
 
   @Post('registration')
-  @UseGuards(LimitIpGuard)
+  //@UseGuards(LimitIpGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async registration(@Body() bodyDTO: UserInputModelDto) {
     await this.commandBus.execute(
@@ -93,14 +93,14 @@ export class AuthController {
   }
 
   @Post('registration-confirmation')
-  @UseGuards(LimitIpGuard)
+  //@UseGuards(LimitIpGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async confirmation(@Body() bodyDTO: RegConfirmCodeModelDto) {
     await this.usersService.confirmUser(bodyDTO.code);
   }
 
   @Post('registration-email-resending')
-  @UseGuards(LimitIpGuard)
+  //@UseGuards(LimitIpGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async emailResending(@Body() bodyDTO: RegEmailResendingDto) {
     await this.commandBus.execute(
@@ -109,7 +109,7 @@ export class AuthController {
   }
 
   @Post('password-recovery')
-  @UseGuards(LimitIpGuard)
+  //@UseGuards(LimitIpGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async passwordRecovery(
     @Body() bodyDTO: PasswordRecoveryInputModelDto,
@@ -125,7 +125,7 @@ export class AuthController {
   }
 
   @Post('new-password')
-  @UseGuards(LimitIpGuard)
+  //@UseGuards(LimitIpGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async newPassword(@Body() bodyDTO: NewPassRecIMDto) {
     await this.usersService.updatePassword(bodyDTO.recoveryCode, bodyDTO.newPassword);
