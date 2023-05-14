@@ -5,7 +5,7 @@ import {Trim} from "../../../utils/decorators";
 export class BanInputDto implements BanInputModel {
     @IsBoolean()
     isBanned: boolean
-    @MinLength(30)
+    @MinLength(20)
     @Trim()
     @IsString()
     banReason: string
