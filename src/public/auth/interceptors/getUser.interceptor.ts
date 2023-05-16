@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 import { Request } from 'express';
 import { JwtService } from '../../../applications/jwt.service';
 import { settings } from '../../../config';
-import { UsersQueryRepository } from '../../../users/repo/users.query-repository';
+import { UsersQueryRepository } from '../../../users/repository/users.query-repository';
 
 @Injectable()
 export class GetUserInterceptor implements NestInterceptor {

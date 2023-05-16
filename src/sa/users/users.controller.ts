@@ -3,7 +3,7 @@ import {CommandBus} from "@nestjs/cqrs";
 import {BanUserCommand, CreateUserCommand, DeleteUserCommand} from "./useCase/command";
 import {UsersService} from "./users.service";
 import {BasicGuard} from "../../public/auth/guards/basic.guard";
-import {UsersQueryRepository} from "../../users/repo/users.query-repository";
+import {UsersQueryRepository} from "../../users/repository/users.query-repository";
 import {QueryUsersDto, UserInputModelDto} from "../../users/dto";
 import {BanInputDto} from "./dto";
 

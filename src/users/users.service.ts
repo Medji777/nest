@@ -3,8 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { UsersRepository } from './repo/users.repository';
-import { Users } from './entity/users.schema';
+import { UsersRepository } from './repository/users.repository';
 import { PassHashService } from '../applications/passHash.service';
 import {
   EmailConfirmUserModel,

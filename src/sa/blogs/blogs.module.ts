@@ -6,7 +6,7 @@ import {Blogs, BlogsSchema} from "../../public/blogs/entity/blogs.schema";
 import {PaginationService} from "../../applications/pagination.service";
 import {BindBlogByUserCommandHandler} from "./useCase/handler";
 import {BlogsRepository} from "../../public/blogs/repository/blogs.repository";
-import {UsersRepository} from "../../users/repo/users.repository";
+import {UsersRepository} from "../../users/repository/users.repository";
 import {Users, UsersSchema} from "../../users/entity/users.schema";
 import {BlogsQueryRepository} from "../../public/blogs/repository/blogs.query-repository";
 

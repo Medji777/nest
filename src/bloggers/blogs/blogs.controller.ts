@@ -13,6 +13,7 @@ import {Users} from "../../users/entity/users.schema";
 import {JwtAccessGuard} from "../../public/auth/guards/jwt-access.guard";
 import {BlogsQueryRepository as BloggerQueryRepository} from "./repository/blogs.query-repository";
 import {UpdatePostDto} from "./dto";
+import {PaginationDto} from "../../utils/dto/pagination.dto";
 
 @Controller('blogger/blogs')
 export class BlogsController {
@@ -20,6 +21,16 @@ export class BlogsController {
         private commandBus: CommandBus,
         private bloggerQueryRepository: BloggerQueryRepository,
     ) {}
+
+    @UseGuards(JwtAccessGuard)
+    @Get('comments')
+    @HttpCode(HttpStatus.OK)
+    getAllCommentsWithPostByBlog(
+        @Query() queryDTO: PaginationDto,
+        @User() user: Users
+    ) {
+
+    }
 
     @UseGuards(JwtAccessGuard)
     @Get()

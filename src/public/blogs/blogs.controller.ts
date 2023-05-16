@@ -9,7 +9,6 @@ import {
 } from '@nestjs/common';
 import { BlogsService } from './blogs.service';
 import { BlogsQueryRepository } from './repository/blogs.query-repository';
-import { PostsService } from '../posts/posts.service';
 import { PostsQueryRepository } from '../posts/repository/posts.query-repository';
 import {
   QueryBlogsDTO,
@@ -23,7 +22,6 @@ import {Users} from "../../users/entity/users.schema";
 export class BlogsController {
   constructor(
     private readonly blogsService: BlogsService,
-    private readonly postsService: PostsService,
     private readonly blogsQueryRepository: BlogsQueryRepository,
     private readonly postsQueryRepository: PostsQueryRepository,
   ) {}

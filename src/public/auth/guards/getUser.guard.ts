@@ -1,5 +1,5 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
-import { UsersQueryRepository } from '../../../users/repo/users.query-repository';
+import { UsersQueryRepository } from '../../../users/repository/users.query-repository';
 import { JwtService } from '../../../applications/jwt.service';
 import { settings } from '../../../config';
 

@@ -2,7 +2,7 @@ import {CommandHandler, ICommandHandler} from "@nestjs/cqrs";
 import {BadRequestException} from "@nestjs/common";
 import {BindBlogByUserCommand} from "../command";
 import {BlogsRepository} from "../../../../public/blogs/repository/blogs.repository";
-import {UsersRepository} from "../../../../users/repo/users.repository";
+import {UsersRepository} from "../../../../users/repository/users.repository";
 
 @CommandHandler(BindBlogByUserCommand)
 export class BindBlogByUserCommandHandler implements ICommandHandler<BindBlogByUserCommand> {

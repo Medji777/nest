@@ -2,7 +2,7 @@ import {CommandHandler, ICommandHandler} from "@nestjs/cqrs";
 import {NotFoundException} from "@nestjs/common";
 import {HydratedDocument} from "mongoose";
 import {BanUserCommand} from "../command";
-import {UsersRepository} from "../../../../users/repo/users.repository";
+import {UsersRepository} from "../../../../users/repository/users.repository";
 import {SecurityRepository} from "../../../../public/security/repository/security.repository";
 import {CommandRepository} from "../../repository/command.repository";
 import {CommentsRepository} from "../../../../public/comments/repository/comments.repository";

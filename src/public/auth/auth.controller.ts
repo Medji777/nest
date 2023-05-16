@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { CommandBus } from "@nestjs/cqrs";
 import { Request, Response } from 'express';
-import { UsersQueryRepository } from '../../users/repo/users.query-repository';
+import { UsersQueryRepository } from '../../users/repository/users.query-repository';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
 import { JwtAccessGuard } from './guards/jwt-access.guard';

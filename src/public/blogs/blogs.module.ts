@@ -14,7 +14,7 @@ import { JwtService } from '../../applications/jwt.service';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Blogs.name, schema: BlogsSchema }]),
-    forwardRef(() => PostsModule),
+    PostsModule,
     UsersModule,
   ],
   controllers: [BlogsController],
