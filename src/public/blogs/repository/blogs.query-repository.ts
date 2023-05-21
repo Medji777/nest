@@ -20,6 +20,11 @@ export class BlogsQueryRepository {
     if(searchNameTerm) {
       filter = { name: { $regex: new RegExp(searchNameTerm, 'gi') } }
     }
+    filter = {
+      ...filter,
+      'blogOwnerInfo.isBanned': false,
+      isBanned: false
+    }
     const pagination = await this.paginationService.create<BlogsModelType,BlogDocument>(
         restQuery,
         this.BlogsModel,
@@ -32,6 +37,9 @@ export class BlogsQueryRepository {
   async findById(id: string, proj = {}): Promise<BlogsViewModel> {
     const blog = await this.BlogsModel.findOne({ id }, {...projection, ...proj}).lean();
     if (!blog) {
+      throw new NotFoundException('blog not found');
+    }
+    if(blog.checkBan()) {
       throw new NotFoundException('blog not found');
     }
     return blog;

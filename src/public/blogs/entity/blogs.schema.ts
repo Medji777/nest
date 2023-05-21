@@ -56,7 +56,6 @@ export class Blogs {
   updateBindUser(userId: string): void {
     this.blogOwnerInfo.userId = userId;
   }
-
   updateBan(isBanned: boolean): void {
     if (!isBanned) {
       this.banDate = null
@@ -71,6 +70,9 @@ export class Blogs {
   }
   checkBindUser(): boolean {
     return this.blogOwnerInfo.userId !== null
+  }
+  checkBan(): boolean {
+    return this.blogOwnerInfo.isBanned || this.isBanned
   }
 
   static make(
@@ -108,7 +110,8 @@ BlogsSchema.methods = {
   updateBindUser: Blogs.prototype.updateBindUser,
   updateBan: Blogs.prototype.updateBan,
   checkIncludeUser: Blogs.prototype.checkIncludeUser,
-  checkBindUser: Blogs.prototype.checkBindUser
+  checkBindUser: Blogs.prototype.checkBindUser,
+  checkBan: Blogs.prototype.checkBan
 };
 
 const blogsStaticMethods: BlogsModelStatic = {
