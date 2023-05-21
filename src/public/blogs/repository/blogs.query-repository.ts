@@ -35,13 +35,23 @@ export class BlogsQueryRepository {
     return this.paginationService.transformPagination<BlogsViewModel,BlogDocument>(pagination);
   }
   async findById(id: string, proj = {}): Promise<BlogsViewModel> {
-    const blog = await this.BlogsModel.findOne({ id }, {...projection, ...proj}).lean();
-    if (!blog) {
+    const doc: BlogDocument = await this.BlogsModel.findOne({ id }, {...projection, ...proj});
+    if (!doc) {
       throw new NotFoundException('blog not found');
     }
-    if(blog.checkBan()) {
+    if(doc.checkBan()) {
       throw new NotFoundException('blog not found');
     }
-    return blog;
+    return this._getBlogMapped(doc);
+  }
+  private _getBlogMapped(doc: BlogDocument): BlogsViewModel {
+    return ({
+      id: doc.id,
+      name: doc.name,
+      description: doc.description,
+      websiteUrl: doc.websiteUrl,
+      createdAt: doc.createdAt,
+      isMembership: doc.isMembership
+    })
   }
 }
