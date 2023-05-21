@@ -15,7 +15,16 @@ class ExtendedLikesInfo {
   dislikesCount: number;
 }
 
+@Schema({ _id: false })
+class PostOwnerInfo {
+  @Prop({ required: true })
+  userId: string;
+  @Prop({ default: false })
+  isBanned: boolean;
+}
+
 const ExtendedLikesInfoSchema = SchemaFactory.createForClass(ExtendedLikesInfo)
+const PostOwnerInfoSchema = SchemaFactory.createForClass(PostOwnerInfo)
 
 @Schema()
 export class Posts {
@@ -35,6 +44,10 @@ export class Posts {
   createdAt?: string;
   @Prop({ type: ExtendedLikesInfoSchema, default: () => ({}) })
   extendedLikesInfo: ExtendedLikesInfo;
+  @Prop({type: PostOwnerInfoSchema, default: () => ({})})
+  postOwnerInfo: PostOwnerInfo;
+  @Prop({ default: false })
+  blogIsBanned: boolean;
 
   update(payload: PostInputModel) {
     this.title = payload.title;
@@ -45,7 +58,6 @@ export class Posts {
   updateLikeInPost(payload: LikeInfoModel) {
     this.extendedLikesInfo = payload;
   }
-
   updateLikesCount(
       statusLike: LikeStatus,
       isBanned: boolean,
@@ -54,12 +66,17 @@ export class Posts {
     update(statusLike,isBanned,this.extendedLikesInfo)
   }
 
+  checkIsBan(): boolean {
+    return this.postOwnerInfo.isBanned || this.blogIsBanned
+  }
+
   static make(
     title: string,
     shortDescription: string,
     content: string,
     blogId: string,
     blogName: string,
+    userId: string,
     PostsModel: PostsModelType,
   ): PostsDocument {
     const date = new Date();
@@ -75,6 +92,9 @@ export class Posts {
         likesCount: 0,
         dislikesCount: 0,
       },
+      postOwnerInfo: {
+        userId: userId
+      }
     };
     return new PostsModel(newPost);
   }
@@ -85,7 +105,8 @@ export const PostsSchema = SchemaFactory.createForClass(Posts);
 PostsSchema.methods = {
   update: Posts.prototype.update,
   updateLikeInPost: Posts.prototype.updateLikeInPost,
-  updateLikesCount: Posts.prototype.updateLikesCount
+  updateLikesCount: Posts.prototype.updateLikesCount,
+  checkIsBan: Posts.prototype.checkIsBan
 };
 
 const staticsMethods = {
@@ -101,6 +122,7 @@ export type PostsModelStatic = {
     content: string,
     blogId: string,
     blogName: string,
+    userId: string,
     PostsModel: PostsModelType,
   ): PostsDocument;
 };

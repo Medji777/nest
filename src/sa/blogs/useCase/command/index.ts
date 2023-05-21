@@ -1,5 +1,2 @@
-import {BindBlogByUserCommand} from './bindBlogByUser.command';
-
-export {
-    BindBlogByUserCommand
-}
+export {BindBlogByUserCommand} from './bindBlogByUser.command';
+export {BanBlogCommand} from './banBlog.command';

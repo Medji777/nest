@@ -21,7 +21,7 @@ export class PostsLikeQueryRepository {
     return result.map(this._getOutputExtendedLike);
   }
   async getLike(userId: string, postId: string): Promise<LikesPostsModel | null> {
-    const result = await this.PostsLikeModel.findOne({ userId, postId });
+    const result = await this.PostsLikeModel.findOne({ userId, postId, isBanned: false });
     if (!result) return null;
     return this._getOutputLike(result);
   }

@@ -18,6 +18,17 @@ export type CommentViewModel = {
   likesInfo: LikesInfoViewModel;
 };
 
+export type PostInfo = {
+  id: string,
+  title: string,
+  blogId: string,
+  blogName: string
+}
+
+export type BloggerCommentViewModel = Omit<CommentViewModel, 'likesInfo'> & {
+  postInfo: PostInfo
+}
+
 export type CommentDBModel = {
   id: string;
   content: string;

@@ -6,7 +6,7 @@ import { PostsController } from './posts.controller';
 import { PostsService } from './posts.service';
 import { PostsRepository } from './repository/posts.repository';
 import { PostsQueryRepository } from './repository/posts.query-repository';
-import { UpdateStatusLikeCommandHandler } from "./useCase/handler";
+import {CreateCommentByPostCommandHandler, UpdateStatusLikeCommandHandler} from "./useCase/handler";
 import { BlogsModule } from '../blogs/blogs.module';
 import { CommentsModule } from '../comments/comments.module';
 import { JwtAccessStrategy } from '../auth/strategies/jwt-access.strategy';
@@ -36,7 +36,8 @@ import { CheckBlogIdValidate } from "../../utils/validates";
     JwtService,
     PaginationService,
     CheckBlogIdValidate,
-    UpdateStatusLikeCommandHandler
+    UpdateStatusLikeCommandHandler,
+    CreateCommentByPostCommandHandler
   ],
   exports: [PostsService, PostsRepository, PostsQueryRepository],
 })

@@ -42,20 +42,33 @@ export class Blogs {
   @Prop({ type: BlogOwnerInfoSchema })
   blogOwnerInfo: BlogOwnerInfo
 
-  update(payload: BlogsInputModel) {
+  @Prop({ default: false })
+  isBanned: boolean;
+
+  @Prop({default: null})
+  banDate: string | null;
+
+  update(payload: BlogsInputModel): void {
     this.name = payload.name;
     this.description = payload.description;
     this.websiteUrl = payload.websiteUrl;
   }
-
-  updateBindUser(userId: string) {
+  updateBindUser(userId: string): void {
     this.blogOwnerInfo.userId = userId;
+  }
+
+  updateBan(isBanned: boolean): void {
+    if (!isBanned) {
+      this.banDate = null
+    } else {
+      this.banDate = new Date().toISOString()
+    }
+    this.isBanned = isBanned;
   }
 
   checkIncludeUser(userId: string): boolean {
     return this.blogOwnerInfo.userId === userId
   }
-
   checkBindUser(): boolean {
     return this.blogOwnerInfo.userId !== null
   }
@@ -93,6 +106,7 @@ export const BlogsSchema = SchemaFactory.createForClass(Blogs);
 BlogsSchema.methods = {
   update: Blogs.prototype.update,
   updateBindUser: Blogs.prototype.updateBindUser,
+  updateBan: Blogs.prototype.updateBan,
   checkIncludeUser: Blogs.prototype.checkIncludeUser,
   checkBindUser: Blogs.prototype.checkBindUser
 };

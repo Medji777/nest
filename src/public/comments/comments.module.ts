@@ -5,6 +5,7 @@ import { CommentsController } from './comments.controller';
 import { CommentsService } from './comments.service';
 import { CommentsRepository } from './repository/comments.repository';
 import { Comments, CommentsSchema } from './entity/comments.schema';
+import { Posts, PostsSchema } from "../posts/entity/posts.schema";
 import { CommentsQueryRepository } from './repository/comments.query-repository';
 import { JwtAccessStrategy } from '../auth/strategies/jwt-access.strategy';
 import { CommentsLikeModule } from './like/commentsLike.module';
@@ -18,6 +19,7 @@ import {settings} from "../../config";
   imports: [
     MongooseModule.forFeature([
       { name: Comments.name, schema: CommentsSchema },
+      { name: Posts.name, schema: PostsSchema }
     ]),
     JwtModule.register({
       secret: settings.JWT_SECRET

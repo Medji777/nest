@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { UsersRepository } from './repository/users.repository';
 import { PassHashService } from '../applications/passHash.service';
+import { Users } from "./entity/users.schema";
 import {
   EmailConfirmUserModel,
   PasswordConfirmUserModel,

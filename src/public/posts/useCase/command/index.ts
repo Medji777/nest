@@ -1,5 +1,2 @@
-import {UpdateStatusLikeCommand} from './updateStatusLike.command';
-
-export {
-    UpdateStatusLikeCommand
-}
+export {UpdateStatusLikeCommand} from './updateStatusLike.command';
+export {CreateCommentByPostCommand} from './createCommentByPost.command';

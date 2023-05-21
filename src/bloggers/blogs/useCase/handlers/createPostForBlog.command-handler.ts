@@ -19,6 +19,7 @@ export class CreatePostForBlogCommandHandler implements ICommandHandler<CreatePo
             ...bodyDTO,
             blogId: id,
             blogName: blog.name,
+            userId
         });
     }
 }

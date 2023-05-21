@@ -14,10 +14,9 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { CommandBus } from "@nestjs/cqrs";
-import { UpdateStatusLikeCommand } from "./useCase/command";
+import {CreateCommentByPostCommand, UpdateStatusLikeCommand} from "./useCase/command";
 import { PostsQueryRepository } from './repository/posts.query-repository';
 import { CommentDBModel } from '../../types/comments';
-import { CommentsService } from '../comments/comments.service';
 import { CommentsQueryRepository } from '../comments/repository/comments.query-repository';
 import { QueryPostsDto, LikeInputModelDto } from './dto';
 import { CommentInputModelDto, QueryCommentsDto } from '../comments/dto';
@@ -29,10 +28,7 @@ export class PostsController {
   constructor(
       private commandBus: CommandBus,
       private readonly postsQueryRepository: PostsQueryRepository,
-      private readonly commentsService: CommentsService,
       private readonly commentsQueryRepository: CommentsQueryRepository,
-      //private readonly postsService: PostsService,
-      //private readonly blogsQueryRepository: BlogsQueryRepository,
   ) {}
 
   @Get()
@@ -46,36 +42,8 @@ export class PostsController {
   @UseInterceptors(GetUserInterceptor)
   @HttpCode(HttpStatus.OK)
   async getPostById(@Param('id') id: string, @Req() req: Request) {
-    return await this.postsQueryRepository.findById(id, req.user?.id);
+    return this.postsQueryRepository.findById(id, req.user?.id);
   }
-
-  // @Post()
-  // @UseGuards(BasicGuard)
-  // @HttpCode(HttpStatus.CREATED)
-  // async createPost(@Body() bodyDTO: PostInputModelDto) {
-  //   const blog = await this.blogsQueryRepository.findById(bodyDTO.blogId);
-  //   return await this.postsService.create({
-  //     ...bodyDTO,
-  //     blogName: blog.name,
-  //   });
-  // }
-
-  // @Put(':id')
-  // @UseGuards(BasicGuard)
-  // @HttpCode(HttpStatus.NO_CONTENT)
-  // async updatePost(
-  //   @Param('id') id: string,
-  //   @Body() bodyDTO: PostInputModelDto,
-  // ) {
-  //   await this.postsService.update(id, bodyDTO);
-  // }
-
-  // @Delete(':id')
-  // @UseGuards(BasicGuard)
-  // @HttpCode(HttpStatus.NO_CONTENT)
-  // async deletePost(@Param('id') id: string) {
-  //   await this.postsService.delete(id);
-  // }
 
   @Get('/:id/comments')
   @UseInterceptors(GetUserInterceptor)
@@ -85,7 +53,6 @@ export class PostsController {
     @Query() query: QueryCommentsDto,
     @Req() req: Request,
   ) {
-    await this.postsQueryRepository.findById(id, req.user?.id);
     return this.commentsQueryRepository.getCommentsByPostId(
       id,
       query,
@@ -101,13 +68,9 @@ export class PostsController {
     @Body() bodyDTO: CommentInputModelDto,
     @Req() req: Request,
   ): Promise<CommentDBModel> {
-    const post = await this.postsQueryRepository.findById(id, req.user.id);
-    return this.commentsService.create({
-      ...bodyDTO,
-      postId: post.id,
-      userId: req.user.id,
-      userLogin: req.user.login,
-    });
+     return this.commandBus.execute(
+         new CreateCommentByPostCommand(id,req.user,bodyDTO)
+     )
   }
 
   @Put('/:id/like-status')

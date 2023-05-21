@@ -11,14 +11,16 @@ export class PostsRepository {
     content: string,
     blogId: string,
     blogName: string,
+    userId: string,
   ): PostsDocument {
     return this.PostsModel.make(
-      title,
-      shortDescription,
-      content,
-      blogId,
-      blogName,
-      this.PostsModel,
+        title,
+        shortDescription,
+        content,
+        blogId,
+        blogName,
+        userId,
+        this.PostsModel,
     );
   }
   async findById(id: string): Promise<PostsDocument> {
@@ -26,6 +28,12 @@ export class PostsRepository {
   }
   async findByIdAndBlogId(id: string, blogId: string): Promise<PostsDocument> {
     return this.PostsModel.findOne({ id, blogId });
+  }
+  async findByBlogId(blogId: string): Promise<PostsDocument> {
+    return this.PostsModel.findOne({ blogId });
+  }
+  async updateBanStatusAllPostByBlogId(blogId: string, isBanned: boolean): Promise<void> {
+    await this.PostsModel.updateMany({blogId},{$set: {blogIsBanned: isBanned}})
   }
   async deleteById(id: string): Promise<boolean> {
     const result = await this.PostsModel.deleteOne({ id });

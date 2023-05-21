@@ -16,7 +16,7 @@ import { CommentsQueryRepository } from './repository/comments.query-repository'
 import { CommentsLikeService } from './like/commentsLike.service';
 import { CommentInputModelDto, LikeInputModelDto } from './dto';
 
-type CommentPayload = CommentInputModel & CommentatorInfo & PostId;
+type CommentPayload = CommentInputModel & CommentatorInfo & PostId & {bloggerId: string};
 
 @Injectable()
 export class CommentsService {
@@ -29,10 +29,11 @@ export class CommentsService {
   ) {}
   async create(payload: CommentPayload): Promise<CommentDBModel> {
     const doc = this.commentsRepository.create(
-      payload.content,
-      payload.postId,
-      payload.userId,
-      payload.userLogin,
+        payload.content,
+        payload.postId,
+        payload.userId,
+        payload.userLogin,
+        payload.bloggerId
     );
     await this.commentsRepository.save(doc);
     return this._likeCreateTransform(this._mapComments(doc));

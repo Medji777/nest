@@ -13,6 +13,7 @@ export type CommentsStaticMethods = {
     postId: string,
     userId: string,
     userLogin: string,
+    bloggerId: string,
     CommentsModel: CommentsModuleType,
   ) => CommentsDocument;
 };
@@ -51,6 +52,8 @@ export class Comments {
   createdAt: string;
   @Prop({ required: true })
   postId: string;
+  @Prop({ required: true })
+  bloggerId: string;
   @Prop({ type: LikesInfoSchema, default: () => ({}) })
   likesInfo: LikesInfo;
 
@@ -78,6 +81,7 @@ export class Comments {
     postId: string,
     userId: string,
     userLogin: string,
+    bloggerId: string,
     CommentsModel: CommentsModuleType,
   ): CommentsDocument {
     const date = new Date();
@@ -85,6 +89,7 @@ export class Comments {
       id: `${+date}`,
       content: content,
       postId: postId,
+      bloggerId: bloggerId,
       commentatorInfo: {
         userId: userId,
         userLogin: userLogin,

@@ -11,6 +11,7 @@ import { transformPagination } from '../../../utils/transform';
 import { QueryCommentsDto } from '../dto';
 import { CommentsLikeQueryRepository } from '../like/repository/commentsLike.query-repository';
 import { PaginationService } from '../../../applications/pagination.service';
+import {Posts, PostsModelType} from "../../posts/entity/posts.schema";
 
 const projection = { _id: 0, postId: 0, __v: 0 };
 
@@ -18,6 +19,7 @@ const projection = { _id: 0, postId: 0, __v: 0 };
 export class CommentsQueryRepository {
   constructor(
     @InjectModel(Comments.name) private CommentsModel: CommentsModuleType,
+    @InjectModel(Posts.name) private PostsModel: PostsModelType,
     private readonly commentsLikeQueryRepository: CommentsLikeQueryRepository,
     private readonly paginationService: PaginationService,
   ) {}
@@ -37,6 +39,11 @@ export class CommentsQueryRepository {
     query: QueryCommentsDto,
     userId?: string,
   ): Promise<Paginator<CommentViewModel>> {
+    const post = await this.PostsModel.findOne({id})
+    if (!post) {
+      throw new NotFoundException('post not found');
+    }
+
     const filter = { postId: id, "commentatorInfo.isBanned": false };
     const { doc, pageSize, pageNumber, count } =
       await this.paginationService.create(

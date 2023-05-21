@@ -16,13 +16,14 @@ export class PostsService {
     private readonly postsRepository: PostsRepository,
     private readonly postsLikeService: PostsLikeService,
   ) {}
-  async create(payload: PostInputModel & BlogName): Promise<PostsViewModel> {
+  async create(payload: PostInputModel & BlogName & {userId: string}): Promise<PostsViewModel> {
     const createPost = this.postsRepository.create(
-      payload.title,
-      payload.shortDescription,
-      payload.content,
-      payload.blogId,
-      payload.blogName,
+        payload.title,
+        payload.shortDescription,
+        payload.content,
+        payload.blogId,
+        payload.blogName,
+        payload.userId
     );
     await this.postsRepository.save(createPost);
     return this._likeCreateTransform(this._mappedPostModel(createPost));

@@ -1,9 +1,12 @@
-import {Controller, Get, Param, Put, Query, UseGuards} from "@nestjs/common";
+import {Body, Controller, Get, HttpCode, HttpStatus, Param, Put, Query, UseGuards} from "@nestjs/common";
 import {CommandBus} from "@nestjs/cqrs";
-import {BindBlogByUserCommand} from "./useCase/command";
+import {BanBlogCommand, BindBlogByUserCommand} from "./useCase/command";
 import {BlogsQueryRepository} from "../../public/blogs/repository/blogs.query-repository";
 import {BasicGuard} from "../../public/auth/guards/basic.guard";
 import {QueryBlogsDTO} from "../../public/blogs/dto";
+import {BanBlogInputDto} from "./dto";
+import {Paginator} from "../../types/types";
+import {BlogsViewModel} from "../../types/blogs";
 
 @Controller('sa/blogs')
 export class SABlogsController {
@@ -13,16 +16,32 @@ export class SABlogsController {
     ) {}
     @UseGuards(BasicGuard)
     @Get()
-    async getAll(@Query() query: QueryBlogsDTO) {
+    @HttpCode(HttpStatus.OK)
+    async getAll(@Query() query: QueryBlogsDTO): Promise<Paginator<BlogsViewModel>> {
         return this.blogsQueryRepository.getAll(query,{"blogOwnerInfo.isBanned": false})
     }
 
     @UseGuards(BasicGuard)
     @Put(':id/bind-with-user/:userId')
+    @HttpCode(HttpStatus.NO_CONTENT)
     async bindBlogByUser(
         @Param('id') id: string,
         @Param('userId') userId: string
-    ) {
-        await this.commandBus.execute(new BindBlogByUserCommand(id, userId))
+    ): Promise<void> {
+        await this.commandBus.execute(
+            new BindBlogByUserCommand(id, userId)
+        )
+    }
+
+    @UseGuards(BasicGuard)
+    @Put(':id/ban')
+    @HttpCode(HttpStatus.NO_CONTENT)
+    async blogUnbanBlog(
+        @Param('id') id: string,
+        @Body() bodyDTO: BanBlogInputDto
+    ): Promise<void> {
+        await this.commandBus.execute(
+            new BanBlogCommand(id, bodyDTO)
+        )
     }
 }

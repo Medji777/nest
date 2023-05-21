@@ -25,6 +25,12 @@ export type UserViewModelSA = UserViewModel & {
   banInfo: BanInfoModel
 }
 
+export type BloggerBanInfo = {
+  banDate: string;
+  banReason: string;
+  blogId: string;
+}
+
 export type PasswordHash = {
   passwordHash: string;
 };
@@ -47,3 +53,13 @@ export type ConfirmModel = {
 export type EmailConfirmUserModel = ConfirmModel;
 
 export type PasswordConfirmUserModel = ConfirmModel;
+
+export type UsersBloggerModel = UserViewModel & {
+  bloggerBanInfo: Array<BloggerBanInfo>
+}
+
+export type UsersBloggerViewModel = {
+  id: string;
+  login: string;
+  banInfo: BanInfoModel
+}

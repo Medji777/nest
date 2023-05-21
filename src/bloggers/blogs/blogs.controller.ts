@@ -12,6 +12,7 @@ import {User} from "../../utils/decorators";
 import {Users} from "../../users/entity/users.schema";
 import {JwtAccessGuard} from "../../public/auth/guards/jwt-access.guard";
 import {BlogsQueryRepository as BloggerQueryRepository} from "./repository/blogs.query-repository";
+import {CommentsQueryRepository as BloggerCommentsQueryRepository} from './repository/comments.query-repository';
 import {UpdatePostDto} from "./dto";
 import {PaginationDto} from "../../utils/dto/pagination.dto";
 
@@ -20,16 +21,17 @@ export class BlogsController {
     constructor(
         private commandBus: CommandBus,
         private bloggerQueryRepository: BloggerQueryRepository,
+        private bloggerCommentsQueryRepository: BloggerCommentsQueryRepository
     ) {}
 
     @UseGuards(JwtAccessGuard)
     @Get('comments')
     @HttpCode(HttpStatus.OK)
-    getAllCommentsWithPostByBlog(
+    async getAllCommentsWithPostByBlog(
         @Query() queryDTO: PaginationDto,
         @User() user: Users
     ) {
-
+        return this.bloggerCommentsQueryRepository.getAllCommentsWithPostByBlog(queryDTO, user.id)
     }
 
     @UseGuards(JwtAccessGuard)
@@ -60,7 +62,9 @@ export class BlogsController {
         @Body() bodyDTO: BlogPostInputModelDto,
         @User() user: Users
     ) {
-        return this.commandBus.execute(new CreatePostForBlogCommand(id, user.id, bodyDTO))
+        return this.commandBus.execute(
+            new CreatePostForBlogCommand(id, user.id, bodyDTO)
+        )
     }
 
     @UseGuards(JwtAccessGuard)

@@ -1,11 +1,20 @@
-import { Injectable } from '@nestjs/common';
-import { HydratedDocument, Model, QueryWithHelpers } from 'mongoose';
-import { getSortNumber } from '../utils/sort';
-import { transformPagination } from "../utils/transform";
-import { SortDirections } from "../types/types";
+import {Injectable} from '@nestjs/common';
+import {HydratedDocument, Model, PipelineStage, QueryWithHelpers} from 'mongoose';
+import {getSortNumber} from '../utils/sort';
+import {transformPagination} from "../utils/transform";
+import {SortDirections} from "../types/types";
 
 type Pagination<D> = {
   doc: D | any;
+  pageSize: number;
+  pageNumber: number;
+  count: number;
+};
+
+type Sort = Record<string, 1 | -1>
+
+type PaginationAggregate = {
+  config: Array<PipelineStage>;
   pageSize: number;
   pageNumber: number;
   count: number;
@@ -38,6 +47,37 @@ export class PaginationService {
       pageNumber,
       count,
     };
+  }
+  public async createAggregate<M extends Model<any>, D extends any>(
+      query: Query,
+      model: M,
+      filter = {},
+      aggregatePayload: Array<PipelineStage>
+  ): Promise<Pagination<D>> {
+    const { pageNumber, pageSize, sortBy, sortDirection } = query;
+    const count = await model.countDocuments(filter);
+
+    const sort: Sort = {
+      [sortBy]: getSortNumber(sortDirection)
+    }
+    const skip = (pageNumber - 1) * pageSize
+    const config = [
+      { $sort: sort },
+      { $skip: skip },
+      { $limit: pageSize },
+    ]
+
+    const doc: Array<D> = await model.aggregate([
+        ...aggregatePayload,
+        ...config
+    ])
+
+    return {
+      doc,
+      pageSize,
+      pageNumber,
+      count,
+    }
   }
   public transformPagination<T,D>(pagination: Pagination<D>) {
     return transformPagination<T>(

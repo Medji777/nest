@@ -18,10 +18,15 @@ export class PostsQueryRepository {
     private readonly paginationService: PaginationService,
   ) {}
   async getAll(query: QueryPostsDto, userId: string): Promise<Paginator<PostsViewModel>> {
+    const filter = {
+      'postOwnerInfo.isBanned': false,
+      'blogIsBanned': false
+    }
     const pagination = await this.paginationService.create(
-      query,
-      this.PostsModel,
-      projectionInit,
+        query,
+        this.PostsModel,
+        projectionInit,
+        filter
     );
 
     const mappedPost = pagination.doc.map(this._getOutputPost);
@@ -45,6 +50,9 @@ export class PostsQueryRepository {
     if (!doc) {
       throw new NotFoundException('post not found');
     }
+    if(doc.checkIsBan()) {
+      throw new NotFoundException('post not found');
+    }
     const mappedResult = this._getOutputPost(doc);
     if (userId && mappedResult) {
       await this._setLike(userId, mappedResult);
@@ -59,7 +67,11 @@ export class PostsQueryRepository {
     query: QueryPostsDto,
     userId?: string,
   ): Promise<Paginator<PostsViewModel>> {
-    const filter = { blogId: id };
+    const filter = {
+      blogId: id,
+      'postOwnerInfo.isBanned': false,
+      'blogIsBanned': false
+    };
     const pagination = await this.paginationService.create(
       query,
       this.PostsModel,

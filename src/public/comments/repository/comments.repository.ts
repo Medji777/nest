@@ -16,13 +16,15 @@ export class CommentsRepository {
     postId: string,
     userId: string,
     userLogin: string,
+    bloggerId: string,
   ): CommentsDocument {
     return this.CommentsModel.make(
-      content,
-      postId,
-      userId,
-      userLogin,
-      this.CommentsModel,
+        content,
+        postId,
+        userId,
+        userLogin,
+        bloggerId,
+        this.CommentsModel,
     );
   }
   async findById(id: string): Promise<CommentsDocument> {

@@ -15,10 +15,8 @@ export type UsersModelType = Model<UsersDocument> & UsersModelStatic;
 class EmailConfirmation {
   @Prop({ default: null })
   confirmationCode?: string | null;
-
   @Prop()
   expirationDate?: Date;
-
   @Prop({ required: true })
   isConfirmed: boolean;
 }
@@ -30,14 +28,23 @@ class PasswordConfirmation extends EmailConfirmation {}
 class BanInfo {
   @Prop({ default: false })
   isBanned: boolean
-
   @Prop({ default: null })
   banDate: string | null
-
   @Prop({ default: null })
   banReason: string | null
 }
 
+@Schema({ _id: false })
+class BloggerBanInfo {
+  @Prop()
+  banDate: string;
+  @Prop({ minlength: 20 })
+  banReason: string;
+  @Prop()
+  blogId: string;
+}
+
+const BloggerBanInfoSchema = SchemaFactory.createForClass(BloggerBanInfo)
 const BanInfoSchema = SchemaFactory.createForClass(BanInfo)
 
 @Schema()
@@ -66,6 +73,9 @@ export class Users {
   @Prop({ type: BanInfoSchema, default: () => ({}) })
   banInfo: BanInfo
 
+  @Prop({type: BloggerBanInfoSchema, default: () => []})
+  bloggerBanInfo: Array<BloggerBanInfo>
+
   updatePassword(payload: PasswordHash) {
     this.passwordHash = payload.passwordHash;
   }
@@ -90,6 +100,18 @@ export class Users {
     }
     this.banInfo.isBanned = payload.isBanned;
   }
+  updateBloggerBan(isBanned: boolean, banReason: string, blogId: string) {
+    if (isBanned) {
+      this.bloggerBanInfo.push({
+        banDate: new Date().toISOString(),
+        banReason: banReason,
+        blogId: blogId
+      });
+    }
+    this.bloggerBanInfo = this.bloggerBanInfo.filter(
+        (b) => b.blogId !== blogId
+    );
+  }
 
   async checkValidCode(isEmail: boolean = false): Promise<ErrorResponse> {
     if (this.emailConfirmation.isConfirmed) {
@@ -109,7 +131,6 @@ export class Users {
       check: true,
     };
   }
-
   async checkValidRecoveryCode(): Promise<ErrorResponse> {
     const expirationDate = this.passwordConfirmation.expirationDate;
     if (expirationDate && expirationDate < new Date()) {
@@ -121,6 +142,12 @@ export class Users {
     return {
       check: true,
     };
+  }
+  checkBanStatusForBlog(blogId: string): boolean {
+    const result = this.bloggerBanInfo.filter(
+        (b) => b.blogId === blogId
+    );
+    return !!result.length;
   }
 
   static make(
@@ -159,7 +186,8 @@ UsersSchema.methods = {
   updatePasswordConfirmationData: Users.prototype.updatePasswordConfirmationData,
   updateConfirmation: Users.prototype.updateConfirmation,
   updateConfirmationData: Users.prototype.updateConfirmationData,
-  updateBan: Users.prototype.updateBan
+  updateBan: Users.prototype.updateBan,
+  updateBloggerBan: Users.prototype.updateBloggerBan
 };
 
 const userStaticMethods: UsersModelStatic = {

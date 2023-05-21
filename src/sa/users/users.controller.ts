@@ -17,6 +17,7 @@ export class SAUsersController {
 
     @UseGuards(BasicGuard)
     @Get()
+    @HttpCode(HttpStatus.OK)
     async getAllUsers(@Query() queryDTO: QueryUsersDto ) {
         return this.usersQueryRepository.getAll(queryDTO)
     }
