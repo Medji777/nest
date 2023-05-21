@@ -73,7 +73,7 @@ export class Users {
   @Prop({ type: BanInfoSchema, default: () => ({}) })
   banInfo: BanInfo
 
-  @Prop({type: BloggerBanInfoSchema, default: () => []})
+  @Prop({type: [BloggerBanInfoSchema], default: () => []})
   bloggerBanInfo: Array<BloggerBanInfo>
 
   updatePassword(payload: PasswordHash) {
