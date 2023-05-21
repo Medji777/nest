@@ -10,7 +10,7 @@ export class BanBlogCommandHandler implements ICommandHandler<BanBlogCommand> {
         private blogsRepository: BlogsRepository,
         private postsRepository: PostsRepository
     ) {}
-    async execute(command: BanBlogCommand): Promise<any> {
+    async execute(command: BanBlogCommand): Promise<void> {
         const {blogId, bodyDTO} = command;
 
         const blog = await this.blogsRepository.findById(blogId)

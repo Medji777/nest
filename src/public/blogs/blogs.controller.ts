@@ -29,13 +29,13 @@ export class BlogsController {
   @Get()
   @HttpCode(HttpStatus.OK)
   async getBlogs(@Query() query: QueryBlogsDTO) {
-    return this.blogsQueryRepository.getAll(query,{ blogOwnerInfo: false });
+    return this.blogsQueryRepository.getAll(query,{ blogOwnerInfo: false, banInfo: false });
   }
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   async getBlogOnId(@Param('id') id: string) {
-    return this.blogsQueryRepository.findById(id,{ blogOwnerInfo: false });
+    return this.blogsQueryRepository.findById(id);
   }
 
   @Get(':blogId/posts')

@@ -1,16 +1,17 @@
 import {InjectModel} from '@nestjs/mongoose';
 import {Injectable, NotFoundException} from '@nestjs/common';
 import {Users, UsersDocument, UsersModelType} from '../entity/users.schema';
+import {PaginationService} from '../../applications/pagination.service';
+import {QueryUsersDto} from '../dto';
 import {BanStatus, Paginator} from '../../types/types';
 import {UserViewModel} from '../../types/users';
-import {QueryUsersDto} from '../dto';
-import {PaginationService} from '../../applications/pagination.service';
 
 const projectionFilter = {
   _id: 0,
   passwordHash: 0,
   emailConfirmation: 0,
   passwordConfirmation: 0,
+  bloggerBanInfo: 0,
   __v: 0,
 };
 

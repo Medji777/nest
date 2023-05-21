@@ -17,7 +17,17 @@ class BlogOwnerInfo {
   isBanned: boolean;
 }
 
+@Schema({ _id: false })
+class BanInfo {
+  @Prop({ default: false })
+  isBanned: boolean;
+
+  @Prop({default: null})
+  banDate: string | null;
+}
+
 const BlogOwnerInfoSchema = SchemaFactory.createForClass(BlogOwnerInfo)
+const BanInfoSchema = SchemaFactory.createForClass(BanInfo)
 
 @Schema()
 export class Blogs {
@@ -39,14 +49,11 @@ export class Blogs {
   @Prop()
   isMembership?: boolean;
 
-  @Prop({ type: BlogOwnerInfoSchema })
+  @Prop({ type: BlogOwnerInfoSchema, default: () => ({}) })
   blogOwnerInfo: BlogOwnerInfo
 
-  @Prop({ default: false })
-  isBanned: boolean;
-
-  @Prop({default: null})
-  banDate: string | null;
+  @Prop({type: BanInfoSchema, default: () => ({})})
+  banInfo: BanInfo
 
   update(payload: BlogsInputModel): void {
     this.name = payload.name;
@@ -58,11 +65,11 @@ export class Blogs {
   }
   updateBan(isBanned: boolean): void {
     if (!isBanned) {
-      this.banDate = null
+      this.banInfo.banDate = null
     } else {
-      this.banDate = new Date().toISOString()
+      this.banInfo.banDate = new Date().toISOString()
     }
-    this.isBanned = isBanned;
+    this.banInfo.isBanned = isBanned;
   }
 
   checkIncludeUser(userId: string): boolean {
@@ -72,7 +79,7 @@ export class Blogs {
     return this.blogOwnerInfo.userId !== null
   }
   checkBan(): boolean {
-    return this.blogOwnerInfo.isBanned || this.isBanned
+    return this.blogOwnerInfo.isBanned || this.banInfo.isBanned
   }
 
   static make(
