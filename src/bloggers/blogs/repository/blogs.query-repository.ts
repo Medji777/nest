@@ -5,7 +5,7 @@ import {PaginationService} from "../../../applications/pagination.service";
 import {QueryBlogsDTO} from "../../../public/blogs/dto";
 import {BlogsViewModel} from "../../../types/blogs";
 
-const projection = { _id: 0, __v: 0, blogOwnerInfo: 0 };
+const projection = { _id: 0, __v: 0, blogOwnerInfo: 0, banInfo: 0 };
 
 @Injectable()
 export class BlogsQueryRepository {
@@ -33,10 +33,23 @@ export class BlogsQueryRepository {
         return this.paginationService.transformPagination<BlogsViewModel,BlogDocument>(pagination)
     }
     async findById(id: string): Promise<BlogsViewModel> {
-        const blog = await this.BlogsModel.findOne({ id }, projection).lean();
+        const blog: BlogDocument = await this.BlogsModel.findOne({ id }, projection);
         if (!blog) {
             throw new NotFoundException('blog not found');
         }
-        return blog;
+        if(blog.checkBan()) {
+            throw new NotFoundException('blog not found');
+        }
+        return this._getBlogMapped(blog);
+    }
+    private _getBlogMapped(doc: BlogDocument): BlogsViewModel {
+        return ({
+            id: doc.id,
+            name: doc.name,
+            description: doc.description,
+            websiteUrl: doc.websiteUrl,
+            createdAt: doc.createdAt,
+            isMembership: doc.isMembership
+        })
     }
 }
