@@ -15,7 +15,7 @@ export class BanBlogCommandHandler implements ICommandHandler<BanBlogCommand> {
 
         const blog = await this.blogsRepository.findById(blogId)
         if(!blog){
-            throw new NotFoundException()
+            throw new NotFoundException('blog not found')
         }
 
         blog.updateBan(bodyDTO.isBanned)

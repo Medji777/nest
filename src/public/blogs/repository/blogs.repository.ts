@@ -29,6 +29,11 @@ export class BlogsRepository {
   async save(model: BlogDocument): Promise<BlogDocument> {
     return model.save();
   }
+  async updateAllBanInfoUserAtBlogs(userId: string, isBanned: boolean) {
+    await this.BlogsModel.updateMany({
+      'blogOwnerInfo.userId': userId
+    },{$set: {'blogOwnerInfo.isBanned': isBanned}})
+  }
   async deleteById(id: string): Promise<boolean> {
     const result = await this.BlogsModel.deleteOne({ id });
     return result.deletedCount === 1;

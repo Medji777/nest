@@ -9,12 +9,14 @@ import {CommentsRepository} from "../../../../public/comments/repository/comment
 import {PostsRepository} from "../../../../public/posts/repository/posts.repository";
 import {LikeCalculateService} from "../../../../applications/likeCalculate.service";
 import {LikeStatus} from "../../../../types/types";
+import {BlogsRepository} from "../../../../public/blogs/repository/blogs.repository";
 
 @CommandHandler(BanUserCommand)
 export class BanUserCommandHandler implements ICommandHandler<BanUserCommand> {
     constructor(
         private usersRepository: UsersRepository,
         private securityRepository: SecurityRepository,
+        private blogsRepository: BlogsRepository,
         private commandRepository: CommandRepository,
         private commentsRepository: CommentsRepository,
         private postsRepository: PostsRepository,
@@ -29,6 +31,7 @@ export class BanUserCommandHandler implements ICommandHandler<BanUserCommand> {
         await Promise.all([
             this.ban(userId, bodyDTO),
             this.killAllSessionsUser(userId),
+            this.banUserAtBlogs(userId, bodyDTO.isBanned),
             this.banUserAtComments(userId, bodyDTO.isBanned),
             this.banUserAtCommentLikes(userId, bodyDTO.isBanned),
             this.banUserAtPostLikes(userId, bodyDTO.isBanned),
@@ -47,6 +50,9 @@ export class BanUserCommandHandler implements ICommandHandler<BanUserCommand> {
     }
     private async killAllSessionsUser(userId: string): Promise<void> {
         await this.securityRepository.deleteAllByUserId(userId)
+    }
+    private async banUserAtBlogs(userId: string, isBanned: boolean): Promise<void> {
+        await this.blogsRepository.updateAllBanInfoUserAtBlogs(userId, isBanned)
     }
     private async banUserAtComments(userId: string, isBanned: boolean): Promise<void> {
         await this.commandRepository.updateAllBanInfoUserAtComments(userId, isBanned)

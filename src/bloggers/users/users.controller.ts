@@ -7,7 +7,7 @@ import {Users} from "../../users/entity/users.schema";
 import {BanUserCommand} from "./useCase/command";
 import {UsersQueryRepository} from "./repository/users.query-repository";
 
-@Controller('bloggers/users')
+@Controller('blogger/users')
 export class BloggerUsersController {
     constructor(
         private commandBus: CommandBus,

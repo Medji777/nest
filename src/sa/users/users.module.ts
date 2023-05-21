@@ -24,6 +24,8 @@ import {CommentsRepository} from "../../public/comments/repository/comments.repo
 import {PostsRepository} from "../../public/posts/repository/posts.repository";
 import {Posts, PostsSchema} from "../../public/posts/entity/posts.schema";
 import {LikeCalculateService} from "../../applications/likeCalculate.service";
+import {BlogsRepository} from "../../public/blogs/repository/blogs.repository";
+import {Blogs, BlogsSchema} from "../../public/blogs/entity/blogs.schema";
 
 const CommandHandlers = [CreateUserCommandHandler, DeleteUserCommandHandler, BanUserCommandHandler]
 const Repository = [
@@ -33,6 +35,7 @@ const Repository = [
     CommentsRepository,
     PostsRepository,
     CommandRepository,
+    BlogsRepository
 ]
 
 @Module({
@@ -41,6 +44,7 @@ const Repository = [
         MongooseModule.forFeature([
             { name: Users.name, schema: UsersSchema },
             { name: Security.name, schema: SecuritySchema },
+            { name: Blogs.name, schema: BlogsSchema },
             { name: Comments.name, schema: CommentsSchema },
             { name: CommentsLike.name, schema: CommentsLikeSchema },
             { name: Posts.name, schema: PostsSchema },
