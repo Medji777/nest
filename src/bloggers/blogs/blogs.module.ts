@@ -20,6 +20,8 @@ import {BloggerBlogsRepository} from "./repository/blogs.repository";
 import {PostsModule} from "../../public/posts/posts.module";
 import {BlogService} from "./blog.service";
 import {Posts, PostsSchema} from "../../public/posts/entity/posts.schema";
+import {JwtAccessStrategy} from "../../public/auth/strategies/jwt-access.strategy";
+import {UsersModule} from "../../users/users.module";
 
 const CommandHandlers = [
     CreateBlogCommandHandler,
@@ -36,13 +38,15 @@ const CommandHandlers = [
         MongooseModule.forFeature([
             { name: Blogs.name, schema: BlogsSchema },
             { name: Comments.name, schema: CommentsSchema },
-            { name: Posts.name, schema: PostsSchema}
+            { name: Posts.name, schema: PostsSchema},
         ]),
-        PostsModule
+        PostsModule,
+        UsersModule
     ],
     controllers: [BlogsController],
     providers: [
         ...CommandHandlers,
+        JwtAccessStrategy,
         BlogService,
         BlogsRepository,
         BlogsQueryRepository,

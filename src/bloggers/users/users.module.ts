@@ -9,6 +9,8 @@ import {Users, UsersSchema} from "../../users/entity/users.schema";
 import {Blogs, BlogsSchema} from "../../public/blogs/entity/blogs.schema";
 import {UsersQueryRepository} from "./repository/users.query-repository";
 import {PaginationService} from "../../applications/pagination.service";
+import {JwtAccessStrategy} from "../../public/auth/strategies/jwt-access.strategy";
+import {UsersModule} from "../../users/users.module";
 
 @Module({
     imports: [
@@ -16,10 +18,12 @@ import {PaginationService} from "../../applications/pagination.service";
         MongooseModule.forFeature([
             { name: Users.name, schema: UsersSchema },
             { name: Blogs.name, schema: BlogsSchema }
-        ])
+        ]),
+        UsersModule
     ],
     controllers: [BloggerUsersController],
     providers: [
+        JwtAccessStrategy,
         UsersRepository,
         BlogsRepository,
         UsersQueryRepository,

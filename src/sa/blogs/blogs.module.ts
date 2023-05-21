@@ -11,6 +11,7 @@ import {Users, UsersSchema} from "../../users/entity/users.schema";
 import {BlogsQueryRepository} from "../../public/blogs/repository/blogs.query-repository";
 import {PostsRepository} from "../../public/posts/repository/posts.repository";
 import {Posts, PostsSchema} from "../../public/posts/entity/posts.schema";
+import {BasicStrategy} from "../../public/auth/strategies/basic.strategy";
 
 const CommandHandlers = [BindBlogByUserCommandHandler, BanBlogCommandHandler]
 const Repository = [BlogsRepository, UsersRepository, BlogsQueryRepository, PostsRepository]
@@ -26,6 +27,7 @@ const Repository = [BlogsRepository, UsersRepository, BlogsQueryRepository, Post
     ],
     controllers: [SABlogsController],
     providers: [
+        BasicStrategy,
         PaginationService,
         ...Repository,
         ...CommandHandlers

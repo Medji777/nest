@@ -8,10 +8,11 @@ import { PostsModule } from '../public/posts/posts.module';
 import { CommentsModule } from '../public/comments/comments.module';
 import { AuthModule } from '../public/auth/auth.module';
 import { SecurityModule } from '../public/security/security.module';
-import { settings } from '../config';
 import { BloggerBlogModule } from "../bloggers/blogs/blogs.module";
+import { BloggerUsersModule } from "../bloggers/users/users.module";
 import { SABlogsModule } from "../sa/blogs/blogs.module";
 import { SAUsersModule } from "../sa/users/users.module";
+import { settings } from '../config';
 
 const PublicModule = [
   UsersModule,
@@ -22,7 +23,7 @@ const PublicModule = [
   SecurityModule
 ]
 const SAModule = [SABlogsModule, SAUsersModule]
-const BloggerModule = [BloggerBlogModule]
+const BloggerModule = [BloggerBlogModule, BloggerUsersModule]
 
 @Module({
   imports: [
