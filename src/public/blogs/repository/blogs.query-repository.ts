@@ -35,10 +35,7 @@ export class BlogsQueryRepository {
     return this.paginationService.transformPagination<BlogsViewModel,BlogDocument>(pagination);
   }
   async findById(id: string): Promise<BlogsViewModel> {
-    const doc: BlogDocument = await this.BlogsModel.findOne(
-        { id },
-        {...projection, blogOwnerInfo: false, banInfo: false }
-    );
+    const doc: BlogDocument = await this.BlogsModel.findOne({ id }, projection);
     if (!doc) {
       throw new NotFoundException('blog not found');
     }
