@@ -23,7 +23,7 @@ export class BlogsQueryRepository {
     filter = {
       ...filter,
       'blogOwnerInfo.isBanned': false,
-      isBanned: false
+      'banInfo.isBanned': false
     }
     const pagination = await this.paginationService.create<BlogsModelType,BlogDocument>(
         restQuery,
