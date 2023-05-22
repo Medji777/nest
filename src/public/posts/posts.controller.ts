@@ -14,7 +14,7 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { CommandBus } from "@nestjs/cqrs";
-import {CreateCommentByPostCommand, UpdateStatusLikeCommand} from "./useCase/command";
+import { CreateCommentByPostCommand, UpdateStatusLikeCommand } from "./useCase/command";
 import { PostsQueryRepository } from './repository/posts.query-repository';
 import { CommentDBModel } from '../../types/comments';
 import { CommentsQueryRepository } from '../comments/repository/comments.query-repository';

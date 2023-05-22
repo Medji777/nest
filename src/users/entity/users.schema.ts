@@ -101,16 +101,17 @@ export class Users {
     this.banInfo.isBanned = payload.isBanned;
   }
   updateBloggerBan(isBanned: boolean, banReason: string, blogId: string) {
-    if (isBanned) {
+    if (!isBanned) {
+      this.bloggerBanInfo = this.bloggerBanInfo.filter(
+          (b) => b.blogId !== blogId
+      );
+    } else {
       this.bloggerBanInfo.push({
         banDate: new Date().toISOString(),
         banReason: banReason,
         blogId: blogId
       });
     }
-    this.bloggerBanInfo = this.bloggerBanInfo.filter(
-        (b) => b.blogId !== blogId
-    );
   }
 
   async checkValidCode(isEmail: boolean = false): Promise<ErrorResponse> {
@@ -182,6 +183,7 @@ export const UsersSchema = SchemaFactory.createForClass(Users);
 UsersSchema.methods = {
   checkValidCode: Users.prototype.checkValidCode,
   checkValidRecoveryCode: Users.prototype.checkValidRecoveryCode,
+  checkBanStatusForBlog: Users.prototype.checkBanStatusForBlog,
   updatePassword: Users.prototype.updatePassword,
   updatePasswordConfirmationData: Users.prototype.updatePasswordConfirmationData,
   updateConfirmation: Users.prototype.updateConfirmation,

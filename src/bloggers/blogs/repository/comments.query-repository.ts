@@ -5,6 +5,7 @@ import {PaginationService} from "../../../applications/pagination.service";
 import {Comments, CommentsModuleType} from "../../../public/comments/entity/comments.schema";
 import {Posts, PostsModelType} from "../../../public/posts/entity/posts.schema";
 import {BloggerCommentViewModel} from "../../../types/comments";
+import {LikeStatus} from "../../../types/types";
 
 @Injectable()
 export class CommentsQueryRepository {
@@ -47,6 +48,11 @@ export class CommentsQueryRepository {
                         userLogin: 1
                     },
                     createdAt: 1,
+                    likesInfo: {
+                        likesCount: 1,
+                        dislikesCount: 1,
+                        myStatus: LikeStatus.None
+                    },
                     postInfo: {
                         id: '$allPostComments.id',
                         title: '$allPostComments.title',

@@ -8,7 +8,7 @@ import {BanBlogCommandHandler, BindBlogByUserCommandHandler} from "./useCase/han
 import {BlogsRepository} from "../../public/blogs/repository/blogs.repository";
 import {UsersRepository} from "../../users/repository/users.repository";
 import {Users, UsersSchema} from "../../users/entity/users.schema";
-import {BlogsQueryRepository} from "../../public/blogs/repository/blogs.query-repository";
+import {BlogsQueryRepository} from "./repository/blogs.query-repository";
 import {PostsRepository} from "../../public/posts/repository/posts.repository";
 import {Posts, PostsSchema} from "../../public/posts/entity/posts.schema";
 import {BasicStrategy} from "../../public/auth/strategies/basic.strategy";

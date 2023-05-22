@@ -10,6 +10,21 @@ export type BlogsViewModel = {
   isMembership?: boolean;
 };
 
+export type BlogOwnerInfo = {
+  userId: string | null;
+  userLogin: string | null;
+}
+
+export type BanInfo = {
+  isBanned: boolean;
+  banDate: Date | null;
+}
+
+export type BlogsSAViewModel = BlogsViewModel & {
+  blogOwnerInfo: BlogOwnerInfo,
+  banInfo: BanInfo
+}
+
 export class BlogsViewModelDTO {
   constructor(
     public id: string,

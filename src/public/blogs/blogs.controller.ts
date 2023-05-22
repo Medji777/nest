@@ -29,7 +29,7 @@ export class BlogsController {
   @Get()
   @HttpCode(HttpStatus.OK)
   async getBlogs(@Query() query: QueryBlogsDTO) {
-    return this.blogsQueryRepository.getAll(query,{ blogOwnerInfo: false, banInfo: false });
+    return this.blogsQueryRepository.getAll(query);
   }
 
   @Get(':id')

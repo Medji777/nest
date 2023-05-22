@@ -29,7 +29,7 @@ type Query = {
 
 @Injectable()
 export class PaginationService {
-  public async create<M extends Model<any>, D extends HydratedDocument<any>>(
+  public async create<M extends Model<any>, D extends HydratedDocument<any> | D>(
       query: Query,
       model: M,
       projection = {},

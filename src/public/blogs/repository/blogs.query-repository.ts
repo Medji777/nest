@@ -14,7 +14,7 @@ export class BlogsQueryRepository {
     @InjectModel(Blogs.name) private BlogsModel: BlogsModelType,
     private readonly paginationService: PaginationService,
   ) {}
-  async getAll(query: QueryBlogsDTO, proj = {}): Promise<Paginator<BlogsViewModel>> {
+  async getAll(query: QueryBlogsDTO): Promise<Paginator<BlogsViewModel>> {
     const { searchNameTerm, ...restQuery } = query;
     let filter = {};
     if(searchNameTerm) {
@@ -25,14 +25,16 @@ export class BlogsQueryRepository {
       'blogOwnerInfo.isBanned': false,
       'banInfo.isBanned': false
     }
-    const pagination = await this.paginationService.create<BlogsModelType,BlogDocument>(
+    const pagination = await this.paginationService.create<BlogsModelType,Array<BlogsModelType>>(
         restQuery,
         this.BlogsModel,
-        {...projection, ...proj},
+        {
+          ...projection, blogOwnerInfo: 0, banInfo: 0
+        },
         filter,
         true
     );
-    return this.paginationService.transformPagination<BlogsViewModel,BlogDocument>(pagination);
+    return this.paginationService.transformPagination<BlogsViewModel,Array<BlogsModelType>>(pagination);
   }
   async findById(id: string): Promise<BlogsViewModel> {
     const doc: BlogDocument = await this.BlogsModel.findOne({ id }, projection);

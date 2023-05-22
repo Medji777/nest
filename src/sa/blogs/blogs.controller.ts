@@ -1,7 +1,7 @@
 import {Body, Controller, Get, HttpCode, HttpStatus, Param, Put, Query, UseGuards} from "@nestjs/common";
 import {CommandBus} from "@nestjs/cqrs";
 import {BanBlogCommand, BindBlogByUserCommand} from "./useCase/command";
-import {BlogsQueryRepository} from "../../public/blogs/repository/blogs.query-repository";
+import {BlogsQueryRepository} from "./repository/blogs.query-repository";
 import {BasicGuard} from "../../public/auth/guards/basic.guard";
 import {QueryBlogsDTO} from "../../public/blogs/dto";
 import {BanBlogInputDto} from "./dto";
@@ -17,8 +17,8 @@ export class SABlogsController {
     @UseGuards(BasicGuard)
     @Get()
     @HttpCode(HttpStatus.OK)
-    async getAll(@Query() query: QueryBlogsDTO): Promise<Paginator<BlogsViewModel>> {
-        return this.blogsQueryRepository.getAll(query,{"blogOwnerInfo.isBanned": false})
+    async getAll(@Query() queryDTO: QueryBlogsDTO): Promise<Paginator<BlogsViewModel>> {
+        return this.blogsQueryRepository.getAll(queryDTO)
     }
 
     @UseGuards(BasicGuard)

@@ -18,6 +18,6 @@ import { PassHashService } from '../applications/passHash.service';
     PaginationService,
     PassHashService,
   ],
-  exports: [UsersService, UsersQueryRepository],
+  exports: [UsersService, UsersRepository, UsersQueryRepository],
 })
 export class UsersModule {}
