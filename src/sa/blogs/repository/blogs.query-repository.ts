@@ -6,7 +6,7 @@ import {QueryBlogsDTO} from "../../../public/blogs/dto";
 import {BlogsSAViewModel} from "../../../types/blogs";
 import {Paginator} from "../../../types/types";
 
-const projection = { _id: 0, __v: 0 };
+const projection = { _id: 0, __v: 0, "blogOwnerInfo.isBanned": 0 };
 
 @Injectable()
 export class BlogsQueryRepository {
